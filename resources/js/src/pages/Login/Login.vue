@@ -1,5 +1,5 @@
 <template>
-    <body class="app app-login  p-0">
+    <body class="app app-login p-0">
         <div class="row g-0 app-auth-wrapper">
             <div class="col-12 col-md-7 col-lg-6 auth-main-col text-center p-5">
                 <div class="d-flex flex-column align-content-end">
@@ -49,7 +49,7 @@
 <script lang="ts">
 
 import {defineAsyncComponent, defineComponent, ref} from 'vue';
-const LoginForm = defineAsyncComponent(() => import('@/js/src/Users/pages/Login/LoginForm.vue'));
+const LoginForm = defineAsyncComponent(() => import('@/js/src/pages/Login/LoginForm.vue'));
 
 export default defineComponent({
     name: "Login",

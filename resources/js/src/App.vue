@@ -11,7 +11,6 @@ export default defineComponent({
     },
     data() {
         return {
-            username: 'BotVot33',
         };
     },
 });

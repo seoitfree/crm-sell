@@ -49,19 +49,16 @@ export default defineComponent({
        logIn(): void {
            axios.get('/sanctum/csrf-cookie').then(() => {
                 axios.post('/login', this.form).then((response) => {
-                    //console.log(response);
-
-                    axios.get('/api/user').then((response) => {
-                        console.log('/api/user');
-                        console.log(response);
-                    });
+                    localStorage.setItem('x_xsrf_token', response.config.headers['X-XSRF-TOKEN']);
+                    this.getUserData();
                 });
             });
-
-           // axios.get('/api/v1/user').then((response) => {
-           //     console.log('/api/v1/user');
-           //     console.log(response);
-           // });
+        },
+        getUserData(): void {
+            axios.get('/api/user').then((response) => {
+                console.log(response);
+                this.$router.push({name: 'main'});
+            });
         }
     }
 });
