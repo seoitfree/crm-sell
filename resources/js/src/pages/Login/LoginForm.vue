@@ -24,9 +24,13 @@
                 </div><!--//col-6-->
             </div><!--//extra-->
         </div><!--//form-group-->
-        <div class="text-center">
+        <div v-if="!processing" class="text-center">
             <button type="button" class="btn app-btn-primary w-100 theme-btn mx-auto" @click="logIn()">Log In</button>
         </div>
+        <button v-if="processing" class="btn btn-primary text-center" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span class="visually-hidden">Loading...</span>
+        </button>
     </form>
 </template>
 
@@ -34,11 +38,16 @@
 
 import { defineComponent, ref } from 'vue';
 import axios from "axios";
+import { useUserStore } from "../../stores/UserStore";
+import {UserInfo} from "../../types/userInfo";
+
+const userStore = useUserStore();
 
 export default defineComponent({
     name: "LoginForm",
     data() {
         return {
+            processing: false,
             form: {
                 email: '' as string,
                 password: '' as string,
@@ -46,20 +55,29 @@ export default defineComponent({
         }
     },
     methods: {
-       logIn(): void {
-           axios.get('/sanctum/csrf-cookie').then(() => {
-                axios.post('/login', this.form).then((response) => {
-                    localStorage.setItem('x_xsrf_token', response.config.headers['X-XSRF-TOKEN']);
-                    this.getUserData();
-                });
+        logIn(): void {
+            this.processing = true;
+            axios.get('/sanctum/csrf-cookie').then(() => {
+                this.login();
+            }).catch(() => {
+                this.processing = false;
             });
         },
-        getUserData(): void {
-            axios.get('/api/user').then((response) => {
-                console.log(response);
-                this.$router.push({name: 'main'});
+        login(): void {
+            axios.post('/login', this.form).then((response) => {
+                this.getUserData(response.config.headers['X-XSRF-TOKEN']);
+            }).catch(() => {
+                this.processing = false;
             });
-        }
+        },
+        getUserData(token: string): void {
+            axios.get('/api/user').then((response) => {
+                userStore.login(token, response as UserInfo);
+                this.$router.push({name: 'main'});
+            }).catch(() => {
+                this.processing = false;
+            });
+        },
     }
 });
 

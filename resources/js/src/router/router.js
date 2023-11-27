@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import routes from './routes.js';
+import {useUserStore} from "../stores/UserStore";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -8,7 +9,8 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const token = localStorage.getItem('x_xsrf_token'); //TODO next step install Pinia store for comfort work;
+    const userStore = useUserStore();
+    const token = userStore.isAuthenticated;
 
     notAuth(token, to, next);
 

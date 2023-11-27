@@ -2,10 +2,12 @@
 
 namespace CrmSell\Users\UI\Http\Controllers;
 
-
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
 
 class UsersController
 {
-
+    private function logUsers()
+    {
+        Auth::guard('web')->logoutOtherDevices('');
+    }
 }

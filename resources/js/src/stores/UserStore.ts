@@ -1,0 +1,30 @@
+
+import { defineStore } from 'pinia'
+import {UserInfo} from "../types/userInfo";
+
+export const useUserStore = defineStore("UserStore", {
+    state: () => {
+        return {
+            token: localStorage.getItem('x_xsrf_token') || null,
+            userInfo: {} as UserInfo,
+        }
+    },
+    getters: {
+        isAuthenticated(): boolean {
+            return this.token;
+        }
+    },
+    actions: {
+        login(token: string, user: UserInfo): void {
+            localStorage.setItem('x_xsrf_token', token);
+            this.setUser(user);
+            this.token = token;
+        },
+        setUser(user: UserInfo): void {
+            this.userInfo = user;
+        },
+        logOut(): void {
+            localStorage.removeItem('x_xsrf_token');
+        },
+    },
+})
