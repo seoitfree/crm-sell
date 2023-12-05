@@ -1,3 +1,4 @@
+import {RouteNamesEnum} from "./RouteNamesEnum.js";
 
 const Login = () => import("@/js/src/pages/Login/Login.vue");
 const Main = () => import("@/js/src/pages/Main/Main.vue");
@@ -18,6 +19,14 @@ const routes = [
         path: '/docs',
         name: 'docs',
         component: Docs,
+    },
+    {
+        path: '/docs',
+        name: RouteNamesEnum.ACCESS_ERROR,
+        component: Docs,
+        meta: {
+            accessScopes: [],
+        },
     },
 ];
 

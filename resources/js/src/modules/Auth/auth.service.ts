@@ -1,7 +1,7 @@
 
-import {useUserStore} from "../../../../stores/UserStore";
+import {useUserStore} from "../../stores/UserStore";
 import axios from "axios";
-import {UserInfo} from "../../../../types/userInfo";
+import {UserInfo} from "../../types/userInfo";
 
 
 export interface Permission  {

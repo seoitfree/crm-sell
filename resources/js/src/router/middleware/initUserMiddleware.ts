@@ -1,6 +1,6 @@
 
 import {useUserStore} from "../../stores/UserStore";
-import {initAuth} from "../../modules/Users/Services/Auth/auth.service";
+import {initAuth} from "../../modules/Auth/auth.service";
 
 async function initUser(): Promise<void> {
     const userStore = useUserStore();
@@ -9,6 +9,5 @@ async function initUser(): Promise<void> {
     }
     await initAuth().init();
 }
-
 
 export {initUser};

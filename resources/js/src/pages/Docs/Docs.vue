@@ -693,8 +693,8 @@
 
 <script lang="ts">
 import {defineComponent, defineAsyncComponent} from 'vue';
-import {initAuth} from "../../modules/Users/Services/Auth/auth.service";
-import {RolesEnum} from "../../modules/Users/Services/Auth/enum/roles.enum";
+import {initAuth} from "../../modules/Auth/auth.service";
+import {RolesEnum} from "../../modules/Auth/enum/roles.enum";
 
 const Header = defineAsyncComponent(() => import('../../common/components/Header/Header.vue'));
 const Footer = defineAsyncComponent(() => import('../../common/components/Footer/Footer.vue'));
