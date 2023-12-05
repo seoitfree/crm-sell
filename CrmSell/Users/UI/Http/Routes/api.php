@@ -11,3 +11,12 @@ Route::middleware(['api', 'auth:sanctum'])->group(function () {
             });
         });
 });
+
+Route::middleware(['api', 'auth:sanctum'])->group(function () {
+    Route::prefix('api/v1')
+        ->namespace("CrmSell\Users\UI\Http\Controllers")
+        ->group(function () {
+            Route::post('/user/add', 'UsersController@addUser');
+            Route::get('/user', 'UsersController@getUser');
+        });
+});

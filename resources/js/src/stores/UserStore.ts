@@ -6,13 +6,16 @@ export const useUserStore = defineStore("UserStore", {
     state: () => {
         return {
             token: localStorage.getItem('x_xsrf_token') || null,
-            userInfo: {} as UserInfo,
+            userInfo: null as UserInfo|null,
         }
     },
     getters: {
         isAuthenticated(): boolean {
             return this.token;
-        }
+        },
+        getUserInfo(): UserInfo|null {
+            return this.userInfo;
+        },
     },
     actions: {
         login(token: string, user: UserInfo): void {

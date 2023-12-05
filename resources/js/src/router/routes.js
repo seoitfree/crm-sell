@@ -1,6 +1,7 @@
 
 const Login = () => import("@/js/src/pages/Login/Login.vue");
 const Main = () => import("@/js/src/pages/Main/Main.vue");
+const Docs = () => import("@/js/src/pages/Docs/Docs.vue");
 
 const routes = [
     {
@@ -12,6 +13,11 @@ const routes = [
         path: '/',
         name: 'main',
         component: Main,
+    },
+    {
+        path: '/docs',
+        name: 'docs',
+        component: Docs,
     },
 ];
 

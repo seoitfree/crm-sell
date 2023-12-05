@@ -159,6 +159,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Spatie\Permission\PermissionServiceProvider::class,
         \CrmSell\Users\Infrastructure\Laravel\Provider\UserProvider::class,
         /*
          * Application Service Providers...

@@ -9,10 +9,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use CrmSell\Common\Domains\Traits\UuidTrait;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasApiTokens, UuidTrait;
+    use HasFactory, Notifiable, HasApiTokens, UuidTrait, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -44,4 +45,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+
+    public function getForInit(): array {
+        return [
+            "id" => $this->id,
+            "email" => $this->email,
+            "first_name" => $this->first_name,
+            "last_name" => $this->first_name,
+        ];
+    }
 }

@@ -387,21 +387,20 @@
     </body>
 </template>
 
-<script>
-
+<script lang="ts">
 
 import {defineAsyncComponent, defineComponent, ref} from 'vue';
 
 const Header = defineAsyncComponent(() => import('../../common/components/Header/Header.vue'));
 const Footer = defineAsyncComponent(() => import('../../common/components/Footer/Footer.vue'));
 
-export default {
+export default defineComponent({
     name: "Main",
     components: {
         Header,
         Footer
     }
-}
+});
 </script>
 
 <style scoped>
