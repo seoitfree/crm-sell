@@ -17,6 +17,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         try {
+            echo "<pre>";
+            var_dump('DatabaseSeeder');
+            die;
+
             DB::beginTransaction();
 
             $user = User::create([

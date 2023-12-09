@@ -104,7 +104,7 @@
                         <div class="app-card app-card-doc shadow-sm  h-100">
                             <div class="app-card-thumb-holder p-3">
                                 <div class="app-card-thumb">
-                                    <img class="thumb-image" src="assets/images/doc-thumb-1.jpg" alt="">
+<!--                                    <img class="thumb-image" src="assets/images/doc-thumb-1.jpg" alt="">-->
                                 </div>
                                 <a class="app-card-link-mask" href="#file-link"></a>
                             </div>
@@ -563,7 +563,7 @@
                         <div class="app-card app-card-doc shadow-sm  h-100">
                             <div class="app-card-thumb-holder p-3">
                                 <div class="app-card-thumb">
-                                    <img class="thumb-image" src="assets/images/doc-thumb-2.jpg" alt="">
+<!--                                    <img class="thumb-image" src="assets/images/doc-thumb-2.jpg" alt="">-->
                                 </div>
                                 <a class="app-card-link-mask" href="#file-link"></a>
                             </div>

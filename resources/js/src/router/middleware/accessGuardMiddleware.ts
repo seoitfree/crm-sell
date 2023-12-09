@@ -8,9 +8,9 @@ export function accessGuardMiddleware(to: RouteLocationNormalized) {
     if (!accessScopes) {
         return;
     }
-    const permission = initAuth()
-    if (permission.hasRoles([accessScopes as string])) {
-        return;
-    }
-    return { name: RouteNamesEnum.ACCESS_ERROR };
+    // const permission = initAuth()
+    // if (permission.hasRoles([accessScopes as string])) {
+    //     return;
+    // }
+    // return { name: RouteNamesEnum.ACCESS_ERROR };
 }
