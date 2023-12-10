@@ -17,17 +17,19 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         try {
-            echo "<pre>";
-            var_dump('DatabaseSeeder');
-            die;
-
             DB::beginTransaction();
 
+            $email = env('SUPER_ADMIN_EMAIL');
+            $userByEmail = User::whereIn('email', $email)->get();
+            if ($userByEmail->count() > 0) {
+                return;
+            }
+
             $user = User::create([
-                'password' => bcrypt("adept1234567"),
-                'email' => 'test@example.com',
-                'first_name' => 'Yakovenko',
-                'last_name' => 'Vlad'
+                'password' => bcrypt(env('SUPER_ADMIN_PASSWORD')),
+                'email' => $email,
+                'first_name' => 'SUPER_ADMIN',
+                'last_name' => 'SUPER_ADMIN'
             ]);
             $user->save();
 
