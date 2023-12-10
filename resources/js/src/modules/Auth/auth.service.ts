@@ -6,6 +6,7 @@ import {UserInfo} from "../../types/userInfo";
 
 export interface Permission  {
     hasRoles(roles: string[]): boolean;
+    hasPermission(permission: string[]): boolean;
     init(): Promise<void>
 }
 
@@ -16,6 +17,15 @@ let permissionList: Set<string> = null;
 const hasRoles = function(roles: string[]): boolean {
     for (const element of roles) {
         if (rolesList.has(element)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+const hasPermission = function(permission: string[]): boolean {
+    for (const element of permission) {
+        if (permissionList.has(element)) {
             return true;
         }
     }
@@ -37,6 +47,7 @@ const initAuth = function(): Permission {
     if (authService === null) {
         authService = {
             hasRoles,
+            hasPermission,
             init
         } as Permission;
     }
