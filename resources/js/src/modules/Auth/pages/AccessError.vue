@@ -19,9 +19,15 @@
 </template>
 
 <script>
-import {defineComponent} from "vue";
+import {defineAsyncComponent, defineComponent} from "vue";
+const Header = defineAsyncComponent(() => import('../../../common/components/Header/Header.vue'));
+const Footer = defineAsyncComponent(() => import('../../../common/components/Footer/Footer.vue'));
 
 export default defineComponent({
+    components: {
+        Header,
+        Footer
+    },
     name: "AccessError"
 });
 </script>
