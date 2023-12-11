@@ -1,0 +1,110 @@
+{
+  "resources/assets/images/app-logo.svg": {
+    "file": "assets/app-logo-6741cde7.svg",
+    "src": "resources/assets/images/app-logo.svg"
+  },
+  "resources/assets/images/background/background-1.jpg": {
+    "file": "assets/background-1-dacc9c24.jpg",
+    "src": "resources/assets/images/background/background-1.jpg"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-4ed993c7.js",
+    "isEntry": true,
+    "src": "resources/css/app.css"
+  },
+  "resources/js/app.css": {
+    "file": "assets/app-c26a98b4.css",
+    "src": "resources/js/app.css"
+  },
+  "resources/js/app.js": {
+    "assets": [
+      "assets/background-1-dacc9c24.jpg"
+    ],
+    "css": [
+      "assets/app-c26a98b4.css"
+    ],
+    "dynamicImports": [
+      "resources/js/src/pages/Login/Login.vue",
+      "resources/js/src/pages/Main/Main.vue",
+      "resources/js/src/pages/Docs/Docs.vue",
+      "resources/js/src/modules/Auth/pages/AccessError.vue"
+    ],
+    "file": "assets/app-40271bfc.js",
+    "isEntry": true,
+    "src": "resources/js/app.js"
+  },
+  "resources/js/src/common/components/Footer/Footer.vue": {
+    "file": "assets/Footer-a7c03a87.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/common/components/Footer/Footer.vue"
+  },
+  "resources/js/src/common/components/Header/Header.vue": {
+    "file": "assets/Header-b0cde434.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/common/components/Header/Header.vue"
+  },
+  "resources/js/src/modules/Auth/pages/AccessError.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/Header/Header.vue",
+      "resources/js/src/common/components/Footer/Footer.vue"
+    ],
+    "file": "assets/AccessError-5efd911b.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Auth/pages/AccessError.vue"
+  },
+  "resources/js/src/pages/Docs/Docs.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/Header/Header.vue",
+      "resources/js/src/common/components/Footer/Footer.vue"
+    ],
+    "file": "assets/Docs-42065085.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/pages/Docs/Docs.vue"
+  },
+  "resources/js/src/pages/Login/Login.vue": {
+    "assets": [
+      "assets/app-logo-6741cde7.svg"
+    ],
+    "dynamicImports": [
+      "resources/js/src/pages/Login/LoginForm.vue"
+    ],
+    "file": "assets/Login-42f6a72c.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/pages/Login/Login.vue"
+  },
+  "resources/js/src/pages/Login/LoginForm.vue": {
+    "file": "assets/LoginForm-7b750047.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/pages/Login/LoginForm.vue"
+  },
+  "resources/js/src/pages/Main/Main.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/Header/Header.vue",
+      "resources/js/src/common/components/Footer/Footer.vue"
+    ],
+    "file": "assets/Main-5540f8f3.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/pages/Main/Main.vue"
+  }
+}
