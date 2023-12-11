@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             DB::beginTransaction();
 
             $email = env('SUPER_ADMIN_EMAIL');
-            $userByEmail = User::whereIn('email', $email)->get();
+            $userByEmail = User::whereIn('email', [$email])->get();
             if ($userByEmail->count() > 0) {
                 return;
             }
