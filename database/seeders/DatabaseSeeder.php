@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
             ]);
             $user->save();
 
-            $role = Role::where('name', 'Admin')->first();
+            $role = Role::where('name', 'admin')->first();
             $user->assignRole($role);
 
             DB::commit();
