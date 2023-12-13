@@ -8,17 +8,17 @@ const Docs = () => import("@/js/src/pages/Docs/Docs.vue");
 const routes = [
     {
         path: '/login',
-        name: 'user.login',
+        name: RouteNamesEnum.USER_LOGIN,
         component: Login,
     },
     {
         path: '/',
-        name: 'main',
+        name: RouteNamesEnum.MAIN,
         component: Main,
     },
     {
         path: '/docs',
-        name: 'docs',
+        name: RouteNamesEnum.DOCS,
         component: Docs,
         meta: {
             accessScopes: [RolesEnum.ADMIN],

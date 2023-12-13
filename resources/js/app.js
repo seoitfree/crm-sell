@@ -11,6 +11,7 @@ import '@/assets/plugins/bootstrap/js/bootstrap.min.js';
 import { createPinia } from 'pinia'
 import {useUserStore} from "@/js/src/stores/UserStore";
 import Router from '@/js/src/router/router.js';
+import {RouteNamesEnum} from "./src/router/RouteNamesEnum";
 
 const app = createApp(App);
 app.use(createPinia);
@@ -24,7 +25,7 @@ window.axios.interceptors.response.use({}, err => {
             userStore.logOut();
             userStore.$reset();
         }
-        router.push({ name: 'user.login' })
+        router.push({ name: RouteNamesEnum.USER_LOGIN })
     }
 
     return err.response;

@@ -319,6 +319,7 @@
 import {defineComponent} from "vue";
 import axios from "axios";
 import {useUserStore} from "../../../stores/UserStore";
+import {RouteNamesEnum} from "../../../router/RouteNamesEnum";
 
 const userStore = useUserStore();
 
@@ -330,7 +331,7 @@ export default defineComponent({
                 .then(res => {
                     userStore.logOut();
                     userStore.$reset();
-                    this.$router.push({name: 'user.login'});
+                    this.$router.push({name: RouteNamesEnum.USER_LOGIN });
                 })
         }
     }
