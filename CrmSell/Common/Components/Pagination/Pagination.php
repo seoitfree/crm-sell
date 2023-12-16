@@ -98,8 +98,8 @@ class Pagination implements PaginationInterface
                 "total_pages" => $this->total,
                 "current_page" => $this->pageNumber,
                 "first_page" => 1,
-                "second_page" => $this->pageNumber === 1 ? 2 : null,
-                "third_page" => $this->pageNumber === 1 ? 3 : null,
+                "second_page" => $this->pageNumber === 1 && $this->total > 1 ? 2 : null,
+                "third_page" => $this->pageNumber === 1 && $this->total > 1 ? 3 : null,
                 "previous_page" => ($this->pageNumber !== $this->previousPage) ? $this->previousPage : null,
                 "next_page" => ($this->pageNumber !== $this->nextPage) ? $this->nextPage : null,
                 "last_page" => $this->lastPage
