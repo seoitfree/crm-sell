@@ -18,5 +18,6 @@ Route::middleware(['api', 'auth:sanctum'])->group(function () {
         ->group(function () {
             Route::post('/user/add', 'UsersController@addUser');
             Route::get('/user', 'UsersController@getUser');
+            Route::get('/users', 'UsersController@getList');
         });
 });

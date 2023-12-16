@@ -6,6 +6,8 @@ namespace CrmSell\Users\UI\Http\Controllers;
 use CrmSell\Common\UI\Traits\ResponseTrait;
 use CrmSell\Users\Application\User\AddUser\AddUserHandler;
 use CrmSell\Users\Application\User\AddUser\Request\AddUser;
+use CrmSell\Users\Application\User\GetList\GetListHandler;
+use CrmSell\Users\Application\User\GetList\Request\GetList;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -47,6 +49,23 @@ class UsersController
         }
 
         $result = $handler->handle(new AddUser($request->toArray()));
+
+        return $this->getResponse($result);
+    }
+
+    /**
+     * @param Request $request
+     * @param GetListHandler $handler
+     * @return JsonResponse
+     */
+    public function getList(Request $request, GetListHandler $handler): JsonResponse
+    {
+        $user = Auth::user();
+        if (empty($user) || !$user->hasRole('admin')) {
+            return $this->getErrorsResponse(["Access is denied."]);
+        }
+
+        $result = $handler->handle(new GetList($request->toArray()));
 
         return $this->getResponse($result);
     }
