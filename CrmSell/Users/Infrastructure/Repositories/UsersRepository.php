@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\Log;
 
 class UsersRepository implements UsersRepositoryInterface
 {
+    /**
+     * @param GetListDTO $getListDTO
+     * @return Collection
+     * @throws \Exception
+     */
     public function getListUsers(GetListDTO $getListDTO): Collection
     {
         try {
@@ -39,7 +44,7 @@ class UsersRepository implements UsersRepositoryInterface
             $result = DB::table('users')->select(['id'])->count();
         } catch (QueryException $e) {
             Log::error($e->getMessage() . $e->getTraceAsString());
-            throw new \Exception("UsersRepository::getAllCitiesByRegionId() error.");
+            throw new \Exception("UsersRepository:: getCountForListUsers() error.");
         }
 
         return $result;

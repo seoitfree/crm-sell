@@ -8,6 +8,7 @@ use CrmSell\Common\Application\Service\Handler\ResultHandler;
 use CrmSell\Common\Application\Service\Request\RequestInterface;
 use CrmSell\Users\Application\User\AddUser\Request\AddUser;
 use CrmSell\Users\Domains\Entities\Role;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use CrmSell\Users\Domains\Entities\User;
@@ -42,6 +43,7 @@ class AddUserHandler extends AbstractHandler
             $this->notSuccessfulResponse($e);
         }
 
+
         return $this->resultHandler;
     }
 
@@ -62,24 +64,28 @@ class AddUserHandler extends AbstractHandler
             throw new \Exception("Error save, try next time.", 500);
         }
 
-        $this->checkRoles($command);
-        $user->assignRole($command->getRules());
+        //TODO need optimization
+        $this->getRoles($command)->each(function ($role) use ($user) {
+            $user->assignRole($role);
+        });
 
         return $user->id;
     }
 
     /**
      * @param AddUser $command
-     * @return void
+     * @return Collection
      */
-    private function checkRoles(AddUser $command): void
+    private function getRoles(AddUser $command): Collection
     {
-        $roles = Role::whereIn('name', $command->getRules())->get();
+        $roles = Role::whereIn('id', $command->getRoles())->get();
 
-        $rolesDiff = array_diff($command->getRules(), $roles->map(fn (Role $item) =>  $item->name));
+        $rolesDiff = array_diff($command->getRoles(), $roles->map(fn (Role $item) => $item->id));
         if (count($rolesDiff) > 0) {
             $rolesString = implode(",", $rolesDiff);
-            throw new \DomainException("Roles does $rolesString not exist.", 500);
+            throw new \DomainException("Roles does $rolesString not exist.", 404);
         }
+
+        return $roles;
     }
 }

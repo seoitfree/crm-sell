@@ -12,18 +12,19 @@ class AddUser extends RootRequest
 
     private string $email = '';
     private string $password = '';
+    private string $confirmPassword = '';
     private string $firstName = '';
     private string $lastName = '';
-    private array $role = [];
+    private array $roles = [];
 
     /**
      * @param array $request
      */
     public function __construct(array $request)
     {
-        $this->mapField($request, ['role']);
+        $this->mapField($request, ['roles']);
 
-        $this->role = !empty($request['role']) ? array_unique($request['role']) : [];
+        $this->roles = !empty($request['roles']) ? array_unique($request['roles']) : [];
     }
 
     public function getFirstName(): string
@@ -44,10 +45,15 @@ class AddUser extends RootRequest
         return $this->password;
     }
 
+    public function getRoles(): array {
+        return $this->roles;
+    }
+
     public function toValidation(): array {
         return [
             "email" => $this->email,
             "password" => $this->password,
+            "password_confirmation" => $this->confirmPassword,
             "first_name" => $this->firstName,
             "last_name" => $this->lastName,
         ];
@@ -57,7 +63,8 @@ class AddUser extends RootRequest
     {
         return [
             "email" => 'required|string|unique:users|email',
-            "password" => 'required|string|max:100|min:12',
+            "password" => 'required|string|max:100|min:8|confirmed',
+            'password_confirmation' => 'required|min:8',
             "first_name" => 'required|string|max:25|min:2',
             "last_name" => 'required|string|max:25|min:2',
         ];

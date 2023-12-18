@@ -5,6 +5,7 @@ namespace CrmSell\Common\Application\Service\Handler;
 
 use CrmSell\Common\Application\Service\Enum\ResponseCodeErrors;
 use CrmSell\Common\Application\Service\Request\RequestInterface;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator as Validation;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -66,8 +67,11 @@ abstract class AbstractHandler
     {
         $errors = [];
 
-        foreach ($validator->errors()->toArray() as $error) {
-            $errors[] = ["message" => $error[0]];
+        foreach ($validator->errors()->toArray() as $field => $error) {
+            $errors[] = [
+                "field" => $field,
+                "message" => $error[0]
+            ];
         }
 
         return $errors;

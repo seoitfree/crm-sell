@@ -63,7 +63,7 @@ import axios from "axios";
 import {UserListType} from "./Type/UserListType";
 
 const HeadTable = defineAsyncComponent(() => import("@/js/src/common/components/Table/HeadTable.vue"));
-const Pagination = defineAsyncComponent(() => import('@/js/src//common/components/Table/Pagination.vue'));
+const Pagination = defineAsyncComponent(() => import('@/js/src/common/components/Table/Pagination.vue'));
 
 export default defineComponent({
     name: "UsersTableList",

@@ -8,6 +8,7 @@ use CrmSell\Users\Application\User\AddUser\AddUserHandler;
 use CrmSell\Users\Application\User\AddUser\Request\AddUser;
 use CrmSell\Users\Application\User\GetList\GetListHandler;
 use CrmSell\Users\Application\User\GetList\Request\GetList;
+use CrmSell\Users\Domains\Entities\Role;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -68,5 +69,28 @@ class UsersController
         $result = $handler->handle(new GetList($request->toArray()));
 
         return $this->getResponse($result);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getRoles(Request $request): JsonResponse
+    {
+        $user = Auth::user();
+        if (empty($user) || !$user->hasRole('admin')) {
+            return $this->getErrorsResponse(["Access is denied."]);
+        }
+
+        $roles = Role::all()->map(function ($item) {
+            return [
+                "key" => $item->id,
+                "value" => $item->name,
+            ];
+        })->sortBy(function ($item) {
+            return strtolower($item['value']);
+        });
+
+        return $this->getSuccessfulResponse($roles->toArray());
     }
 }

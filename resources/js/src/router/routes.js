@@ -47,7 +47,16 @@ const routes = [
     },
     {
         path: '/users',
+        name: 'users-list',
         component: () => import("../modules/Admin/pages/Users/List/UsersList.vue"),
+        meta: {
+            accessScopes: [RolesEnum.ADMIN],
+            sidepanel: 'admin',
+        },
+    },
+    {
+        path: '/users/create',
+        component: () => import("../modules/Admin/pages/Users/CreateUpdate/UserCreateUpdate.vue"),
         meta: {
             accessScopes: [RolesEnum.ADMIN],
             sidepanel: 'admin',
