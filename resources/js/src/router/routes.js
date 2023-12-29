@@ -79,6 +79,81 @@ const routes = [
         },
     },
     {
+        path: '/order-status',
+        name: 'order-status',
+        component: () => import("../modules/Admin/pages/OrderStatus/List/OrderStatusList.vue"),
+        meta: {
+            accessScopes: [RolesEnum.ADMIN],
+            sidepanel: 'admin',
+        },
+    },
+    {
+        path: '/order-status/create',
+        component: () => import("../modules/Admin/pages/OrderStatus/Edit/OrderStatusEdit.vue"),
+        meta: {
+            accessScopes: [RolesEnum.ADMIN],
+            sidepanel: 'admin',
+        },
+    },
+    {
+        path: '/order-status/edit/:recordId',
+        component: () => import("../modules/Admin/pages/OrderStatus/Edit/OrderStatusEdit.vue"),
+        meta: {
+            accessScopes: [RolesEnum.ADMIN],
+            sidepanel: 'admin',
+        },
+    },
+    {
+        path: '/return-status',
+        name: 'return-status',
+        component: () => import("../modules/Admin/pages/ReturnStatus/List/ReturnStatusList.vue"),
+        meta: {
+            accessScopes: [RolesEnum.ADMIN],
+            sidepanel: 'admin',
+        },
+    },
+    {
+        path: '/return-status/create',
+        component: () => import("../modules/Admin/pages/ReturnStatus/Edit/ReturnStatusEdit.vue"),
+        meta: {
+            accessScopes: [RolesEnum.ADMIN],
+            sidepanel: 'admin',
+        },
+    },
+    {
+        path: '/return-status/edit/:recordId',
+        component: () => import("../modules/Admin/pages/ReturnStatus/Edit/ReturnStatusEdit.vue"),
+        meta: {
+            accessScopes: [RolesEnum.ADMIN],
+            sidepanel: 'admin',
+        },
+    },
+    {
+        path: '/providers',
+        name: 'providers',
+        component: () => import("../modules/Admin/pages/Providers/List/ProvidersList.vue"),
+        meta: {
+            accessScopes: [RolesEnum.ADMIN],
+            sidepanel: 'admin',
+        },
+    },
+    {
+        path: '/provider/create',
+        component: () => import("../modules/Admin/pages/Providers/Edit/ProviderEdit.vue"),
+        meta: {
+            accessScopes: [RolesEnum.ADMIN],
+            sidepanel: 'admin',
+        },
+    },
+    {
+        path: '/provider/edit/:recordId',
+        component: () => import("../modules/Admin/pages/Providers/Edit/ProviderEdit.vue"),
+        meta: {
+            accessScopes: [RolesEnum.ADMIN],
+            sidepanel: 'admin',
+        },
+    },
+    {
         path: '/access-error',
         name: RouteNamesEnum.ACCESS_ERROR,
         meta: {
