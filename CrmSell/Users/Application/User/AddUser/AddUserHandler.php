@@ -80,7 +80,7 @@ class AddUserHandler extends AbstractHandler
     {
         $roles = Role::whereIn('id', $command->getRoles())->get();
 
-        $rolesDiff = array_diff($command->getRoles(), $roles->map(fn (Role $item) => $item->id));
+        $rolesDiff = array_diff($command->getRoles(), $roles->map(fn (Role $item) => $item->id)->toArray());
         if (count($rolesDiff) > 0) {
             $rolesString = implode(",", $rolesDiff);
             throw new \DomainException("Roles does $rolesString not exist.", 404);

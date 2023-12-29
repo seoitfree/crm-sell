@@ -49,22 +49,39 @@ class UpdateHandler extends AbstractHandler
     {
         $userAuth = Auth::user();
         if ($userAuth->id !== $request->getEntityId() && !$userAuth->hasRole('admin')) {
-            $this->resultHandler->setStatusCode(403)
-                ->setErrors(["Access is denied."])
-                ->setStatus(ResponseCodeErrors::FORBIDDEN_ERROR);
+            $this->resultHandler->setStatusCode(403)->setErrors(["Access is denied."])->setStatus(ResponseCodeErrors::FORBIDDEN_ERROR);
             return;
         }
 
         $user = User::find($request->getEntityId());
+        $userByEmail = User::where('email', $request->getEmail())->first();
+        if ($userByEmail->id !==  $user->id) {
+            $this->resultHandler->setStatusCode(422)->setErrors([
+                [
+                    "field" => 'email',
+                    "message" => 'Email is occupied by another user.'
+                ]
+            ])->setStatus(ResponseCodeErrors::VALIDATE_ERROR);
+            return;
+        }
+        $this->saveData($request, $user);
+    }
+
+    /**
+     * @param Update $request
+     * @param User $user
+     * @return void
+     * @throws \Exception
+     */
+    protected function saveData(Update $request, User $user): void
+    {
         $user->update($request->forUpdate());
         if ($request->getSwitchResetPassword()) {
             $user->password = bcrypt($request->getPassword());
         }
-
         if (!$user->save()) {
             throw new \Exception("Error save, try next time.", 500);
         }
-
         $this->resultHandler->setStatusCode()->setStatus();
     }
 }

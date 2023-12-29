@@ -129,9 +129,6 @@ export default defineComponent({
     created() {
         this.getUser()
     },
-    mounted() {
-
-    },
     methods: {
         getUser(): void {
             axios.get('/api/v1/user/' + this.userId).then((response) => {
@@ -159,8 +156,13 @@ export default defineComponent({
                         actions.setFieldError(item.field, item.message);
                     })
                     this.isLoading = false;
-                } else {
+                    return;
+                }
+                if (response.status === 200) {
                     this.$router.push({name: 'users-list'});
+                } else {
+                    alert(response.data.errors[0]);
+                    this.isLoading = false;
                 }
             }).catch((error) => {
                 console.error(error)

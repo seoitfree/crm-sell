@@ -82,7 +82,6 @@ export default defineComponent({
         return {
             isLoading: false,
             form: {
-                entityId: '',
                 firstName: '',
                 lastName: '',
                 email: '',
@@ -126,8 +125,13 @@ export default defineComponent({
                         actions.setFieldError(item.field, item.message);
                     })
                     this.isLoading = false;
-                } else {
+                    return;
+                }
+                if (response.status === 201) {
                     this.$router.push({name: 'users-list'});
+                } else {
+                    alert(response.data.errors[0]);
+                    this.isLoading = false;
                 }
             }).catch((error) => {
                 console.error(error)

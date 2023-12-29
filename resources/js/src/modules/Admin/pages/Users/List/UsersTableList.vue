@@ -16,27 +16,27 @@
                                 @clickSort="clickSort"
                             />
                             <tbody>
+                            <template v-for="item in records">
                             <tr>
-                                <template v-for="item in records">
-                                    <td class="cell">{{ item.first_name }} {{ item.last_name }}</td>
-                                    <td class="cell">{{ item.created_at }}</td>
-                                    <td class="cell">{{ item.updated_at }}</td>
-                                    <td class="cell">{{ item.email }}</td>
-                                    <td class="cell">
-                                        <span :class="['badge', item.status ? 'bg-danger' : 'bg-success']">{{ item.status ? 'Уволен' : 'Активный' }}</span>
-                                    </td>
-                                    <td class="cell">
-                                        <router-link class="btn-sm app-btn-secondary" :to="`/user/detail/${item.id}`">
-                                            View
-                                        </router-link>
-                                    </td>
-                                    <td class="cell">
-                                        <router-link class="btn-sm app-btn-secondary" :to="`/user/edit/${item.id}`">
-                                            Edit
-                                        </router-link>
-                                    </td>
-                                </template>
+                                <td class="cell">{{ item.first_name }} {{ item.last_name }}</td>
+                                <td class="cell">{{ item.created_at }}</td>
+                                <td class="cell">{{ item.updated_at }}</td>
+                                <td class="cell">{{ item.email }}</td>
+                                <td class="cell">
+                                    <span :class="['badge', item.status ? 'bg-danger' : 'bg-success']">{{ item.status ? 'Уволен' : 'Активный' }}</span>
+                                </td>
+                                <td class="cell">
+                                    <router-link class="btn-sm app-btn-secondary" :to="`/user/detail/${item.id}`">
+                                        View
+                                    </router-link>
+                                </td>
+                                <td class="cell">
+                                    <router-link class="btn-sm app-btn-secondary" :to="`/user/edit/${item.id}`">
+                                        Edit
+                                    </router-link>
+                                </td>
                             </tr>
+                            </template>
                             </tbody>
 
                         </table>

@@ -24,7 +24,7 @@ import {defineAsyncComponent, defineComponent} from "vue";
 
 const Header = defineAsyncComponent(() => import('@/js/src/common/components/Header/Header.vue'));
 const Footer = defineAsyncComponent(() => import('@/js/src/common/components/Footer/Footer.vue'));
-const CreateUpdateForm = defineAsyncComponent(() => import('@/js/src/modules/Admin/pages/Users/CreateUpdate/CreateForm.vue'));
+const CreateUpdateForm = defineAsyncComponent(() => import('@/js/src/modules/Admin/pages/Users/CreateUpdate/Create/CreateForm.vue'));
 
 export default defineComponent({
     name: "UserCreate",

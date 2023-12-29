@@ -8,7 +8,7 @@
                 </div>
             </div>
             <div class="col text-end" v-if="permission">
-                <a class="btn-sm app-btn-secondary" @click="remove()">Удалить</a>
+                <a href="" class="btn-sm app-btn-secondary" @click.prevent="remove()">Удалить</a>
             </div>
         </div>
     </div>

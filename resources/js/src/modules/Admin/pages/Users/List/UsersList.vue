@@ -13,7 +13,7 @@
                         <div class="page-utilities">
                             <div class="row g-2 justify-content-start justify-content-md-end align-items-center">
                                 <div class="col-auto">
-                                    <router-link class="btn app-btn-secondary" to="/users/create">
+                                    <router-link class="btn app-btn-secondary" to="/user/create">
                                         Создать
                                     </router-link>
                                 </div>

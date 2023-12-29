@@ -58,9 +58,6 @@ export default defineComponent({
             required: true,
         }
     },
-    created() {
-        console.log('pagination');
-    },
     methods: {
         clickButton(page: number): void {
             this.$emit("clickPagination", page);

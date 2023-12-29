@@ -23,6 +23,10 @@ class Update extends RootRequest
         $this->mapField($request);
     }
 
+    public function getEmail(): string {
+        return $this->email;
+    }
+
     public function getSwitchResetPassword(): bool {
         return $this->confirmPassword;
     }
@@ -69,7 +73,7 @@ class Update extends RootRequest
     public function getRules(): array
     {
         $rules = [
-            "email" => 'required|string|unique:users|email',
+            "email" => 'required|string|email',
             "first_name" => 'required|string|max:25|min:2',
             "last_name" => 'required|string|max:25|min:2',
         ];
