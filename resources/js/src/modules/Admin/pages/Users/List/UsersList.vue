@@ -58,9 +58,6 @@ export default defineComponent({
         Header,
         UsersTableList
     },
-    created() {
-        console.log("UsersList");
-    }
 });
 </script>
 

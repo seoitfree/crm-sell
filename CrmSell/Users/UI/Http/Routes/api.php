@@ -17,8 +17,13 @@ Route::middleware(['api', 'auth:sanctum'])->group(function () {
         ->namespace("CrmSell\Users\UI\Http\Controllers")
         ->group(function () {
             Route::post('/user', 'UsersController@addUser');
+            Route::put('/user', 'UsersController@updateUser');
             Route::get('/user', 'UsersController@getUser');
             Route::get('/users', 'UsersController@getList');
             Route::get('/roles', 'UsersController@getRoles');
+            Route::get('/user/{id}', 'UsersController@getUserById')->whereUuid('id');
+            Route::get('/user/roles/{id}', 'UsersController@getUserRolesId')->whereUuid('id');
+            Route::post('/user/role/', 'UsersController@addRole');
+            Route::post('/user/role/untie/', 'UsersController@untieRole');
         });
 });

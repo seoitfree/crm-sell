@@ -55,8 +55,24 @@ const routes = [
         },
     },
     {
-        path: '/users/create',
-        component: () => import("../modules/Admin/pages/Users/CreateUpdate/UserCreateUpdate.vue"),
+        path: '/user/create',
+        component: () => import("../modules/Admin/pages/Users/CreateUpdate/Create/UserCreate.vue"),
+        meta: {
+            accessScopes: [RolesEnum.ADMIN],
+            sidepanel: 'admin',
+        },
+    },
+    {
+        path: '/user/edit/:recordId',
+        component: () => import("../modules/Admin/pages/Users/CreateUpdate/Update/UserUpdate.vue"),
+        meta: {
+            accessScopes: [RolesEnum.ADMIN],
+            sidepanel: 'admin',
+        },
+    },
+    {
+        path: '/user/detail/:recordId',
+        component: () => import("../modules/Admin/pages/Users/DetailView/UserDetailView.vue"),
         meta: {
             accessScopes: [RolesEnum.ADMIN],
             sidepanel: 'admin',

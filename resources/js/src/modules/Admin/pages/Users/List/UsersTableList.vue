@@ -26,7 +26,7 @@
                                         <span :class="['badge', item.status ? 'bg-danger' : 'bg-success']">{{ item.status ? 'Уволен' : 'Активный' }}</span>
                                     </td>
                                     <td class="cell">
-                                        <router-link class="btn-sm app-btn-secondary" :to="`/user/view/${item.id}`">
+                                        <router-link class="btn-sm app-btn-secondary" :to="`/user/detail/${item.id}`">
                                             View
                                         </router-link>
                                     </td>

@@ -49,4 +49,26 @@ class UsersRepository implements UsersRepositoryInterface
 
         return $result;
     }
+
+    /**
+     * @param string $userId
+     * @return Collection
+     * @throws \Exception
+     */
+    public function getUsersRolesList(string $userId): Collection
+    {
+        try {
+            $result = DB::table('users as u')
+                ->select(['r.id as roleId', 'r.name as roleName',])
+                ->join('model_has_roles as m_h_r', 'u.id', '=', 'm_h_r.model_uuid')
+                ->join('roles as r', 'r.id', '=', 'm_h_r.role_id')
+                ->where("u.id", $userId)
+                ->get();
+        } catch (QueryException $e) {
+            Log::error($e->getMessage() . $e->getTraceAsString());
+            throw new \Exception("UsersRepository::getUsersRolesList() error.");
+        }
+
+        return $result;
+    }
 }

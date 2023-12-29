@@ -34,9 +34,7 @@ trait ResponseTrait
         return response()->json([
             'status' => $status,
             "data" => [],
-            "errors" => [
-                "error" => $error
-            ],
+            "errors" => $error,
         ], $code);
     }
 

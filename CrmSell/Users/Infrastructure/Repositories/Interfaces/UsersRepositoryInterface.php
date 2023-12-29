@@ -10,4 +10,6 @@ interface UsersRepositoryInterface
     public function getListUsers(GetListDTO $getListDTO): Collection;
 
     public function getCountForListUsers(): int;
+
+    public function getUsersRolesList(string $userId): Collection;
 }

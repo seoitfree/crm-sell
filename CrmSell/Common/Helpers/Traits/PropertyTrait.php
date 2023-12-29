@@ -17,7 +17,9 @@ trait PropertyTrait
                     $this->$fieldName = trim($value);
                 } elseif (gettype($this->$fieldName) === "int") {
                     $this->$fieldName = (int)trim($value);
-                } else {
+                }  elseif (gettype($this->$fieldName) === "bool") {
+                    $this->$fieldName = array_key_exists($fieldName, $request) && (bool)$value;
+                }else {
                     $this->$fieldName = $value;
                 }
             }

@@ -1,11 +1,6 @@
 <template>
     <div>
-        <div v-if="isLoading" class="d-flex justify-content-center">
-            <div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
-        <Form v-if="!isLoading" tag="form" @submit="onSubmit" :validation-schema="validation">
+        <Form tag="form" ref="myForm" @submit="onSubmit" :validation-schema="validation">
             <div class="form-group row">
                 <div class="form-group col-md-6">
                     <label for="firstName">Имя</label>
@@ -50,8 +45,13 @@
                 </div>
             </div>
 
-            <div class="text-center mt-2">
+            <div v-if="!isLoading" class="text-center mt-2">
                 <button type="submit" class="btn app-btn-primary">Создать</button>
+            </div>
+            <div v-if="isLoading" class="d-flex justify-content-center mt-2">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
             </div>
         </Form>
     </div>
@@ -61,7 +61,8 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import * as yup from "yup";
-import { Form, Field, ErrorMessage } from 'vee-validate';
+import { Form, Field, ErrorMessage, useForm } from 'vee-validate';
+
 import axios from "axios";
 
 
@@ -71,7 +72,7 @@ interface Options {
 }
 
 export default defineComponent({
-    name: "CreateUpdateForm",
+    name: "CreateForm",
     components: {
         Form,
         Field,
@@ -96,52 +97,43 @@ export default defineComponent({
                 email:  yup.string().required('Поле обзательное').email('Некоректный формат.').min(8, 'Минимальное количество символов 8'),
                 password: yup.string().required('Поле обзательное').min(8, 'Минимальное количество символов 8'),
                 confirmPassword: yup.string()
-                    .oneOf([yup.ref('password'), null], 'Пароли должны совпадать')
-                    .required('Поле обзательное'),
+                     .oneOf([yup.ref('password'), null], 'Пароли должны совпадать')
+                     .required('Поле обзательное'),
                 roles: yup.array().min(1, 'Выберите хотя бы одну роль'),
             }),
             rolesEnum: [] as Options[],
         }
     },
     async created() {
-        if (this.form.entityId === '') {
-            this.isLoading = true;
-            try {
-                await this.getRoles();
-                this.isLoading = false;
-            } catch (e) {
-                alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
-                this.isLoading = false;
-            }
+        this.isLoading = true;
+        try {
+            await this.getRoles();
+            this.isLoading = false;
+        } catch (e) {
+            alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
+            this.isLoading = false;
         }
     },
     methods: {
        onSubmit(values, actions) {
-            console.log("onSubmit");
-           // console.log(actions);
-           //  return;
-            if (this.form.entityId === '') {
-                this.create(actions);
-            } else {
-                this.update(actions);
-            }
+           this.create(actions);
         },
         create(actions): void {
             this.isLoading = true;
-            axios.post('/api/v1/user', this.form).then((response) => {
+            axios.post('/api/v1/user', this.form).then(async (response) => {
                 if (response.status === 422) {
-                    console.log(response);
-                    //actions.setFieldError('email', 'this email is already taken');
+                    response.data.errors.forEach((item) => {
+                        actions.setFieldError(item.field, item.message);
+                    })
                     this.isLoading = false;
                 } else {
                     this.$router.push({name: 'users-list'});
                 }
             }).catch((error) => {
+                console.error(error)
+                alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
                 this.isLoading = false;
             });
-        },
-        update(actions): void {
-
         },
         async getRoles(): Promise<void> {
             return axios.get('/api/v1/roles').then((response) => {
