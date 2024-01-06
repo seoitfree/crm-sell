@@ -23,7 +23,7 @@
 
                 </div><!--//row-->
 
-                <OrderStatusTable/>
+                <ProvidersTable/>
             </div>
         </div>
     </div>

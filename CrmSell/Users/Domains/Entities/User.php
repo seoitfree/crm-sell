@@ -27,6 +27,10 @@ class User extends Authenticatable
         'status',
         "first_name",
         "last_name",
+        'created_by',
+        'modified_user_id',
+        "created_at",
+        "updated_at"
     ];
 
     /**

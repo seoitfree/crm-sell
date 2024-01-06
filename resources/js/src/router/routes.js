@@ -79,50 +79,24 @@ const routes = [
         },
     },
     {
-        path: '/order-status',
-        name: 'order-status',
-        component: () => import("../modules/Admin/pages/OrderStatus/List/OrderStatusList.vue"),
+        path: '/status/:type',
+        component: () => import("../modules/Admin/pages/Status/List/StatusList.vue"),
         meta: {
             accessScopes: [RolesEnum.ADMIN],
             sidepanel: 'admin',
         },
     },
     {
-        path: '/order-status/create',
-        component: () => import("../modules/Admin/pages/OrderStatus/Edit/OrderStatusEdit.vue"),
+        path: '/status/:type/create',
+        component: () => import("../modules/Admin/pages/Status/Edit/StatusEdit.vue"),
         meta: {
             accessScopes: [RolesEnum.ADMIN],
             sidepanel: 'admin',
         },
     },
     {
-        path: '/order-status/edit/:recordId',
-        component: () => import("../modules/Admin/pages/OrderStatus/Edit/OrderStatusEdit.vue"),
-        meta: {
-            accessScopes: [RolesEnum.ADMIN],
-            sidepanel: 'admin',
-        },
-    },
-    {
-        path: '/return-status',
-        name: 'return-status',
-        component: () => import("../modules/Admin/pages/ReturnStatus/List/ReturnStatusList.vue"),
-        meta: {
-            accessScopes: [RolesEnum.ADMIN],
-            sidepanel: 'admin',
-        },
-    },
-    {
-        path: '/return-status/create',
-        component: () => import("../modules/Admin/pages/ReturnStatus/Edit/ReturnStatusEdit.vue"),
-        meta: {
-            accessScopes: [RolesEnum.ADMIN],
-            sidepanel: 'admin',
-        },
-    },
-    {
-        path: '/return-status/edit/:recordId',
-        component: () => import("../modules/Admin/pages/ReturnStatus/Edit/ReturnStatusEdit.vue"),
+        path: '/status/:type/edit/:recordId',
+        component: () => import("../modules/Admin/pages/Status/Edit/StatusEdit.vue"),
         meta: {
             accessScopes: [RolesEnum.ADMIN],
             sidepanel: 'admin',

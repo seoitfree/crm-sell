@@ -29,7 +29,9 @@ class DatabaseSeeder extends Seeder
                 'password' => bcrypt(env('SUPER_ADMIN_PASSWORD')),
                 'email' => $email,
                 'first_name' => 'SUPER_ADMIN',
-                'last_name' => 'SUPER_ADMIN'
+                'last_name' => 'SUPER_ADMIN',
+                'created_by' => '1',
+                'modified_user_id' => '1',
             ]);
             $user->save();
 

@@ -19,10 +19,10 @@
                             <template v-for="item in records">
                                 <tr>
                                     <td class="cell">{{ item.name }} </td>
-                                    <td class="cell">{{ item.created_at }}</td>
-                                    <td class="cell">{{ item.updated_at }}</td>
+                                    <td class="cell">{{ getLocalDateTime(item.created_at) }}</td>
+                                    <td class="cell">{{ getLocalDateTime(item.updated_at) }}</td>
                                     <td class="cell">
-                                        <router-link class="btn-sm app-btn-secondary" :to="`/order-status/edit/${item.id}`">
+                                        <router-link class="btn-sm app-btn-secondary" :to="`/provider/edit/${item.id}`">
                                             Edit
                                         </router-link>
                                     </td>
@@ -46,8 +46,9 @@
 import {defineAsyncComponent, defineComponent} from "vue";
 import {HeadColumn} from "../../../../../common/components/Table/Type/HeadColumn";
 import {SortData} from "../../../../../common/components/Table/Type/SortData";
-import axios from "axios/index";
+import axios from "axios";
 import pagination from "../../../../../common/components/Table/mixins/Pagination";
+import {getLocalDateTime} from "../../../../../common/helpers/DateTime";
 
 const HeadTable = defineAsyncComponent(() => import("@/js/src/common/components/Table/HeadTable.vue"));
 const Pagination = defineAsyncComponent(() => import('@/js/src/common/components/Table/Pagination.vue'));
@@ -113,6 +114,9 @@ export default defineComponent({
         refreshRecords(page: number): void {
             this.pagination.pages.current_page = page;
             this.getData();
+        },
+        getLocalDateTime(date: string): string {
+            return getLocalDateTime(date);
         }
     }
 });

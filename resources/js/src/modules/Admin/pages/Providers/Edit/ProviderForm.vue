@@ -10,7 +10,7 @@
             </div>
 
             <div v-if="!isLoading" class="text-center mt-2">
-                <button type="submit" class="btn app-btn-primary">Создать</button>
+                <button type="submit" class="btn app-btn-primary">{{recordId === '' ? 'Создать' : 'Редактировать'}}</button>
             </div>
             <div v-if="isLoading" class="d-flex justify-content-center mt-2">
                 <div class="spinner-border" role="status">
@@ -37,7 +37,7 @@ export default defineComponent({
         ErrorMessage
     },
     props: {
-        userId: {
+        recordId: {
             type: String,
             required: true,
         },
@@ -46,8 +46,8 @@ export default defineComponent({
         return {
             isLoading: false,
             form: {
+                id: '',
                 name: '',
-                alias: '',
             },
             validation: yup.object().shape({
                 name:  yup.string().required('Поле обзательное').min(2, 'Минимальное количество символов 2'),
@@ -55,17 +55,16 @@ export default defineComponent({
         }
     },
     created() {
-        if (this.userId !== '') {
+        if (this.recordId !== '') {
             this.getStatus();
         }
     },
     methods: {
         getStatus(): void {
-            axios.get('/api/v1/provider/' + this.userId).then((response) => {
+            axios.get('/api/v1/provider/' + this.recordId).then((response) => {
                 if (response.status === 200) {
-                    const status = response.data.data.status;
-                    this.form.name = status.name;
-                    this.form.alias = status.alias;
+                    const provider = response.data.data.provider;
+                    this.form.name = provider.name;
                 }
             }).catch((error) => {
                 console.error(error);
@@ -73,7 +72,7 @@ export default defineComponent({
             })
         },
         onSubmit(values, actions): void {
-            if (this.userId === '') {
+            if (this.recordId === '') {
                 this.create(actions);
             } else {
                 this.update(actions);
@@ -89,6 +88,7 @@ export default defineComponent({
         },
         update(actions): void {
             this.isLoading = true;
+            this.form.id = this.recordId;
             axios.put('/api/v1/provider', this.form).then(async (response) => {
                 this.responseHandle(response, actions, 200);
             }).catch((error) => {

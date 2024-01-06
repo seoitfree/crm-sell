@@ -10,7 +10,7 @@
                     </div>
                 </div>
 
-                <ProviderForm :userId="userId"/>
+                <ProviderForm :recordId="recordId"/>
             </div>
         </div>
     </div>
@@ -37,7 +37,7 @@ export default defineComponent({
     },
     data() {
         return {
-            userId: this.$route.params?.recordId ?? '',
+            recordId: this.$route.params?.recordId ?? '',
         }
     }
 });

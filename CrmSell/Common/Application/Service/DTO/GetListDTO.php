@@ -8,6 +8,7 @@ class GetListDTO
 {
     private string $sortField = '';
     private string $sortDir = '';
+    private array $filter = [];
 
     private PaginationInterface $pagination;
 
@@ -33,6 +34,20 @@ class GetListDTO
         $this->pagination = $pagination;
 
         return $this;
+    }
+
+    public function setFilter(array $filter): self {
+        $this->filter = $filter;
+
+        return $this;
+    }
+
+    public function getFilter(string $key): array {
+        return $this->filter;
+    }
+
+    public function getFilterValue(string $key): string {
+        return array_key_exists($key, $this->filter) ? $this->filter[$key] : '';
     }
 
     public function getPagination(): PaginationInterface { return $this->pagination; }

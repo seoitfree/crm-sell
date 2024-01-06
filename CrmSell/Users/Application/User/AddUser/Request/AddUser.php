@@ -62,7 +62,7 @@ class AddUser extends RootRequest
     public function getRules(): array
     {
         return [
-            "email" => 'required|string|unique:users|email',
+            "email" => 'required|string|unique:users,email|email',
             "password" => 'required|string|max:100|min:8|confirmed',
             'password_confirmation' => 'required|min:8',
             "first_name" => 'required|string|max:25|min:2',

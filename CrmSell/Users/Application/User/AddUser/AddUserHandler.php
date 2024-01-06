@@ -9,6 +9,7 @@ use CrmSell\Common\Application\Service\Request\RequestInterface;
 use CrmSell\Users\Application\User\AddUser\Request\AddUser;
 use CrmSell\Users\Domains\Entities\Role;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use CrmSell\Users\Domains\Entities\User;
@@ -54,11 +55,18 @@ class AddUserHandler extends AbstractHandler
      */
     private function addUser(AddUser $command): string
     {
+        $userId = auth()->id();
+        $date = Carbon::now()->format('Y-m-d H:i:s');
+
         $user = User::create([
             "email" => $command->getEmail(),
             "password" => bcrypt($command->getPassword()),
             "first_name" => $command->getFirstName(),
             "last_name" => $command->getLastName(),
+            'created_by' => $userId,
+            'modified_user_id' => $userId,
+            'created_at' => $date,
+            'updated_at' => $date,
         ]);
         if (!$user->save()) {
             throw new \Exception("Error save, try next time.", 500);
