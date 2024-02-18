@@ -1,8 +1,8 @@
 <template>
-    <div id="app-sidepanel" class="app-sidepanel">
+    <div id="app-sidepanel" :class="['app-sidepanel', mobileToggler ? 'sidepanel-visible' : '']">
         <div id="sidepanel-drop" class="sidepanel-drop"></div>
         <div class="sidepanel-inner d-flex flex-column">
-            <a href="#" id="sidepanel-close" class="sidepanel-close d-xl-none">&times;</a>
+            <a href="#" id="sidepanel-close" class="sidepanel-close d-xl-none" @click="sidepanelClose()">&times;</a>
 
             <Branding/>
 
@@ -158,6 +158,17 @@ export default defineComponent({
     components: {
         Branding,
         FooterSidepanel
+    },
+    props: {
+        mobileToggler: {
+            type: Boolean,
+            required: true,
+        }
+    },
+    methods: {
+        sidepanelClose(): void {
+            this.$emit('sidepanelClose');
+        }
     }
 });
 

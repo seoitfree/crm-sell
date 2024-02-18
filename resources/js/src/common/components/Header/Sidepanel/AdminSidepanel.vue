@@ -1,8 +1,8 @@
 <template>
-    <div id="app-sidepanel" class="app-sidepanel">
+    <div id="app-sidepanel" :class="['app-sidepanel', mobileToggler ? 'sidepanel-visible' : '']">
         <div id="sidepanel-drop" class="sidepanel-drop"></div>
         <div class="sidepanel-inner d-flex flex-column">
-            <a href="#" id="sidepanel-close" class="sidepanel-close d-xl-none">&times;</a>
+            <a href="#" id="sidepanel-close" class="sidepanel-close d-xl-none" @click="sidepanelClose()">&times;</a>
 
             <Branding/>
 
@@ -64,7 +64,7 @@ import {StatusEnum} from "../../../../modules/Admin/pages/Status/enum/StatusEnum
 const Branding = defineAsyncComponent(() => import('@/js/src/common/components/Header/Branding.vue'));
 const FooterSidepanel = defineAsyncComponent(() => import('@/js/src/common/components/Header/Sidepanel/FooterSidepanel.vue'));
 
-import {defineAsyncComponent, defineComponent} from "vue";
+import {defineAsyncComponent, defineComponent, PropType} from "vue";
 
 export default defineComponent({
     name: "AdminSidepanel",
@@ -77,6 +77,17 @@ export default defineComponent({
             statusEnum: StatusEnum,
         }
     },
+    props: {
+        mobileToggler: {
+            type: Boolean,
+            required: true,
+        }
+    },
+    methods: {
+        sidepanelClose(): void {
+            this.$emit('sidepanelClose');
+        }
+    }
 });
 
 </script>

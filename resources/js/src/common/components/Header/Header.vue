@@ -6,8 +6,12 @@
                     <div class="row justify-content-between align-items-center">
 
                         <div class="col-auto">
-                            <a id="sidepanel-toggler" class="sidepanel-toggler d-inline-block d-xl-none" href="#">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" role="img"><title>Menu</title><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg>
+                            <a id="sidepanel-toggler" class="sidepanel-toggler d-inline-block d-xl-none" href="#" @click="sidepanelToggler()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" role="img">
+                                    <title>Menu</title>
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22">
+                                    </path>
+                                </svg>
                             </a>
                         </div><!--//col-->
                         <div class="search-mobile-trigger d-sm-none col">
@@ -52,10 +56,16 @@
         </div><!--//app-header-inner-->
 
         <template v-if="this.sidepanel === 'admin'">
-            <AdminSidepanel/>
+            <AdminSidepanel
+                :mobileToggler="mobileToggler"
+                @sidepanelClose="sidepanelToggler"
+            />
         </template>
         <template v-else>
-            <AppSidepanel/>
+            <AppSidepanel
+                :mobileToggler="mobileToggler"
+                @sidepanelClose="sidepanelToggler"
+            />
         </template>
 
     </header><!--//app-header-->
@@ -83,6 +93,7 @@ export default defineComponent({
     data() {
         return {
             sidepanel: '',
+            mobileToggler: false,
         };
     },
     created() {
@@ -96,7 +107,10 @@ export default defineComponent({
                     userStore.$reset();
                     this.$router.push({name: RouteNamesEnum.USER_LOGIN });
                 })
-        }
+        },
+        sidepanelToggler() {
+            this.mobileToggler = !this.mobileToggler;
+        },
     }
 });
 
