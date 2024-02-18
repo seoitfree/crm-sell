@@ -71,4 +71,8 @@ class User extends Authenticatable
             "status" => $this->status,
         ];
     }
+
+    public function isNotActive(): bool {
+        return $this->status === 1;
+    }
 }

@@ -102,7 +102,7 @@ export default defineComponent({
             },
             statusEnum: [
                 {key: '0', value: 'Активный'},
-                {key: '1', value: 'Уволен'}
+                {key: '1', value: 'Не активный'}
             ],
             validation: yup.object().shape({
                 switchResetPassword: yup.boolean(),

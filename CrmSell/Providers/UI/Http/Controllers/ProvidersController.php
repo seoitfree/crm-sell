@@ -29,7 +29,7 @@ class ProvidersController
     {
         /* @var User */
         $user = Auth::user();
-        if (empty($user) || !$user->hasRole('admin')) {
+        if (empty($user) || !$user->hasRole('admin') || $user->isNotActive()) {
             return $this->getErrorsResponse(["Access is denied."]);
         }
 
@@ -49,7 +49,7 @@ class ProvidersController
     {
         /* @var User */
         $user = Auth::user();
-        if (empty($user) || !$user->hasRole('admin')) {
+        if (empty($user) || !$user->hasRole('admin') || $user->isNotActive()) {
             return $this->getErrorsResponse(["Access is denied."]);
         }
 
@@ -69,7 +69,7 @@ class ProvidersController
     {
         /* @var User */
         $user = Auth::user();
-        if (empty($user) || !$user->hasRole('admin')) {
+        if (empty($user) || !$user->hasRole('admin') || $user->isNotActive()) {
             return $this->getErrorsResponse(["Access is denied."]);
         }
 
@@ -87,7 +87,7 @@ class ProvidersController
     public function getProviderById(string $id): JsonResponse
     {
         $authUser = Auth::user();
-        if (empty($authUser)) {
+        if (empty($authUser) || $authUser->isNotActive()) {
             return $this->getErrorsResponse(["Access is denied."]);
         }
 

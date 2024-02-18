@@ -32,7 +32,7 @@ class UsersController
     public function getUser(Request $request): JsonResponse
     {
         $user = Auth::user();
-        if (empty($user)) {
+        if (empty($user) || $user->isNotActive()) {
             return $this->getErrorsResponse(["Access is denied."]);
         }
 
@@ -52,7 +52,7 @@ class UsersController
     {
         /* @var User */
         $user = Auth::user();
-        if (empty($user) || !$user->hasRole('admin')) {
+        if (empty($user) || !$user->hasRole('admin') || $authUser->isNotActive()) {
             return $this->getErrorsResponse(["Access is denied."]);
         }
 
@@ -72,7 +72,7 @@ class UsersController
     {
         /* @var User */
         $user = Auth::user();
-        if (empty($user)) {
+        if (empty($user) || $user->isNotActive()) {
             return $this->getErrorsResponse(["Access is denied."]);
         }
 
@@ -92,7 +92,7 @@ class UsersController
     public function getUserById(string $id, Request $request): JsonResponse
     {
         $authUser = Auth::user();
-        if (empty($authUser)) {
+        if (empty($authUser) || $authUser->isNotActive()) {
             return $this->getErrorsResponse(["Access is denied."]);
         }
 
@@ -112,7 +112,7 @@ class UsersController
     public function getUserRolesId(string $id, UsersRepository $repository): JsonResponse
     {
         $authUser = Auth::user();
-        if (empty($authUser)) {
+        if (empty($authUser) || $authUser->isNotActive()) {
             return $this->getErrorsResponse(["Access is denied."], 403);
         }
 
@@ -129,7 +129,7 @@ class UsersController
     public function addRole(Request $request, AddRoleHandler $handler): JsonResponse
     {
         $authUser = Auth::user();
-        if (empty($authUser) || !$authUser->hasRole('admin')) {
+        if (empty($authUser) || $authUser->isNotActive() || !$authUser->hasRole('admin')) {
             return $this->getErrorsResponse(["Access is denied."], 403);
         }
 
@@ -147,7 +147,7 @@ class UsersController
     public function untieRole(Request $request, UntieRoleHandler $handler): JsonResponse
     {
         $authUser = Auth::user();
-        if (empty($authUser) || !$authUser->hasRole('admin')) {
+        if (empty($authUser) || !$authUser->hasRole('admin') || $authUser->isNotActive()) {
             return $this->getErrorsResponse(["Access is denied."],403);
         }
 
@@ -165,7 +165,7 @@ class UsersController
     public function getList(Request $request, GetListHandler $handler): JsonResponse
     {
         $user = Auth::user();
-        if (empty($user) || !$user->hasRole('admin')) {
+        if (empty($user) || !$user->hasRole('admin') || $user->isNotActive()) {
             return $this->getErrorsResponse(["Access is denied."], 403);
         }
 
@@ -181,7 +181,7 @@ class UsersController
     public function getRoles(Request $request): JsonResponse
     {
         $user = Auth::user();
-        if (empty($user) || !$user->hasRole('admin')) {
+        if (empty($user) || !$user->hasRole('admin') || $user->isNotActive()) {
             return $this->getErrorsResponse(["Access is denied."], 403);
         }
 

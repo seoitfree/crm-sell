@@ -42,7 +42,7 @@
 
                                 <DetailField
                                     :label="'Status'"
-                                    :data="user.status ? 'Уволен' : 'Активный'"
+                                    :data="user.status ? 'Не активный' : 'Активный'"
                                 />
                             </div>
 

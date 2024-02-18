@@ -23,7 +23,7 @@
                                 <td class="cell">{{ item.updated_at }}</td>
                                 <td class="cell">{{ item.email }}</td>
                                 <td class="cell">
-                                    <span :class="['badge', item.status ? 'bg-danger' : 'bg-success']">{{ item.status ? 'Уволен' : 'Активный' }}</span>
+                                    <span :class="['badge', item.status ? 'bg-danger' : 'bg-success']">{{ item.status ? 'Не активный' : 'Активный' }}</span>
                                 </td>
                                 <td class="cell">
                                     <router-link class="btn-sm app-btn-secondary" :to="`/user/detail/${item.id}`">

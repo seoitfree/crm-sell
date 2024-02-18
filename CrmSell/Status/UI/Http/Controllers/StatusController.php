@@ -27,7 +27,7 @@ class StatusController
     public function getList(Request $request, GetListHandler $handler): JsonResponse
     {
         $user = Auth::user();
-        if (empty($user) || !$user->hasRole('admin')) {
+        if (empty($user) || !$user->hasRole('admin') || $user->isNotActive()) {
             return $this->getErrorsResponse(["Access is denied."], 403);
         }
 
@@ -44,7 +44,7 @@ class StatusController
     public function create(Request $request, CreateHandler $handler): JsonResponse
     {
         $user = Auth::user();
-        if (empty($user) || !$user->hasRole('admin')) {
+        if (empty($user) || !$user->hasRole('admin') || $user->isNotActive()) {
             return $this->getErrorsResponse(["Access is denied."], 403);
         }
 
@@ -62,7 +62,7 @@ class StatusController
     public function edit(Request $request, EditHandler $handler): JsonResponse
     {
         $user = Auth::user();
-        if (empty($user) || !$user->hasRole('admin')) {
+        if (empty($user) || !$user->hasRole('admin') || $user->isNotActive()) {
             return $this->getErrorsResponse(["Access is denied."], 403);
         }
 
@@ -79,7 +79,7 @@ class StatusController
     public function getStatusById(string $id): JsonResponse
     {
         $authUser = Auth::user();
-        if (empty($authUser) || !$authUser->hasRole('admin')) {
+        if (empty($authUser) || !$authUser->hasRole('admin') || $user->isNotActive()) {
             return $this->getErrorsResponse(["Access is denied."]);
         }
 
