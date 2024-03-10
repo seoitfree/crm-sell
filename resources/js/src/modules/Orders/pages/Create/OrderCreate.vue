@@ -6,14 +6,11 @@
             <div class="container-xl">
                 <div class="row g-3 mb-4 align-items-center justify-content-between">
                     <div class="col-auto">
-                        <h1 class="app-page-title mb-0">{{ getHead() }}</h1>
+                        <h1 class="app-page-title mb-0">Додавання замовлення поставки</h1>
                     </div>
                 </div>
 
-                <StatusForm
-                    :recordId="recordId"
-                    :type="type"
-                />
+                <CreateForm />
             </div>
         </div>
     </div>
@@ -25,31 +22,19 @@
 <script lang="ts">
 
 import {defineAsyncComponent, defineComponent} from "vue";
-import {StatusEnum} from "../enum/StatusEnum";
-
 const Header = defineAsyncComponent(() => import('@/js/src/common/components/Header/Header.vue'));
 const Footer = defineAsyncComponent(() => import('@/js/src/common/components/Footer/Footer.vue'));
-const StatusForm = defineAsyncComponent(() => import('@/js/src/modules/Admin/pages/Status/Edit/StatusForm.vue'));
+const CreateForm = defineAsyncComponent(() => import('@/js/src/modules/Orders/pages/Create/CreateForm.vue'));
 
 export default defineComponent({
-    name: "StatusEdit",
+    name: "OrderCreate",
     components: {
         Header,
         Footer,
-        StatusForm
+        CreateForm
     },
-    data() {
-        return {
-            recordId: this.$route.params?.recordId ?? '',
-            type: this.$route.params?.type ?? '',
-        }
-    },
-    methods: {
-        getHead(): string {
-            return `${this.recordId === '' ? `Новий` : 'Редагувати'} статус ${StatusEnum.STATUS as string === this.type ? `замовлення` : `повернення`}`;
-        },
-    }
 });
+
 </script>
 
 <style scoped>

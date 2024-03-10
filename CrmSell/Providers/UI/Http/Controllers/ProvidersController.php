@@ -97,4 +97,15 @@ class ProvidersController
             "provider" => $provider->getDetail(),
         ]);
     }
+
+    /**
+     * @param GetListHandler $handler
+     * @return JsonResponse
+     */
+    public function getListAll(GetListHandler $handler): JsonResponse
+    {
+        $result = $handler->getListAll();
+
+        return $this->getResponse($result);
+    }
 }

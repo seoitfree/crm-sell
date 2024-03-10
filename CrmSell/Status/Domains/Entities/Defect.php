@@ -6,11 +6,11 @@ namespace CrmSell\Status\Domains\Entities;
 use CrmSell\Common\Domains\Traits\UuidTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class Status extends Model
+class Defect extends Model
 {
     use UuidTrait;
 
-    protected $table = 'status';
+    protected $table = 'defects';
 
     /**
      * @var array
@@ -29,7 +29,7 @@ class Status extends Model
         return [
             "id" => $this->id,
             "name" => $this->name,
-            "type" => 'status',
+            "type" => 'defect',
             "alias" => $this->alias,
         ];
     }

@@ -77,8 +77,8 @@ export default defineComponent({
                 type: '',
             },
             typeOptions: [
-                {key: StatusEnum.RETURN, value: "Повернення"},
-                {key: StatusEnum.ORDER, value: "Замовлення"}
+                {key: StatusEnum.DEFECT, value: "Повернення"},
+                {key: StatusEnum.STATUS, value: "Замовлення"}
             ],
             validation: yup.object().shape({
                 name:  yup.string().required('Поле обзательное').min(2, 'Минимальное количество символов 2'),
@@ -96,14 +96,12 @@ export default defineComponent({
     },
     methods: {
         getStatus(): void {
-            axios.get('/api/v1/status/' + this.recordId).then((response) => {
+            axios.get(`/api/v1/status/${this.type}/${this.recordId}`).then((response) => {
                 if (response.status === 200) {
                     const status = response.data.data.status;
                     this.form.name = status.name;
                     this.form.alias = status.alias;
                     this.form.type = status.type;
-
-                    console.log(this.form);
                 }
             }).catch((error) => {
                 console.error(error);

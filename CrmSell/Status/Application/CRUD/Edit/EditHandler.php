@@ -9,7 +9,9 @@ use CrmSell\Common\Application\Service\Handler\ResultHandler;
 use CrmSell\Common\Application\Service\Request\RequestInterface;
 use CrmSell\Status\Application\CRUD\Create\Request\Create;
 use CrmSell\Status\Application\CRUD\Edit\Request\Edit;
+use CrmSell\Status\Domains\Entities\Defect;
 use CrmSell\Status\Domains\Entities\Status;
+use CrmSell\Status\Domains\Enum\StatusEnum;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -25,9 +27,12 @@ class EditHandler extends AbstractHandler
         try {
             DB::beginTransaction();
 
-            $this->updateStatus($command);
+            $this->updateEntity($command);
 
             DB::commit();
+        }  catch (\DomainException $e) {
+            DB::rollBack();
+            return $this->resultHandler;
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -44,15 +49,29 @@ class EditHandler extends AbstractHandler
      * @return void
      * @throws \Exception
      */
-    private function updateStatus(Edit $command): void
+    private function updateEntity(Edit $command): void
+    {
+        $id = $command->getType() === StatusEnum::DEFECT->value ? $this->updateDefect($command) : $this->updateStatus($command);
+
+        $this->resultHandler
+            ->setStatusCode(200)
+            ->setResult([
+                "id" => $id
+            ]);
+    }
+
+    /**
+     * @param Edit $command
+     * @return string
+     * @throws \Exception
+     */
+    private function updateStatus(Edit $command): string
     {
         $status = Status::find($command->getId());
-        $this->checkName($command, $status);
-
         if (empty($status->id)) {
-            $this->resultHandler->setStatusCode(404)->setErrors(["Access is denied."])->setStatus(ResponseCodeErrors::BUSINESS_LOGIC_ERROR);
-            return;
+            $this->addErrorExist();
         }
+
         if (!$status->update(array_merge($command->toArray(), [
             'modified_user_id' => auth()->id(),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -60,29 +79,47 @@ class EditHandler extends AbstractHandler
             throw new \Exception("Error save, try next time.", 500);
         }
 
-        $this->resultHandler
-            ->setStatusCode(200)
-            ->setResult([
-                "id" => $status->id
-                ]);
+        return $status->id;
     }
 
     /**
      * @param Edit $command
-     * @param $
-     * @param Status $status
+     * @return string
+     * @throws \Exception
+     */
+    private function updateDefect(Edit $command): string
+    {
+        $defect = Defect::find($command->getId());
+        if (empty($defect->id)) {
+            $this->addErrorExist();
+        }
+        if (!$defect->update($this->getData($command))) {
+            throw new \Exception("Error save, try next time.", 500);
+        }
+        return $defect->id;
+    }
+
+    /**
      * @return void
      */
-    private function checkName(Edit $command, Status $status): void
+    private function addErrorExist(): void
     {
-        $statusByParams = Status::where("name", $command->getName())->where("type", $command->getType())->first();
-        if (!empty($statusByParams->id) && $statusByParams->id !== $status->id) {
-            $this->resultHandler->setStatusCode(422)->setErrors([
-                [
-                    "field" => 'name',
-                    "message" => "Alias for type: {$command->getType()} is exist."
-                ]
-            ])->setStatus(ResponseCodeErrors::VALIDATE_ERROR);
-        }
+        $this->resultHandler
+            ->setStatusCode(404)
+            ->setErrors(["Entity does not exist."])
+            ->setStatus(ResponseCodeErrors::BUSINESS_LOGIC_ERROR);
+        throw new \DomainException("Error save, try next time.", 500);
+    }
+
+    /**
+     * @param Edit $command
+     * @return array
+     */
+    private function getData(Edit $command): array
+    {
+        return array_merge($command->toArray(), [
+            'modified_user_id' => auth()->id(),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+        ]);
     }
 }

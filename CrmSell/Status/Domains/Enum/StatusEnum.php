@@ -4,6 +4,6 @@ namespace CrmSell\Status\Domains\Enum;
 
 enum StatusEnum: string
 {
-    case RETURN = 'return';
-    case ORDER = 'order';
+    case DEFECT = 'defect';
+    case STATUS = 'status';
 }

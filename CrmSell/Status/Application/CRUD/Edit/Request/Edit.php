@@ -31,9 +31,23 @@ class Edit extends RootRequest
      */
     public function getRules(): array {
         return [
-            "name" => 'required|string|max:30|min:2',
-            "type" => ['required','string','max:30','min:2', Rule::in([StatusEnum::ORDER->value, StatusEnum::RETURN->value])],
+            "name" => "required|string|max:30|min:2{$this->getRule()}",
+            "type" => ['required','string','max:30','min:2', Rule::in([StatusEnum::STATUS->value, StatusEnum::DEFECT->value])],
         ];
+    }
+
+    /**
+     * @return string
+     */
+    private function getRule(): string
+    {
+        if (StatusEnum::STATUS->value === $this->type) {
+            return "|unique:status,name";
+        }
+        if (StatusEnum::DEFECT->value === $this->type) {
+            return "|unique:defects,name";
+        }
+        return '';
     }
 
     /**

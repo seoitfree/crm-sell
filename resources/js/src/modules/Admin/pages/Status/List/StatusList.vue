@@ -52,7 +52,7 @@ export default defineComponent({
     },
     methods: {
        getHead(): string {
-           return StatusEnum.ORDER as string === this.type ? `замовлення` : `повернень`;
+           return StatusEnum.STATUS as string === this.type ? `замовлення` : `повернень`;
        }
     }
 });

@@ -8,6 +8,7 @@ use CrmSell\Common\Application\Service\Handler\AbstractHandler;
 use CrmSell\Common\Application\Service\Handler\ResultHandler;
 use CrmSell\Common\Application\Service\Request\RequestInterface;
 use CrmSell\Status\Application\CRUD\Create\Request\Create;
+use CrmSell\Status\Domains\Entities\Defect;
 use CrmSell\Status\Domains\Entities\Status;
 use CrmSell\Status\Domains\Enum\StatusEnum;
 use Illuminate\Support\Carbon;
@@ -29,7 +30,7 @@ class CreateHandler extends AbstractHandler
             $this->resultHandler
                 ->setStatusCode(201)
                 ->setResult([
-                    "id" => $this->addStatus($command)
+                    "id" => $this->addEntity($command)
                 ]);
 
             DB::commit();
@@ -52,21 +53,25 @@ class CreateHandler extends AbstractHandler
      * @return string
      * @throws \Exception
      */
+    private function addEntity(Create $command): string
+    {
+        if (StatusEnum::STATUS->value === $command->getType()) {
+            return $this->addStatus($command);
+        }
+        if (StatusEnum::DEFECT->value === $command->getType()) {
+            return $this->addStatus($command);
+        }
+        return '';
+    }
+
+    /**
+     * @param Create $command
+     * @return string
+     * @throws \Exception
+     */
     private function addStatus(Create $command): string
     {
-        $this->checkAlias($command);
-        $this->checkName($command);
-
-        $userId = auth()->id();
-        $date = Carbon::now()->format('Y-m-d H:i:s');
-
-        $status = Status::create(array_merge($command->toArray(), [
-            'created_by' => $userId,
-            'modified_user_id' => $userId,
-            'created_at' => $date,
-            'updated_at' => $date,
-        ]));
-
+        $status = Status::create($this->getData($command));
         if (!$status->save()) {
             throw new \Exception("Error save, try next time.", 500);
         }
@@ -76,35 +81,33 @@ class CreateHandler extends AbstractHandler
 
     /**
      * @param Create $command
-     * @return void
+     * @return string
+     * @throws \Exception
      */
-    private function checkAlias(Create $command): void
+    private function addDefect(Create $command): string
     {
-        $status = Status::where("alias", $command->getAlias())->where("type", $command->getType())->first();
-        if (!empty($status->id)) {
-            $this->resultHandler->setStatusCode(422)->setErrors([
-                [
-                    "field" => 'alias',
-                    "message" => "Alias for type: {$command->getType()} is exist."
-                ]
-            ])->setStatus(ResponseCodeErrors::VALIDATE_ERROR);
+        $defect = Defect::create($this->getData($command));
+        if (!$defect->save()) {
+            throw new \Exception("Error save, try next time.", 500);
         }
+
+        return $defect->id;
     }
 
     /**
      * @param Create $command
-     * @return void
+     * @return array
      */
-    private function checkName(Create $command): void
+    private function getData(Create $command): array
     {
-        $status = Status::where("name", $command->getName())->where("type", $command->getType())->first();
-        if (!empty($status->id)) {
-            $this->resultHandler->setStatusCode(422)->setErrors([
-                [
-                    "field" => 'name',
-                    "message" => "Alias for type: {$command->getType()} is exist."
-                ]
-            ])->setStatus(ResponseCodeErrors::VALIDATE_ERROR);
-        }
+        $userId = auth()->id();
+        $date = Carbon::now()->format('Y-m-d H:i:s');
+
+        return array_merge($command->toArray(), [
+            'created_by' => $userId,
+            'modified_user_id' => $userId,
+            'created_at' => $date,
+            'updated_at' => $date,
+        ]);
     }
 }

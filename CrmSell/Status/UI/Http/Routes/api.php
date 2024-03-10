@@ -7,7 +7,9 @@ Route::middleware(['api', 'auth:sanctum'])->group(function () {
         ->namespace("CrmSell\Status\UI\Http\Controllers")
         ->group(function () {
             Route::get('/status', 'StatusController@getList');
-            Route::get('/status/{id}', 'StatusController@getStatusById')->whereUuid('id');
+            Route::get('/status/{type}/{id}', 'StatusController@getStatusById')
+                ->whereAlpha('type')
+                ->whereUuid('id');
             Route::post('/status', 'StatusController@create');
             Route::put('/status', 'StatusController@edit');
         });

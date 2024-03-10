@@ -4,6 +4,7 @@ namespace CrmSell\Status\Infrastructure\Repositories;
 
 
 use CrmSell\Common\Application\Service\DTO\GetListDTO;
+use CrmSell\Status\Domains\Enum\StatusEnum;
 use CrmSell\Status\Infrastructure\Repositories\Interfaces\StatusRepositoryInterface;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
@@ -20,10 +21,13 @@ class StatusRepository implements StatusRepositoryInterface
     public function getListStatus(GetListDTO $getListDTO): Collection
     {
         try {
-            $result = DB::table('status as s')
-                ->select(['s.id', 's.name', 's.alias', 's.type', 'created_at', 'updated_at'])
-                ->where("s.type", $getListDTO->getFilterValue('type'))
-                ->limit($getListDTO->getPagination()->getLimit())
+            if ($getListDTO->getFilterValue('type') === StatusEnum::DEFECT->value) {
+                $query = DB::table('defects as d')->select(['d.id', 'd.name', 'd.alias', 'd.created_at', 'd.updated_at']);
+            } else {
+                $query = DB::table('status as s')->select(['s.id', 's.name', 's.alias', 's.created_at', 's.updated_at']);
+            }
+
+            $result = $query->limit($getListDTO->getPagination()->getLimit())
                 ->offset($getListDTO->getPagination()->getOffset())
                 ->orderBy($getListDTO->getSortField(), $getListDTO->getSortDir())
                 ->get();
@@ -43,7 +47,13 @@ class StatusRepository implements StatusRepositoryInterface
     public function getCountForListStatus(string $type): int
     {
         try {
-            $result = DB::table('status')->select(['id'])->where("type", $type)->count();
+            if ($type === StatusEnum::DEFECT->value) {
+                $query = DB::table('defects')->select(['id']);
+            } else {
+                $query = DB::table('status')->select(['id']);
+            }
+
+            $result = $query->count();
         } catch (QueryException $e) {
             Log::error($e->getMessage() . $e->getTraceAsString());
             throw new \Exception("StatusRepository::getCountForListStatus() error.");

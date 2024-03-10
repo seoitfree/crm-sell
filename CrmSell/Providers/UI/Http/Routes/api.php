@@ -10,5 +10,6 @@ Route::middleware(['api', 'auth:sanctum'])->group(function () {
             Route::get('/provider/{id}', 'ProvidersController@getProviderById')->whereUuid('id');
             Route::post('/provider', 'ProvidersController@create');
             Route::put('/provider', 'ProvidersController@edit');
+            Route::get('/providers/all', 'ProvidersController@getListAll');
         });
 });

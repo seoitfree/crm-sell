@@ -10,7 +10,9 @@ use CrmSell\Status\Application\CRUD\Edit\EditHandler;
 use CrmSell\Status\Application\CRUD\Edit\Request\Edit;
 use CrmSell\Status\Application\CRUD\GetList\GetListHandler;
 use CrmSell\Status\Application\CRUD\GetList\Request\GetList;
+use CrmSell\Status\Domains\Entities\Defect;
 use CrmSell\Status\Domains\Entities\Status;
+use CrmSell\Status\Domains\Enum\StatusEnum;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -73,20 +75,29 @@ class StatusController
     }
 
     /**
+     * @param string $type
      * @param string $id
      * @return JsonResponse
      */
-    public function getStatusById(string $id): JsonResponse
+    public function getStatusById(string $type, string $id): JsonResponse
     {
         $authUser = Auth::user();
-        if (empty($authUser) || !$authUser->hasRole('admin') || $user->isNotActive()) {
+        if (empty($authUser) || !$authUser->hasRole('admin') || $authUser->isNotActive()) {
             return $this->getErrorsResponse(["Access is denied."]);
         }
+        if ($type === StatusEnum::DEFECT->value) {
+            $status = Status::find($id);
+            return $this->getSuccessfulResponse([
+                "status" => $status->getDetail(),
+            ]);
+        }
+        if ($type === StatusEnum::STATUS->value) {
+            $defect = Defect::find($id);
+            return $this->getSuccessfulResponse([
+                "status" => $defect->getDetail(),
+            ]);
+        }
 
-        $status = Status::find($id);
-
-        return $this->getSuccessfulResponse([
-            "status" => $status->getDetail(),
-        ]);
+        return $this->getErrorsResponse(["Type: $type does not exist."]);
     }
 }

@@ -52,7 +52,7 @@ class UsersController
     {
         /* @var User */
         $user = Auth::user();
-        if (empty($user) || !$user->hasRole('admin') || $authUser->isNotActive()) {
+        if (empty($user) || !$user->hasRole('admin') || $user->isNotActive()) {
             return $this->getErrorsResponse(["Access is denied."]);
         }
 

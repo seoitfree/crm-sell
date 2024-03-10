@@ -35,6 +35,25 @@ class ProvidersRepository implements ProvidersRepositoryInterface
     }
 
     /**
+     * @return Collection
+     * @throws \Exception
+     */
+    public function getListAll(): Collection
+    {
+        try {
+            $result = DB::table('providers as p')
+                ->select(['p.id', 'p.name'])
+                ->orderBy('p.name')
+                ->get();
+        } catch (QueryException $e) {
+            Log::error($e->getMessage() . $e->getTraceAsString());
+            throw new \Exception("ProvidersRepository::getListProviders() error.");
+        }
+
+        return $result;
+    }
+
+    /**
      * @return int
      * @throws \Exception
      */

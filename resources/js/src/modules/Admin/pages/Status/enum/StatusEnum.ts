@@ -1,5 +1,5 @@
 
 export enum StatusEnum {
-    RETURN = 'return',
-    ORDER = 'order',
+    DEFECT = 'defect',
+    STATUS = 'status',
 }

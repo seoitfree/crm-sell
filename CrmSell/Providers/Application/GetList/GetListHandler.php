@@ -67,4 +67,30 @@ class GetListHandler extends AbstractHandler
                 "pagination" => $this->pagination->getPagination()
             ]);
     }
+
+    /**
+     * @return ResultHandler
+     */
+    public function getListAll(): ResultHandler
+    {
+        try {
+            $result = $this->repository->getListAll()->map(function ($item) {
+                return [
+                    "key" => $item->id,
+                    "value" => $item->name,
+                ];
+            });
+
+            $this->resultHandler
+                ->setStatusCode()
+                ->setResult($result->toArray());
+        } catch (\Exception $e) {
+
+            Log::warning($e->getMessage() . " " . $e->getTraceAsString());
+
+            $this->notSuccessfulResponse($e);
+        }
+
+        return $this->resultHandler;
+    }
 }

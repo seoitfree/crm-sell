@@ -20,4 +20,9 @@ interface ProvidersRepositoryInterface
      * @throws \Exception
      */
     public function getCountForListProviders(): int;
+
+    /**
+     * @return Collection
+     */
+    public function getListAll(): Collection;
 }

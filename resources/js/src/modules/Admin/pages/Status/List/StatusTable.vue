@@ -96,8 +96,6 @@ export default defineComponent({
     },
     methods: {
         getData(): void {
-            getLocalDateTime
-
             this.isLoading = true;
             axios.get('/api/v1/status', {
                 params: {

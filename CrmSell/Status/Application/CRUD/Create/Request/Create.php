@@ -27,12 +27,28 @@ class Create extends RootRequest
     /**
      * @return array
      */
-    public function getRules(): array {
+    public function getRules(): array
+    {
         return [
-            "name" => 'required|string|max:30|min:2',
-            "alias" => 'required|string|max:30|min:2',
-            "type" => ['required', 'string', 'max:30', 'min:2', Rule::in([StatusEnum::ORDER->value, StatusEnum::RETURN->value])],
+            "name" => "required|string|max:50|min:2{$this->getRule('name')}",
+            "alias" => "required|string|max:50|min:2{$this->getRule('alias')}",
+            "type" => [Rule::in([StatusEnum::STATUS->value, StatusEnum::DEFECT->value])],
         ];
+    }
+
+    /**
+     * @param string $field
+     * @return string
+     */
+    private function getRule(string $field): string
+    {
+        if (StatusEnum::STATUS->value === $this->type) {
+            return "|unique:status,{$field}";
+        }
+        if (StatusEnum::DEFECT->value === $this->type) {
+            return "|unique:defects,{$field}";
+        }
+        return '';
     }
 
 

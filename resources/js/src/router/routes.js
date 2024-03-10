@@ -128,6 +128,15 @@ const routes = [
         },
     },
     {
+        path: '/order/add',
+        name: 'order-add',
+        component: () => import("../modules/Orders/pages/Create/OrderCreate.vue"),
+        meta: {
+            //accessScopes: [],
+            sidepanel: 'main',
+        },
+    },
+    {
         path: '/access-error',
         name: RouteNamesEnum.ACCESS_ERROR,
         meta: {
