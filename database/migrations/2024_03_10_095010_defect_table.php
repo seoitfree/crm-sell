@@ -15,7 +15,7 @@ return new class extends Migration
             Schema::create('defects', function (Blueprint $table) {
                 $table->uuid('id')->primary();
                 $table->string('name', 100);
-                $table->string('alias', 50);
+                $table->string('alias', 50)->index();
                 $table->string('created_by', 36)->index();
                 $table->string('modified_user_id', 36)->index();
                 $table->timestamp('created_at')->nullable()->nullable();
@@ -24,8 +24,10 @@ return new class extends Migration
         }
 
         Schema::table('status', function (Blueprint $table) {
-            $table->dropColumn('type');
-            $table->string('alias', 50)->change();
+            if (Schema::hasColumn('status', 'type')) {
+                $table->dropColumn('type');
+            }
+            $table->string('alias', 50)->index()->change();
         });
     }
 

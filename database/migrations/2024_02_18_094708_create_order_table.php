@@ -40,8 +40,8 @@ return new class extends Migration
             $table->string('comfy_brand', 50);
             $table->string('comfy_category', 100);
 
-            $table->string('status', 50);
-            $table->string('defect', 50);
+            $table->string('status', 50)->index();
+            $table->string('defect', 50)->index();
 
 
             $table->string('manager', 36)->index();
@@ -81,7 +81,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('orders_audit');
+        //Schema::dropIfExists('orders_audit');
         Schema::dropIfExists('shipments');
         Schema::dropIfExists('orders');
     }
