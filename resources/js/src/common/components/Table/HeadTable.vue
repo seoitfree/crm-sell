@@ -3,8 +3,10 @@
         <tr>
             <template v-for="column in headColumns">
                 <th class="cell" :style="[column.sort ? 'cursor: pointer' : '']" @click="sort(column.name)">
-                    {{ column.translate }}
-                    <img v-if="column.sort" class="logo-icon me-2" :src="sortIcon(column.name)" alt="logo">
+                    <div :style="column.hasOwnProperty('width') ? column.width : ``">
+                        {{ column.translate }}
+                        <img v-if="column.sort" class="logo-icon me-2" :src="sortIcon(column.name)" alt="logo">
+                    </div>
                 </th>
             </template>
         </tr>

@@ -1,0 +1,233 @@
+<template>
+    <div class="tab-pane fade show active" id="providers-all" role="tabpanel" aria-labelledby="orders-all-tab">
+        <div v-if="isLoading" class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <div v-if="!isLoading">
+            <div class="app-card app-card-orders-table shadow-sm mb-5">
+                <div class="app-card-body">
+                    <div class="table-responsive">
+                        <table class="table app-table-hover mb-0 text-left">
+                            <HeadTable
+                                :headColumns="headColumns"
+                                :sortData="sortData"
+                                @clickSort="clickSort"
+                            />
+                            <tbody>
+                            <template v-for="item in records">
+                                <tr>
+                                    <td class="cell">{{ item.manager }} </td>
+                                    <td class="cell">{{ getLocalDateTime(item.order_date) }}</td>
+                                    <td class="cell">{{ item.order_number }}</td>
+                                    <td class="cell">{{ item.vendor_code }}</td>
+                                    <td class="cell">{{ item.goods_name }}</td>
+                                    <td class="cell">{{ item.manager_comment }}</td>
+                                    <td class="cell">{{ item.sell_price }}</td>
+                                    <td class="cell">{{ item.status }}</td>
+                                    <td class="cell">{{ item.amount_in_order_paid }}</td>
+                                    <td class="cell">{{ item.cost }}</td>
+                                    <td class="cell">
+                                        <div class="row g-2 align-items-center">
+                                            <div class="col-auto">
+                                                <a class="btn-sm app-btn-secondary" href="#" @click="addShipments(item.id)"> Приход </a>
+                                            </div>
+                                            <div class="col-auto">
+                                                <a class="btn-sm app-btn-secondary" href="#" @click="showShipments(item.id)"> Історія </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="cell">{{ item.shipments_amount }}</td>
+                                    <td class="cell">{{ item.remainder }}</td>
+                                    <td class="cell">{{ item.provider_start }}</td>
+                                    <td class="cell">{{ getLocalDateTime(item.date_check) }}</td>
+                                    <td class="cell">{{ item.comment }}</td>
+                                    <td class="cell">{{ item.defect }}</td>
+                                    <td class="cell">{{ item.comfy_code }}</td>
+                                    <td class="cell">{{ item.comfy_goods_name }}</td>
+                                    <td class="cell">{{ item.comfy_brand }}</td>
+                                    <td class="cell">{{ item.comfy_category }}</td>
+                                    <td class="cell">{{ item.comfy_price }}</td>
+
+                                    <td class="cell">
+                                        <router-link class="btn-sm app-btn-secondary" :to="`/delivery-order/edit/${item.id}`">
+                                            Edit
+                                        </router-link>
+                                    </td>
+                                </tr>
+                            </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <Pagination
+                :pagination="pagination"
+                @clickPagination="refreshRecords"
+            />
+        </div>
+        <template v-if="addShipmentModal">
+            <AddShipment
+                :orderId="this.orderId"
+                @addShipments="addShipmentsToCRM"
+                @closeButton="addShipmentClose"
+            />
+        </template>
+        <template v-if="showHistoryShipments">
+            <HistoryShipments
+                :orderId="this.orderId"
+                @closeButton="historyShipmentsClose"
+            />
+        </template>
+    </div>
+</template>
+
+<script lang="ts">
+
+import {defineAsyncComponent, defineComponent} from "vue";
+import {HeadColumn} from "../../../../common/components/Table/Type/HeadColumn";
+import {SortData} from "../../../../common/components/Table/Type/SortData";
+import axios from "axios";
+import {getLocalDateTime} from "../../../../common/helpers/DateTime";
+import pagination from "../../../../common/components/Table/mixins/Pagination";
+const HeadTable = defineAsyncComponent(() => import("@/js/src/common/components/Table/HeadTable.vue"));
+const Pagination = defineAsyncComponent(() => import('@/js/src/common/components/Table/Pagination.vue'));
+const AddShipment = defineAsyncComponent(() => import('@/js/src/modules/Orders/pages/List/components/AddShipments.vue'));
+const HistoryShipments = defineAsyncComponent(() => import('@/js/src/modules/Orders/pages/List/components/HistoryShipments.vue'));
+
+interface OrderType {
+    id: string;
+    manager: string;
+    order_date: string;
+    order_number: number;
+    vendor_code: string;
+    goods_name: string;
+    manager_comment: string;
+    sell_price: number;
+    status: string;
+    amount_in_order_paid: string;
+    cost: number;
+    shipments_amount: number;
+    remainder: number;
+    provider_start: string;
+    date_check: string;
+    comment: string;
+    defect: string;
+    comfy_code: string;
+    comfy_goods_name: string;
+    comfy_brand: string;
+    comfy_category: string;
+    comfy_price: number;
+}
+
+export default defineComponent({
+    name: "OrdersTable",
+    mixins: [pagination],
+    components: {
+        HeadTable,
+        Pagination,
+        AddShipment,
+        HistoryShipments
+    },
+    data() {
+        return {
+            isLoading: false,
+            headColumns: [
+                {name: 'manager', translate: 'Менеджер', sort: true, width: 'width: 125px'},
+                {name: 'order_date', translate: 'Дата', sort: true, width: 'width: 125px'},
+                {name: 'order_number', translate: '№ Замовлення', sort: true, width: 'width: 150px'},
+                {name: 'vendor_code', translate: 'Артикул', sort: false, width: 'width: 100px'},
+                {name: 'goods_name', translate: 'Товар', sort: true, width: 'width: 100px'},
+                {name: 'manager_comment', translate: 'Коментар/уточнення постачальника', sort: false, width: 'width: 200px'},
+                {name: 'sell_price', translate: 'Ціна', sort: true, width: 'width: 100px'},
+                {name: 'status', translate: 'Статус замовлення', sort: true, width: 'width: 100px'},
+                {name: 'amount_in_order_paid', translate: 'К-ть оплачених', sort: true, width: 'width: 100px'},
+                {name: 'cost', translate: 'Ціна закупки', sort: true, width: 'width: 100px'},
+                {name: 'date_of_shipment', translate: 'Дата відвантаження', sort: false, width: 'width: 200px'},
+                {name: 'shipments_amount', translate: 'К-ть забраних', sort: true, width: 'width: 100px'},
+                {name: 'remainder', translate: 'Залишок', sort: true, width: 'width: 100px'},
+                {name: 'provider_start', translate: 'Постачальник', sort: false, width: 'width: 150px'},
+                {name: 'date_check', translate: 'Дата Чеку', sort: false, width: 'width: 100px'},
+                {name: 'comment', translate: 'Коментар', sort: false, width: 'width: 200px'},
+                {name: 'defect', translate: 'Списаний', sort: true, width: 'width: 100px'},
+                {name: 'comfy_code', translate: 'Код номенклатуры', sort: true, width: 'width: 150px'},
+                {name: 'comfy_goods_name', translate: 'Наименование продукта', sort: true, width: 'width: 150px'},
+                {name: 'comfy_brand', translate: 'Наименование бренда', sort: true, width: 'width: 150px'},
+                {name: 'comfy_category', translate: 'Наименование категории', sort: true, width: 'width: 150px'},
+                {name: 'comfy_price', translate: 'Цена/значение', sort: true, width: 'width: 150px'},
+                {name: 'view_edit', translate: '', sort: false}
+            ] as HeadColumn[],
+            orderId: '',
+            addShipmentModal: false,
+            showHistoryShipments: false,
+            sortData: {
+                sortField: 'created_at',
+                sortDir: 'desc',
+            } as SortData,
+            records: [] as OrderType[],
+        }
+    },
+    created() {
+        this.getData();
+    },
+    methods: {
+        getData(): void {
+            this.isLoading = true;
+            axios.get('/api/v1/orders', {
+                params: {
+                    pageNumber: this.pagination.pages.current_page,
+                    sortDir: this.sortData.sortDir,
+                    sortField: this.sortData.sortField,
+                }
+            }).then((response) => {
+                if (response.status === 200) {
+                    const result = response.data.data;
+                    this.pagination = result.pagination;
+                    this.records = result.records;
+                } else {
+                    alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
+                }
+                this.isLoading = false;
+            }).catch(() => {
+                this.isLoading = false;
+            });
+        },
+        clickSort(sortData: SortData) {
+            this.sortData = sortData;
+            this.getData();
+        },
+        refreshRecords(page: number): void {
+            this.pagination.pages.current_page = page;
+            this.getData();
+        },
+        getLocalDateTime(date: string): string {
+            return getLocalDateTime(date);
+        },
+        addShipments(id) {
+            console.log(id);
+            this.orderId = id;
+            this.addShipmentModal = !this.addShipmentModal;
+        },
+        showShipments(id) {
+            this.orderId = id;
+            this.showHistoryShipments = !this.showHistoryShipments;
+        },
+        addShipmentClose(): void {
+            this.addShipmentModal = !this.addShipmentModal;
+        },
+        historyShipmentsClose(): void {
+            this.showHistoryShipments = !this.showHistoryShipments;
+        },
+        addShipmentsToCRM(): void {
+            this.addShipmentModal = !this.addShipmentModal;
+            this.getData();
+        }
+    }
+});
+
+</script>
+
+<style scoped>
+
+</style>

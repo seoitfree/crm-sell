@@ -4,7 +4,6 @@ import {RolesEnum} from "../modules/Auth/enum/roles.enum";
 const Login = () => import("@/js/src/pages/Login/Login.vue");
 const Main = () => import("@/js/src/pages/Main/Main.vue");
 const Docs = () => import("@/js/src/pages/Docs/Docs.vue");
-const DeliveryTermsList = () => import("../modules/DeliveryTerms/pages/List/DeliveryTermsList.vue");
 
 
 const routes = [
@@ -27,13 +26,6 @@ const routes = [
         component: Docs,
         meta: {
             accessScopes: [RolesEnum.ADMIN],
-            sidepanel: 'main',
-        },
-    },
-    {
-        path: '/delivery-terms',
-        component: DeliveryTermsList,
-        meta: {
             sidepanel: 'main',
         },
     },
@@ -125,6 +117,14 @@ const routes = [
         meta: {
             accessScopes: [RolesEnum.ADMIN],
             sidepanel: 'admin',
+        },
+    },
+    {
+        path: '/orders',
+        name: 'orders',
+        component: () => import("../modules/Orders/pages/List/OrdersList.vue"),
+        meta: {
+            sidepanel: 'main',
         },
     },
     {

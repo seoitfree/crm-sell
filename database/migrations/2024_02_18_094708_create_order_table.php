@@ -16,20 +16,20 @@ return new class extends Migration
 
             $table->string('created_by', 36)->index();
             $table->string('modified_user_id', 36)->index();
-            $table->timestamp('created_at')->nullable();
-            $table->timestamp('updated_at')->nullable()->useCurrent();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
 
 
-            $table->integer('amount_in_order');
+            $table->integer('amount_in_order'); //К-ть в замовленні
             $table->integer('amount_in_order_paid');
             $table->float('sell_price', 10,2);
-            $table->float('cost', 10,2);
+            $table->float('cost', 10,2)->default(0.0);
 
 
-            $table->dateTime('date_check');
+            $table->dateTime('date_check')->nullable();
             $table->dateTime('order_date');
             $table->string('order_number', 50);
-            $table->string('vendor_code', 100);
+            $table->string('vendor_code', 100);//Артикул
             $table->string('goods_name', 150);
             $table->text('manager_comment');
             $table->text('comment');
@@ -39,6 +39,7 @@ return new class extends Migration
             $table->string('comfy_goods_name', 200);
             $table->string('comfy_brand', 50);
             $table->string('comfy_category', 100);
+            $table->float('comfy_price', 10,2);
 
             $table->string('status', 50)->index();
             $table->string('defect', 50)->index();
@@ -52,8 +53,11 @@ return new class extends Migration
             Schema::create('shipments', function (Blueprint $table) {
                 $table->uuid('id')->primary();
                 $table->uuid("order_id")->index();
-                $table->dateTime('shipment_date');
+                $table->date('shipment_date');
                 $table->integer('amount');
+                $table->timestamp('created_at')->useCurrent();
+                $table->timestamp('updated_at')->useCurrent();
+                $table->string('created_by', 36)->index();
 
                 $table->foreign("order_id")
                     ->references("id")

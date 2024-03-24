@@ -8,6 +8,8 @@ use CrmSell\Common\Application\Service\Handler\ResultHandler;
 use CrmSell\Common\Application\Service\Request\RequestInterface;
 use CrmSell\Orders\Application\Orders\Create\Request\Create;
 use CrmSell\Orders\Domains\Entities\Order;
+use CrmSell\Status\Domains\Enum\DefectEnum;
+use CrmSell\Status\Domains\Enum\OrderStatusEnum;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -51,18 +53,17 @@ class CreateHandler extends AbstractHandler
         $userId = auth()->id();
         $date = Carbon::now()->format('Y-m-d H:i:s');
 
-        $order = Order::create([
-            array_merge($request->toMap(), [
-                'created_by' => $userId,
-                'modified_user_id' => $userId,
-                'created_at' => $date,
-                'updated_at' => $date,
-                'manager' => $userId,
-                'order_date' => $date,
-                'status' => '',
-                'defect' => '',
-            ])
-        ]);
+        $order = Order::create(array_merge($request->toMap(), [
+            'created_by' => $userId,
+            'modified_user_id' => $userId,
+            'created_at' => $date,
+            'updated_at' => $date,
+            "comment" => '',
+            'manager' => $userId,
+            'order_date' => $date,
+            'status' => OrderStatusEnum::NEW->value,
+            'defect' => DefectEnum::IN_ORDER->value,
+        ]));
 
         if (!$order->save()) {
             throw new \Exception("Error save, try next time.", 500);

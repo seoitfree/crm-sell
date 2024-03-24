@@ -17,7 +17,7 @@ class Create extends RootRequest
     private string $managerComment = '';
 
     private string $goodsName = '';
-    private string $provider = '';
+    private string $providerStart = '';
 
     private int $amountInOrder = 0;
     private string $comfyCode = '';
@@ -44,7 +44,7 @@ class Create extends RootRequest
             "sellPrice" => $this->sellPrice,
             "managerComment" => $this->managerComment,
             "goodsName" => $this->goodsName,
-            "provider" => $this->provider,
+            "providerStart" => $this->providerStart,
             "amountInOrder" => $this->amountInOrder,
             "comfyCode" => $this->comfyCode,
             "comfyGoodsName" => $this->comfyGoodsName,
@@ -62,7 +62,7 @@ class Create extends RootRequest
             "sellPrice" => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/|gt:0',
             "managerComment" => 'required|string|max:1000',
             "goodsName" => 'required|string|max:150',
-            "provider" => 'required|string|exists:CrmSell\Providers\Domains\Entities\Provider,id',
+            "providerStart" => 'required|string|exists:CrmSell\Providers\Domains\Entities\Provider,id',
             "amountInOrder" => 'required|numeric|gt:0',
 
             "comfyCode" => 'required|string|max:50',
@@ -79,18 +79,19 @@ class Create extends RootRequest
     public function toMap(): array
     {
         return [
-            "number_order" => $this->numberOrder,
+            "order_number" => $this->numberOrder,
             "vendor_code" => $this->vendorCode,
             "sell_price" => $this->sellPrice,
             "manager_comment" => $this->managerComment,
             "goods_name" => $this->goodsName,
-            "provider" => $this->provider,
+            "provider_start" => $this->providerStart,
             "amount_in_order" => $this->amountInOrder,
             "comfy_code" => $this->comfyCode,
             "comfy_goods_name" => $this->comfyGoodsName,
             "comfy_brand" => $this->comfyBrand,
             "comfy_category" => $this->comfyCategory,
             "comfy_price" => $this->comfyPrice,
+            'amount_in_order_paid' => $this->amountInOrder,
         ];
     }
 

@@ -42,7 +42,7 @@ class GetListDTO
         return $this;
     }
 
-    public function getFilter(string $key): array {
+    public function getFilter(): array {
         return $this->filter;
     }
 

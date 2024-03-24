@@ -44,6 +44,5 @@ class DatabaseSeeder extends Seeder
 
             DB::rollBack();
         }
-
     }
 }

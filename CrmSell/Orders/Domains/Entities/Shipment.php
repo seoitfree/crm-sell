@@ -11,4 +11,12 @@ class Shipment extends Model
     use UuidTrait;
 
     protected $table = 'shipments';
+
+    protected $fillable = [
+        'amount',
+        'shipment_date',
+        "order_id",
+        'created_by',
+        "created_at",
+    ];
 }

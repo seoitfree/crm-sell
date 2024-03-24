@@ -84,7 +84,7 @@
 
                 <div class="form-group col-md-6">
                     <label for="comfyPrice">Цена/значение</label>
-                    <Field name="comfyPrice" type="text" class="form-control"   v-model="form.comfyPrice"></Field>
+                    <Field name="comfyPrice" type="number" min="0" class="form-control"   v-model="form.comfyPrice"></Field>
                     <ErrorMessage name="comfyPrice" class="text-danger" />
                 </div>
             </div>
@@ -125,35 +125,41 @@ export default defineComponent({
                 sellPrice: '',
                 managerComment: '',
                 goodsName: '',
-                provider: '',
-                amountInOrder: '',
+                providerStart: '',
+                amountInOrder: 0,
                 comfyCode: '',
                 comfyGoodsName: '',
                 comfyBrand: '',
                 comfyCategory: '',
-                comfyPrice: ''
+                comfyPrice: '',
             },
             validation: yup.object().shape({
-                numberOrder:  yup.string().required('Поле обзательное').max(50, 'Максимальное количество символов 50'),
-                vendorCode: yup.string().required('Поле обзательное').max(50, 'Максимальное количество символов 100'),
-                sellPrice:  yup.number().required('Поле обзательное')
-                    .positive()
+                numberOrder: yup.string().trim().required('Поле обзательное').max(50, 'Максимальное количество символов 50'),
+                vendorCode: yup.string().trim().required('Поле обзательное').max(50, 'Максимальное количество символов 100'),
+                sellPrice:  yup.number()
+                    .transform((value) => (isNaN(value) ? undefined : value))
+                    .required('Поле обзательное')
+                    .positive('Поле должно быть больше 0')
                     .test('is-decimal', 'Должно иметь два знака после запятой', (value) => {
                         if (value) {
                             return /^\d+(\.\d{1,2})?$/.test(value.toString());
                         }
                         return true;
                     }),
-                managerComment: yup.string().required('Поле обзательное').max(1000, 'Максимальное количество символов 1000'),
-                goodsName: yup.string().required('Поле обзательное').max(150, 'Максимальное количество символов 150'),
-                provider: yup.string().required('Поле обзательное'),
-                amountInOrder: yup.number().required('Поле обзательное').positive().integer(),
-                comfyCode: yup.string().required('Поле обзательное').max(50, 'Максимальное количество символов 50'),
-                comfyGoodsName: yup.string().required('Поле обзательное').max(150, 'Максимальное количество символов 150'),
-                comfyBrand: yup.string().required('Поле обзательное').max(50, 'Максимальное количество символов 50'),
-                comfyCategory: yup.string().required('Поле обзательное').max(100, 'Максимальное количество символов 100'),
-                comfyPrice: yup.number().required('Поле обзательное')
-                    .positive()
+                managerComment: yup.string().trim().required('Поле обзательное').max(1000, 'Максимальное количество символов 1000'),
+                goodsName: yup.string().trim().required('Поле обзательное').max(150, 'Максимальное количество символов 150'),
+                providerStart: yup.string().trim().required('Поле обзательное'),
+                amountInOrder: yup.number()
+                    .transform((value) => (isNaN(value) ? undefined : value))
+                    .required('Поле обзательное').positive('Поле должно быть больше 0').integer('Поле должно быть целочисельное'),
+                comfyCode: yup.string().trim().required('Поле обзательное').max(50, 'Максимальное количество символов 50'),
+                comfyGoodsName: yup.string().trim().required('Поле обзательное').max(150, 'Максимальное количество символов 150'),
+                comfyBrand: yup.string().trim().required('Поле обзательное').max(50, 'Максимальное количество символов 50'),
+                comfyCategory: yup.string().trim().required('Поле обзательное').max(100, 'Максимальное количество символов 100'),
+                comfyPrice: yup.number()
+                    .transform((value) => (isNaN(value) ? undefined : value))
+                    .required('Поле обзательное')
+                    .positive('Поле должно быть больше 0')
                     .test('is-decimal', 'Должно иметь два знака после запятой', (value) => {
                         if (value) {
                             return /^\d+(\.\d{1,2})?$/.test(value.toString());
@@ -197,7 +203,7 @@ export default defineComponent({
                     return;
                 }
                 if (response.status === 201) {
-                    this.$router.push({name: 'users-list'});
+                    this.$router.push({name: 'orders'});
                 } else {
                     alert(response.data.errors[0]);
                     this.isLoading = false;

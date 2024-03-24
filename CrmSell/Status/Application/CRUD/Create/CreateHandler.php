@@ -59,7 +59,7 @@ class CreateHandler extends AbstractHandler
             return $this->addStatus($command);
         }
         if (StatusEnum::DEFECT->value === $command->getType()) {
-            return $this->addStatus($command);
+            return $this->addDefect($command);
         }
         return '';
     }
