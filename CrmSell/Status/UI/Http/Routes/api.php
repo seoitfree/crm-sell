@@ -12,5 +12,7 @@ Route::middleware(['api', 'auth:sanctum'])->group(function () {
                 ->whereUuid('id');
             Route::post('/status', 'StatusController@create');
             Route::put('/status', 'StatusController@edit');
+            Route::get('/status/all', 'StatusController@getListAll');
+            Route::get('/defects/all', 'StatusController@getListAllDefect');
         });
 });

@@ -36,7 +36,7 @@ class GetListHandler extends AbstractHandler
             $this->getProviders($command);
         } catch (\Exception $e) {
 
-            Log::warning($e->getMessage() . " " . $e->getTraceAsString());
+            Log::error($e->getMessage() . " " . $e->getTraceAsString());
 
             $this->notSuccessfulResponse($e);
         }
@@ -85,8 +85,7 @@ class GetListHandler extends AbstractHandler
                 ->setStatusCode()
                 ->setResult($result->toArray());
         } catch (\Exception $e) {
-
-            Log::warning($e->getMessage() . " " . $e->getTraceAsString());
+            Log::error($e->getMessage() . " " . $e->getTraceAsString());
 
             $this->notSuccessfulResponse($e);
         }

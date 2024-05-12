@@ -19,17 +19,27 @@
                                 </div>
 
                                 <div class="col-auto">
-                                    <router-link class="btn app-btn-secondary" :to="`/delivery-order/create`">
-                                        CSV
-                                    </router-link>
+                                    <a class="btn app-btn-secondary">CSV</a>
+                                </div>
+
+                                <div class="col-auto">
+                                    <a class="btn app-btn-secondary" @click="switchFilter()">Filter</a>
                                 </div>
                             </div>
                         </div><!--//table-utilities-->
                     </div>
-
                 </div><!--//row-->
 
-                <OrdersTable />
+                <OrdersTable :key="ordersTableKey"
+                             :filterParams="filterParams"
+                />
+                <template v-if="isFilter">
+                    <Filter
+                        :filterParams="filterParams"
+                        @closeButton="switchFilter"
+                        @initFilter="initFilter"
+                    />
+                </template>
             </div>
         </div>
     </div>
@@ -41,17 +51,59 @@
 <script lang="ts">
 
 import {defineAsyncComponent, defineComponent} from "vue";
+import {FilterType} from "./Types/FilterType";
 const Header = defineAsyncComponent(() => import('@/js/src/common/components/Header/Header.vue'));
 const Footer = defineAsyncComponent(() => import('@/js/src/common/components/Footer/Footer.vue'));
 const OrdersTable = defineAsyncComponent(() => import('@/js/src/modules/Orders/pages/List/OrdersTable.vue'));
+const Filter = defineAsyncComponent(() => import('@/js/src/modules/Orders/pages/List/Filter.vue'));
 
 export default defineComponent({
     name: "OrdersList",
     components: {
         Header,
         Footer,
-        OrdersTable
+        OrdersTable,
+        Filter
     },
+    data() {
+        return {
+            ordersTableKey: 0,
+            filterParams: {
+                order_date_from: '',
+                order_date_to: '',
+                vendor_code: '',
+                goods_name: '',
+                sell_price_from: 0,
+                sell_price_to: 0,
+                amount_in_order_paid_from: 0,
+                amount_in_order_paid_to: 0,
+                cost_from: 0,
+                cost_to: 0,
+                defect: '',
+                provider_start: '',
+                manager: '',
+                status: '',
+                comfy_code: '',
+                comfy_goods_name: '',
+                comfy_brand: '',
+                comfy_category: '',
+                comfy_price_from: 0,
+                comfy_price_to: 0
+            } as FilterType,
+            isFilter: false,
+        };
+    },
+    methods: {
+        CSV(): void {
+
+        },
+        switchFilter(): void {
+            this.isFilter = !this.isFilter;
+        },
+        initFilter(filterData: FilterType): void {
+            this.filterParams = filterData;
+        }
+    }
 });
 
 </script>

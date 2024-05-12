@@ -26,8 +26,7 @@ return new class extends Migration
             $table->float('cost', 10,2)->default(0.0);
 
 
-            $table->dateTime('date_check')->nullable();
-            $table->dateTime('order_date');
+            $table->date('date_check')->nullable();
             $table->string('order_number', 50);
             $table->string('vendor_code', 100);//Артикул
             $table->string('goods_name', 150);

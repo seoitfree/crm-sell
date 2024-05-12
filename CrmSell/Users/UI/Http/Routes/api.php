@@ -20,6 +20,7 @@ Route::middleware(['api', 'auth:sanctum'])->group(function () {
             Route::put('/user', 'UsersController@updateUser');
             Route::get('/user', 'UsersController@getUser');
             Route::get('/users', 'UsersController@getList');
+            Route::get('/users/all', 'UsersController@getListAll');
             Route::get('/roles', 'UsersController@getRoles');
             Route::get('/user/{id}', 'UsersController@getUserById')->whereUuid('id');
             Route::get('/user/roles/{id}', 'UsersController@getUserRolesId')->whereUuid('id');

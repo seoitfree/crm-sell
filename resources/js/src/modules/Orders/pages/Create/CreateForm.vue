@@ -141,17 +141,16 @@ export default defineComponent({
                     .required('Поле обзательное')
                     .positive('Поле должно быть больше 0')
                     .test('is-decimal', 'Должно иметь два знака после запятой', (value) => {
-                        if (value) {
-                            return /^\d+(\.\d{1,2})?$/.test(value.toString());
-                        }
-                        return true;
+                        return (value) ? /^\d+(\.\d{1,2})?$/.test(value.toString()) : true;
                     }),
                 managerComment: yup.string().trim().required('Поле обзательное').max(1000, 'Максимальное количество символов 1000'),
                 goodsName: yup.string().trim().required('Поле обзательное').max(150, 'Максимальное количество символов 150'),
                 providerStart: yup.string().trim().required('Поле обзательное'),
                 amountInOrder: yup.number()
                     .transform((value) => (isNaN(value) ? undefined : value))
-                    .required('Поле обзательное').positive('Поле должно быть больше 0').integer('Поле должно быть целочисельное'),
+                    .required('Поле обзательное')
+                    .positive('Поле должно быть больше 0')
+                    .integer('Поле должно быть целочисельное'),
                 comfyCode: yup.string().trim().required('Поле обзательное').max(50, 'Максимальное количество символов 50'),
                 comfyGoodsName: yup.string().trim().required('Поле обзательное').max(150, 'Максимальное количество символов 150'),
                 comfyBrand: yup.string().trim().required('Поле обзательное').max(50, 'Максимальное количество символов 50'),
@@ -161,10 +160,7 @@ export default defineComponent({
                     .required('Поле обзательное')
                     .positive('Поле должно быть больше 0')
                     .test('is-decimal', 'Должно иметь два знака после запятой', (value) => {
-                        if (value) {
-                            return /^\d+(\.\d{1,2})?$/.test(value.toString());
-                        }
-                        return true;
+                        return (value) ? /^\d+(\.\d{1,2})?$/.test(value.toString()) : true;
                     }),
             }),
             providerOptions: [] as Option[],

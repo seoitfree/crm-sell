@@ -37,7 +37,7 @@ class GetListHandler  extends AbstractHandler
             $this->getUsers($command);
         } catch (\Exception $e) {
 
-            Log::warning($e->getMessage() . " " . $e->getTraceAsString());
+            Log::error($e->getMessage() . " " . $e->getTraceAsString());
 
             $this->notSuccessfulResponse($e);
         }
@@ -66,5 +66,30 @@ class GetListHandler  extends AbstractHandler
                 "records" => $this->usersRepository->getListUsers($dto)->toArray(),
                 "pagination" => $this->pagination->getPagination()
             ]);
+    }
+
+    /**
+     * @return ResultHandler
+     */
+    public function getListAll(): ResultHandler
+    {
+        try {
+            $result = $this->usersRepository->getListAll()->map(function ($item) {
+                return [
+                    "key" => $item->id,
+                    "value" => "{$item->last_name} {$item->first_name}",
+                ];
+            });
+
+            $this->resultHandler
+                ->setStatusCode()
+                ->setResult($result->toArray());
+        } catch (\Exception $e) {
+            Log::error($e->getMessage() . " " . $e->getTraceAsString());
+
+            $this->notSuccessfulResponse($e);
+        }
+
+        return $this->resultHandler;
     }
 }

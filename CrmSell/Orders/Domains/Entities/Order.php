@@ -34,8 +34,33 @@ class Order extends Model
         "created_at",
         "updated_at",
         'manager',
-        'order_date',
         'status',
         'defect',
     ];
+
+    /**
+     * @param int $value
+     * @param int $totalShipmentForByOrder
+     * @return void
+     */
+    public function changeAmountInOrderPaid(int $value, int $totalShipmentForByOrder): void
+    {
+        if ($this->amount_in_order_paid < $totalShipmentForByOrder) {
+            throw new \DomainException("Total more for current value: $value");
+        }
+        $this->amount_in_order_paid = $value;
+    }
+
+    /**
+     * @param int $value
+     * @param int $totalShipmentForByOrder
+     * @return void
+     */
+    public function changeAmountInOrder(int $value, int $totalShipmentForByOrder): void
+    {
+        if ($this->amount_in_order < $totalShipmentForByOrder) {
+            throw new \DomainException("Total more for current value: $value");
+        }
+        $this->amount_in_order = $value;
+    }
 }

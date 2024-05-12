@@ -71,4 +71,22 @@ class UsersRepository implements UsersRepositoryInterface
 
         return $result;
     }
+
+    /**
+     * @return Collection
+     * @throws \Exception
+     */
+    public function getListAll(): Collection
+    {
+        try {
+            $result = DB::table('users')
+                ->select(['id', 'first_name', 'last_name'])
+                ->get();
+        } catch (QueryException $e) {
+            Log::error($e->getMessage() . $e->getTraceAsString());
+            throw new \Exception("UsersRepository::getAllCitiesByRegionId() error.");
+        }
+
+        return $result;
+    }
 }

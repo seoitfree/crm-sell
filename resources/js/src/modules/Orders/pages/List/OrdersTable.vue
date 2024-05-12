@@ -17,45 +17,12 @@
                             />
                             <tbody>
                             <template v-for="item in records">
-                                <tr>
-                                    <td class="cell">{{ item.manager }} </td>
-                                    <td class="cell">{{ getLocalDateTime(item.order_date) }}</td>
-                                    <td class="cell">{{ item.order_number }}</td>
-                                    <td class="cell">{{ item.vendor_code }}</td>
-                                    <td class="cell">{{ item.goods_name }}</td>
-                                    <td class="cell">{{ item.manager_comment }}</td>
-                                    <td class="cell">{{ item.sell_price }}</td>
-                                    <td class="cell">{{ item.status }}</td>
-                                    <td class="cell">{{ item.amount_in_order_paid }}</td>
-                                    <td class="cell">{{ item.cost }}</td>
-                                    <td class="cell">
-                                        <div class="row g-2 align-items-center">
-                                            <div class="col-auto">
-                                                <a class="btn-sm app-btn-secondary" href="#" @click="addShipments(item.id)"> Приход </a>
-                                            </div>
-                                            <div class="col-auto">
-                                                <a class="btn-sm app-btn-secondary" href="#" @click="showShipments(item.id)"> Історія </a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="cell">{{ item.shipments_amount }}</td>
-                                    <td class="cell">{{ item.remainder }}</td>
-                                    <td class="cell">{{ item.provider_start }}</td>
-                                    <td class="cell">{{ getLocalDateTime(item.date_check) }}</td>
-                                    <td class="cell">{{ item.comment }}</td>
-                                    <td class="cell">{{ item.defect }}</td>
-                                    <td class="cell">{{ item.comfy_code }}</td>
-                                    <td class="cell">{{ item.comfy_goods_name }}</td>
-                                    <td class="cell">{{ item.comfy_brand }}</td>
-                                    <td class="cell">{{ item.comfy_category }}</td>
-                                    <td class="cell">{{ item.comfy_price }}</td>
-
-                                    <td class="cell">
-                                        <router-link class="btn-sm app-btn-secondary" :to="`/delivery-order/edit/${item.id}`">
-                                            Edit
-                                        </router-link>
-                                    </td>
-                                </tr>
+                                <TableRow :value="item"
+                                          @addShipments="addShipments"
+                                          @showShipments="showShipments"
+                                          @updateInline="updateInline"
+                                          @updateOption="updateOption"
+                                />
                             </template>
                             </tbody>
                         </table>
@@ -91,35 +58,17 @@ import {SortData} from "../../../../common/components/Table/Type/SortData";
 import axios from "axios";
 import {getLocalDateTime} from "../../../../common/helpers/DateTime";
 import pagination from "../../../../common/components/Table/mixins/Pagination";
+import {InlineEdit, InlineOptionEdit} from "./components/InlineEdit/Types/InlineEdit";
+import {OrderType} from "./components/Type/OrderType";
+import {PropType} from "vue/dist/vue";
+import {FilterType} from "./Types/FilterType";
 const HeadTable = defineAsyncComponent(() => import("@/js/src/common/components/Table/HeadTable.vue"));
 const Pagination = defineAsyncComponent(() => import('@/js/src/common/components/Table/Pagination.vue'));
 const AddShipment = defineAsyncComponent(() => import('@/js/src/modules/Orders/pages/List/components/AddShipments.vue'));
 const HistoryShipments = defineAsyncComponent(() => import('@/js/src/modules/Orders/pages/List/components/HistoryShipments.vue'));
+const TableRow = defineAsyncComponent(() => import('@/js/src/modules/Orders/pages/List/components/TableRow.vue'));
 
-interface OrderType {
-    id: string;
-    manager: string;
-    order_date: string;
-    order_number: number;
-    vendor_code: string;
-    goods_name: string;
-    manager_comment: string;
-    sell_price: number;
-    status: string;
-    amount_in_order_paid: string;
-    cost: number;
-    shipments_amount: number;
-    remainder: number;
-    provider_start: string;
-    date_check: string;
-    comment: string;
-    defect: string;
-    comfy_code: string;
-    comfy_goods_name: string;
-    comfy_brand: string;
-    comfy_category: string;
-    comfy_price: number;
-}
+
 
 export default defineComponent({
     name: "OrdersTable",
@@ -128,7 +77,14 @@ export default defineComponent({
         HeadTable,
         Pagination,
         AddShipment,
-        HistoryShipments
+        HistoryShipments,
+        TableRow
+    },
+    props: {
+        filterParams: {
+            type: Object as PropType<FilterType>,
+            required: true,
+        }
     },
     data() {
         return {
@@ -169,6 +125,7 @@ export default defineComponent({
         }
     },
     created() {
+
         this.getData();
     },
     methods: {
@@ -177,6 +134,7 @@ export default defineComponent({
             axios.get('/api/v1/orders', {
                 params: {
                     pageNumber: this.pagination.pages.current_page,
+                    filterParams: this.filterParams,
                     sortDir: this.sortData.sortDir,
                     sortField: this.sortData.sortField,
                 }
@@ -204,12 +162,11 @@ export default defineComponent({
         getLocalDateTime(date: string): string {
             return getLocalDateTime(date);
         },
-        addShipments(id) {
-            console.log(id);
+        addShipments(id: string) {
             this.orderId = id;
             this.addShipmentModal = !this.addShipmentModal;
         },
-        showShipments(id) {
+        showShipments(id: string) {
             this.orderId = id;
             this.showHistoryShipments = !this.showHistoryShipments;
         },
@@ -222,6 +179,19 @@ export default defineComponent({
         addShipmentsToCRM(): void {
             this.addShipmentModal = !this.addShipmentModal;
             this.getData();
+        },
+        updateInline(dto: InlineEdit): void {
+            const index = this.records.findIndex(item => item.id === dto.entityId);
+            this.records[index][dto.field] = dto.value;
+        },
+        updateOption(dto: InlineOptionEdit): void {
+            const index = this.records.findIndex(item => item.id === dto.entityId);
+            this.item[dto.field] = dto.label;
+            if (dto.field === 'defect') {
+                this.records[index][`${dto.field}_id`] = dto.value;
+            } else {
+                this.records[index][`${dto.field}_alias`] = dto.value;
+            }
         }
     }
 });

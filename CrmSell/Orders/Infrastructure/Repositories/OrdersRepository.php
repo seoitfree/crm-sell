@@ -87,12 +87,12 @@ FROM orders as o
         try {
             $sql = "
             SELECT o.id,
-                   o.amount_in_order as amount_in_orderamount_in_order,
+                   o.amount_in_order as amount_in_order,
                    o.amount_in_order_paid as amount_in_order_paid,
                    o.sell_price as sell_price,
                    o.cost as cost,
-                   o.date_check as date_check,
-                   o.order_date as order_date,
+                   IFNULL(o.date_check, '') as date_check,
+                   o.created_at as order_date,
                    o.order_number as order_number,
                    o.vendor_code as vendor_code,
                    o.goods_name as goods_name,
@@ -106,8 +106,11 @@ FROM orders as o
                    o.created_at,
                    CONCAT(COALESCE(u.first_name,''), ' ', COALESCE(u.last_name,'')) as manager,
                    s.name as status,
+                   s.alias as status_alias,
                    d.name as defect,
-                   p.name as provider,
+                   o.defect as defect_alias,
+                   p.id as provider_start_id,
+                   p.name as provider_start,
                    shipments.shipments_amount as shipments_amount,
                    o.amount_in_order_paid - shipments.shipments_amount as remainder
             FROM orders as o
@@ -120,18 +123,9 @@ FROM orders as o
                 LEFT JOIN providers p
                    ON p.id = o.provider_start
                 LEFT JOIN (
-                    SELECT order_id,
-                           shipments_amount,
-                           t.rn
-                    FROM (SELECT order_id,
-                                 IF(CONVERT(@prev USING utf8) <> CONVERT(order_id USING utf8), @rn:=0, @rn),
-                                 IF(CONVERT(@prev USING utf8) <> CONVERT(order_id USING utf8), @shipments_amount:=0, @shipments_amount:=@shipments_amount + amount) as shipments_amount,
-                                 @prev:=order_id,
-                                 @rn:=@rn+1 AS rn
-                          FROM shipments, (SELECT @rn:=0) rn, (SELECT @prev:='' ) prev, (SELECT @shipments_amount:=0) shipments_amount
-                          ORDER BY order_id ASC
-                         ) AS t
-                    WHERE t.rn = 1
+                    SELECT s.order_id, SUM(s.amount) as shipments_amount
+                    FROM shipments as s
+                    GROUP BY order_id
                 ) as shipments
                     ON shipments.order_id = o.id
                 ORDER BY {$dto->getSortField()} {$dto->getSortDir()}

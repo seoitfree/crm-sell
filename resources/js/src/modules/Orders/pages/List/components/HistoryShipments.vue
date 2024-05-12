@@ -55,7 +55,6 @@ const Pagination = defineAsyncComponent(() => import('@/js/src/common/components
 import pagination from "../../../../../common/components/Table/mixins/Pagination";
 import {HeadColumn} from "../../../../../common/components/Table/Type/HeadColumn";
 import {SortData} from "../../../../../common/components/Table/Type/SortData";
-import {UserListType} from "../../../../Admin/pages/Users/List/Type/UserListType";
 import axios from "axios";
 import {getLocalDateTime} from "../../../../../common/helpers/DateTime";
 

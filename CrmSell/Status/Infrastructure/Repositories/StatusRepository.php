@@ -61,4 +61,42 @@ class StatusRepository implements StatusRepositoryInterface
 
         return $result;
     }
+
+    /**
+     * @return Collection
+     * @throws \Exception
+     */
+    public function getListAll(): Collection
+    {
+        try {
+            $result = DB::table('status as s')
+                ->select(['s.alias', 's.name'])
+                ->orderBy('s.name')
+                ->get();
+        } catch (QueryException $e) {
+            Log::error($e->getMessage() . $e->getTraceAsString());
+            throw new \Exception("StatusRepository::getListAll() error.");
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return Collection
+     * @throws \Exception
+     */
+    public function getListAllDefect(): Collection
+    {
+        try {
+            $result = DB::table('defects as d')
+                ->select(['d.alias', 'd.name'])
+                ->orderBy('d.name')
+                ->get();
+        } catch (QueryException $e) {
+            Log::error($e->getMessage() . $e->getTraceAsString());
+            throw new \Exception("StatusRepository::getListAllDefect() error.");
+        }
+
+        return $result;
+    }
 }

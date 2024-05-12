@@ -100,4 +100,26 @@ class StatusController
 
         return $this->getErrorsResponse(["Type: $type does not exist."]);
     }
+
+    /**
+     * @param \CrmSell\Providers\Application\GetList\GetListHandler $handler
+     * @return JsonResponse
+     */
+    public function getListAll(GetListHandler $handler): JsonResponse
+    {
+        $result = $handler->getListAll();
+
+        return $this->getResponse($result);
+    }
+
+    /**
+     * @param \CrmSell\Providers\Application\GetList\GetListHandler $handler
+     * @return JsonResponse
+     */
+    public function getListAllDefect(GetListHandler $handler): JsonResponse
+    {
+        $result = $handler->getListAllDefect();
+
+        return $this->getResponse($result);
+    }
 }

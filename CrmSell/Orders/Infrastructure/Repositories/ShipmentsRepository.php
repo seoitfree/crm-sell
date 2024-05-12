@@ -20,7 +20,7 @@ class ShipmentsRepository implements ShipmentsRepositoryInterface
     public function getTotalShipmentForByOrder(string $id): int
     {
         try {
-            $results = DB::select("SELECT COUNT(s.amount) as count FROM shipments as s WHERE s.order_id = :id", ['id' => $id]);
+            $results = DB::select("SELECT SUM(s.amount) as count FROM shipments as s WHERE s.order_id = :id", ['id' => $id]);
         } catch (QueryException $e) {
             Log::error($e->getMessage() . $e->getTraceAsString());
             throw new \Exception("ShipmentsRepository::getTotalShipmentForByOrder() error.");
