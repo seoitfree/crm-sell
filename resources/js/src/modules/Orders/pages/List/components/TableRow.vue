@@ -5,6 +5,7 @@
         <td class="cell">
             <TextInlineEdit :value="item.order_number"
                             :entityId="item.id"
+                            :field="`order_number`"
                             :urlEdit="`order`"
                             :max="50"
                             :required="true"
@@ -14,6 +15,7 @@
         <td class="cell">
             <TextInlineEdit :value="item.vendor_code"
                             :entityId="item.id"
+                            :field="`vendor_code`"
                             :max="50"
                             :urlEdit="`order`"
                             :required="true"
@@ -22,6 +24,7 @@
         </td>
         <td class="cell">
             <TextInlineEdit :value="item.goods_name"
+                            :field="`goods_name`"
                             :entityId="item.id"
                             :max="150"
                             :urlEdit="`order`"
@@ -31,6 +34,7 @@
         </td>
         <td class="cell">
             <TextAreaInlineEdit :value="item.manager_comment"
+                                :field="`manager_comment`"
                                 :entityId="item.id"
                                 :max="1000"
                                 :urlEdit="`order`"
@@ -40,6 +44,7 @@
         </td>
         <td class="cell">
             <DecimalInlineEdit :value="item.sell_price"
+                               :field="`sell_price`"
                                :entityId="item.id"
                                :urlEdit="`order`"
                                @update="updateInline"
@@ -54,6 +59,7 @@
         </td>
         <td class="cell">
             <IntegerInlineEdit :value="item.amount_in_order_paid"
+                               :field="`amount_in_order_paid`"
                                :entityId="item.id"
                                :urlEdit="`order`"
                                @update="updateInline"
@@ -61,6 +67,7 @@
         </td>
         <td class="cell">
             <DecimalInlineEdit :value="item.cost"
+                               :field="`cost`"
                                :entityId="item.id"
                                :urlEdit="`order`"
                                @update="updateInline"
@@ -87,6 +94,7 @@
         </td>
         <td class="cell">
             <DateInlineEdite :value="item.date_check"
+                             :field="`date_check`"
                              :entityId="item.id"
                              :urlEdit="`order`"
                              @update="updateInline"
@@ -95,6 +103,7 @@
 
         <td class="cell">
             <TextAreaInlineEdit :value="item.comment"
+                                :field="`comment`"
                                 :entityId="item.id"
                                 :max="1000"
                                 :urlEdit="`order`"
@@ -113,6 +122,7 @@
 
         <td class="cell">
             <TextInlineEdit :value="item.comfy_code"
+                            :field="`comfy_code`"
                             :entityId="item.id"
                             :max="50"
                             :urlEdit="`order`"
@@ -122,6 +132,7 @@
         </td>
         <td class="cell">
             <TextInlineEdit :value="item.comfy_goods_name"
+                            :field="`comfy_goods_name`"
                             :entityId="item.id"
                             :max="150"
                             :urlEdit="`order`"
@@ -131,6 +142,7 @@
         </td>
         <td class="cell">
             <TextInlineEdit :value="item.comfy_brand"
+                            :field="`comfy_brand`"
                             :entityId="item.id"
                             :max="50"
                             :urlEdit="`order`"
@@ -139,7 +151,8 @@
             />
         </td>
         <td class="cell">
-            <TextInlineEdit :value="item.comfy_brand"
+            <TextInlineEdit :value="item.comfy_category"
+                            :field="`comfy_category`"
                             :entityId="item.id"
                             :max="100"
                             :urlEdit="`order`"
@@ -149,6 +162,7 @@
         </td>
         <td class="cell">
             <DecimalInlineEdit :value="item.comfy_price"
+                               :field="`comfy_price`"
                                :entityId="item.id"
                                :urlEdit="`order`"
                                @update="updateInline"

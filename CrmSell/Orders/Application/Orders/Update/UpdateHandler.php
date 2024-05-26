@@ -3,6 +3,7 @@
 namespace CrmSell\Orders\Application\Orders\Update;
 
 
+use CrmSell\Audit\Application\Service\AddToAudit\AddToAudit;
 use CrmSell\Common\Application\Service\Enum\ResponseCodeErrors;
 use CrmSell\Common\Application\Service\Handler\AbstractHandler;
 use CrmSell\Common\Application\Service\Handler\ResultHandler;
@@ -22,15 +23,18 @@ use Illuminate\Support\Facades\Log;
 class UpdateHandler extends AbstractHandler
 {
     private ShipmentsRepositoryInterface $repository;
+    private AddToAudit $audit;
 
     /**
      * @param ShipmentsRepositoryInterface $repository
+     * @param AddToAudit $audit
      */
-    public function __construct(ShipmentsRepositoryInterface $repository)
+    public function __construct(ShipmentsRepositoryInterface $repository, AddToAudit $audit)
     {
         parent::__construct();
 
         $this->repository = $repository;
+        $this->audit = $audit;
     }
 
     /**
@@ -86,7 +90,8 @@ class UpdateHandler extends AbstractHandler
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]));
 
-        if ($order->save()) {
+        $this->audit->add($order, auth()->id(), $order->getAuditParams());
+        if (!$order->save()) {
             throw new \Exception("Error save, try next time.", 500);
         }
 
@@ -107,19 +112,19 @@ class UpdateHandler extends AbstractHandler
         $forUpdate = $request->forUpdate();
         $totalShipmentForByOrder = $this->repository->getTotalShipmentForByOrder($request->getEntityId());
 
-        if ($request->getFieldName() === "amount_in_order_paid") {
+        if ($request->isThisField("amount_in_order_paid")) {
             $order->changeAmountInOrderPaid($forUpdate["amount_in_order_paid"], $totalShipmentForByOrder);
         }
-        if ($request->getFieldName() === "amount_in_order") {
+        if ($request->isThisField("amount_in_order")) {
             $order->changeAmountInOrderPaid($forUpdate["amount_in_order"], $totalShipmentForByOrder);
         }
-        if (!Status::firstOrNew(['alias' => $forUpdate['status']])->exist) {
+        if ($request->isThisField("status") && !Status::firstOrNew(['alias' => $forUpdate['status']])->exist) {
             throw new \DomainException("Status does not exist: {$forUpdate['status']}");
         }
-        if (!Defect::firstOrNew(['alias' => $forUpdate['defect']])->exist) {
+        if ($request->isThisField("defect") && !Defect::firstOrNew(['alias' => $forUpdate['defect']])->exist) {
             throw new \DomainException("Defect does not exist: {$forUpdate['defect']}");
         }
-        if (!Provider::firstOrNew(['id' => $forUpdate['provider']])->exist) {
+        if ($request->isThisField("provider") && !Provider::firstOrNew(['id' => $forUpdate['provider']])->exist) {
             throw new \DomainException("Provider does not exist: {$forUpdate['provider']}");
         }
     }

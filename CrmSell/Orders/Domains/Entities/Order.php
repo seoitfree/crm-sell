@@ -63,4 +63,61 @@ class Order extends Model
         }
         $this->amount_in_order = $value;
     }
+
+    /**
+     * @return array
+     */
+    public function getAuditParams(): array
+    {
+        return [
+            "order_number" => [
+                "type" => "string",
+            ],
+            "vendor_code" => [
+                "type" => "string",
+            ],
+            "goods_name" => [
+                "type" => "string",
+            ],
+            "manager_comment" => [
+                "type" => "text",
+            ],
+            "status" => [
+                "type" => "enum",
+            ],
+            "amount_in_order_paid" => [
+                "type" => "string",
+            ],
+            "cost" => [
+                "type" => "string",
+            ],
+            "provider_start" => [
+                "type" => "enum",
+            ],
+            "date_check" => [
+                "type" => "date",
+            ],
+            "comment" => [
+                "type" => "text",
+            ],
+            "defect" => [
+                "type" => "enum",
+            ],
+            "comfy_code" => [
+                "type" => "string",
+            ],
+            "comfy_goods_name" => [
+                "type" => "string",
+            ],
+            "comfy_brand" => [
+                "type" => "string",
+            ],
+            "comfy_category" => [
+                "type" => "string",
+            ],
+            "comfy_price" => [
+                "type" => "string",
+            ],
+        ];
+    }
 }

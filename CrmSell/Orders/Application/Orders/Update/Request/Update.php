@@ -46,6 +46,8 @@ class Update extends RootRequest
     public function __construct(array $request = [])
     {
         $this->fieldName = !empty($request['field']) ? $request['field'] : '';
+        $this->entityId = !empty($request['entityId']) ? $request['entityId'] : '';
+
         if (!property_exists($this, $this->fieldName)) {
             throw new \DomainException("Field does not exist: {$this->fieldName}");
         }
@@ -59,8 +61,12 @@ class Update extends RootRequest
     }
 
 
-    public function getFieldName(): array { return $this->fieldName; }
+    public function getFieldName(): string { return $this->fieldName; }
     public function getEntityId(): string { return $this->entityId; }
+
+    public function isThisField(string $fieldName): bool {
+        return $this->fieldName === $fieldName;
+    }
 
     public function forUpdate(): array {
         return $this->toValidation();

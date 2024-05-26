@@ -11,5 +11,6 @@ Route::middleware(['api', 'auth:sanctum'])->group(function () {
             Route::put('/status', 'OrdersController@edit');
             Route::post('/shipment', 'OrdersController@addShipment');
             Route::get('/shipments-history', 'OrdersController@shipmentsHistory');
+            Route::patch('/order', 'OrdersController@patchOrder');
         });
 });

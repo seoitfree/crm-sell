@@ -7,6 +7,8 @@ use CrmSell\Orders\Application\Orders\Create\CreateHandler;
 use CrmSell\Orders\Application\Orders\Create\Request\Create;
 use CrmSell\Orders\Application\Orders\GetList\GetListHandler;
 use CrmSell\Orders\Application\Orders\GetList\Request\GetList;
+use CrmSell\Orders\Application\Orders\Update\Request\Update;
+use CrmSell\Orders\Application\Orders\Update\UpdateHandler;
 use CrmSell\Orders\Application\Shipments\AddShipment\AddShipmentHandler;
 use CrmSell\Orders\Application\Shipments\AddShipment\Request\AddShipment;
 use CrmSell\Orders\Application\Shipments\ShipmentsHistory\Request\ShipmentsHistory;
@@ -84,6 +86,24 @@ class OrdersController
         }
 
         $result = $handler->handle(new ShipmentsHistory($request->toArray()));
+
+        return $this->getResponse($result);
+    }
+
+    /**
+     * @param Request $request
+     * @param UpdateHandler $handler
+     * @return JsonResponse
+     */
+    public function patchOrder(Request $request, UpdateHandler $handler): JsonResponse
+    {
+        $user = Auth::user();
+        if (empty($user) || $user->isNotActive()) {
+            return $this->getErrorsResponse(["Access is denied."], 403);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        $result = $handler->handle(new Update($data));
 
         return $this->getResponse($result);
     }

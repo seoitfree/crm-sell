@@ -45,6 +45,10 @@ export default defineComponent({
             type: String,
             required: true,
         },
+        field: {
+            type: String,
+            required: true,
+        },
         entityId: {
             type: String,
             required: true,
@@ -92,15 +96,15 @@ export default defineComponent({
                 value: this.getValidationRules()
             });
             schema.validate(this.form, { abortEarly: false })
-                .then(valid => this.update())
+                .then((valid) => {
+                    this.update()
+                })
                 .catch(errors => {
-                    console.log(errors);
                     const errorsObject = {};
                     errors.inner.forEach(err => {
                         errorsObject[err.path] = err.message;
                     });
                     this.validation = errorsObject;
-                    console.log(this.validation);
                 });
         },
         getValidationRules() {
@@ -118,7 +122,7 @@ export default defineComponent({
             }
             return rule;
         },
-        async update(): void {return;
+        async update(): void {
             this.isLoading = true;
             axios.patch(`/api/v1/${this.urlEdit}`, this.form).then(async (response) => {
                 if (response.status === 422) {
@@ -137,6 +141,7 @@ export default defineComponent({
                         entityId: String(this.form.entityId),
                         field: this.form.field,
                     } as InlineEdit);
+                    this.edit = false;
                 }
             }).catch((error) => {
                 console.error(error)

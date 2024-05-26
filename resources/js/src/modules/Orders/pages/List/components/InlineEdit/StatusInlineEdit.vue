@@ -120,6 +120,7 @@ export default defineComponent({
                         entityId: String(this.form.entityId),
                         field: this.form.field,
                     } as InlineOptionEdit);
+                    this.edit = false;
                 }
             }).catch((error) => {
                 console.error(error)

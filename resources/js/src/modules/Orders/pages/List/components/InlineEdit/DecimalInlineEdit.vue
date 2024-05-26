@@ -44,6 +44,10 @@ export default defineComponent({
             type: Number,
             required: true,
         },
+        field: {
+            type: String,
+            required: true,
+        },
         entityId: {
             type: String,
             required: true,
@@ -114,6 +118,7 @@ export default defineComponent({
                         entityId: String(this.form.entityId),
                         field: this.form.field,
                     } as InlineEdit);
+                    this.edit = false;
                 }
             }).catch((error) => {
                 console.error(error)
