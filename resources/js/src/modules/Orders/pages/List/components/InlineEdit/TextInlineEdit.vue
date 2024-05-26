@@ -94,29 +94,31 @@ export default defineComponent({
             schema.validate(this.form, { abortEarly: false })
                 .then(valid => this.update())
                 .catch(errors => {
+                    console.log(errors);
                     const errorsObject = {};
                     errors.inner.forEach(err => {
                         errorsObject[err.path] = err.message;
                     });
                     this.validation = errorsObject;
+                    console.log(this.validation);
                 });
         },
         getValidationRules() {
-            const rule = yup.string().trim();
+            let rule = yup.string().trim();
             if (this.required) {
-                rule.required('Поле обзательное');
+                rule = rule.required('Поле обзательное');
             }
             if (this.min) {
-                const min = Number(this.min)
-                rule.min(min, `Минимальное количество символов ${min}`);
+                const min = Number(this.min);
+                rule = rule.min(min, `Минимальное количество символов ${min}`);
             }
             if (this.max) {
-                const max = Number(this.max)
-                rule.min(max, `Максимальное количество символов ${max}`);
+                const max = Number(this.max);
+                rule = rule.max(max, `Максимальное количество символов ${max}`);
             }
             return rule;
         },
-        async update(): void {
+        async update(): void {return;
             this.isLoading = true;
             axios.patch(`/api/v1/${this.urlEdit}`, this.form).then(async (response) => {
                 if (response.status === 422) {

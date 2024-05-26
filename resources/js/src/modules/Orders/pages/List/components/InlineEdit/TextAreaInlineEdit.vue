@@ -103,14 +103,17 @@ export default defineComponent({
                 });
         },
         getValidationRules() {
-            const rule = yup.string().trim().required('Поле обзательное');
+            let rule = yup.string().trim();
+            if (this.required) {
+                rule = rule.required('Поле обзательное');
+            }
             if (this.min) {
                 const min = Number(this.min)
-                rule.min(min, `Минимальное количество символов ${min}`);
+                rule = rule.min(min, `Минимальное количество символов ${min}`);
             }
             if (this.max) {
                 const max = Number(this.max)
-                rule.min(max, `Максимальное количество символов ${max}`);
+                rule = rule.max(max, `Максимальное количество символов ${max}`);
             }
             return rule;
         },
