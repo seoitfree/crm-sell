@@ -30,16 +30,26 @@
                     </div>
                 </div><!--//row-->
 
-                <OrdersTable :key="ordersTableKey"
-                             :filterParams="filterParams"
+                <div v-if="isLoading" class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <OrdersTable
+                    v-else
+                    :key="ordersTableKey"
+                    :filterParams="filterParams"
+                    :paginationProp="pagination"
+                    :recordsProp="records"
+                    @clickSort="clickSort"
+                    @refreshRecords="refreshRecords"
                 />
-                <template v-if="isFilter">
-                    <Filter
-                        :filterParams="filterParams"
-                        @closeButton="switchFilter"
-                        @initFilter="initFilter"
-                    />
-                </template>
+                <Filter
+                    v-if="isFilter"
+                    :filterParams="filterParams"
+                    @closeButton="switchFilter"
+                    @initFilter="initFilter"
+                />
             </div>
         </div>
     </div>
@@ -52,6 +62,11 @@
 
 import {defineAsyncComponent, defineComponent} from "vue";
 import {FilterType} from "./Types/FilterType";
+import axios from "axios";
+import {OrderType} from "./components/Type/OrderType";
+import {SortData} from "../../../../common/components/Table/Type/SortData";
+import pagination from "../../../../common/components/Table/mixins/Pagination";
+
 const Header = defineAsyncComponent(() => import('@/js/src/common/components/Header/Header.vue'));
 const Footer = defineAsyncComponent(() => import('@/js/src/common/components/Footer/Footer.vue'));
 const OrdersTable = defineAsyncComponent(() => import('@/js/src/modules/Orders/pages/List/OrdersTable.vue'));
@@ -59,6 +74,7 @@ const Filter = defineAsyncComponent(() => import('@/js/src/modules/Orders/pages/
 
 export default defineComponent({
     name: "OrdersList",
+    mixins: [pagination],
     components: {
         Header,
         Footer,
@@ -67,33 +83,65 @@ export default defineComponent({
     },
     data() {
         return {
+            isLoading: false,
             ordersTableKey: 0,
             filterParams: {
                 order_date_from: '',
                 order_date_to: '',
                 vendor_code: '',
                 goods_name: '',
-                sell_price_from: 0,
-                sell_price_to: 0,
-                amount_in_order_paid_from: 0,
-                amount_in_order_paid_to: 0,
-                cost_from: 0,
-                cost_to: 0,
                 defect: '',
                 provider_start: '',
                 manager: '',
-                status: '',
-                comfy_code: '',
-                comfy_goods_name: '',
-                comfy_brand: '',
-                comfy_category: '',
-                comfy_price_from: 0,
-                comfy_price_to: 0
+                status: [],
+                date_check_from: '',
+                date_check_to: '',
+                comment: '',
+                order_number: '',
+                remainder: false,
             } as FilterType,
             isFilter: false,
+            sortData: {
+                sortField: 'created_at',
+                sortDir: 'desc',
+            } as SortData,
+            records: [] as OrderType[],
         };
     },
+    created() {
+        this.getData();
+    },
     methods: {
+        getData(): void {
+            this.isLoading = true;
+            axios.get('/api/v1/orders', {
+                params: {
+                    pageNumber: this.pagination.pages.current_page,
+                    filterParams: this.filterParams,
+                    sortDir: this.sortData.sortDir,
+                    sortField: this.sortData.sortField,
+                }
+            }).then((response) => {
+                if (response.status === 200) {
+                    const result = response.data.data;
+                    this.pagination = result.pagination;
+                    this.records = result.records;
+                } else {
+                    alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
+                }
+                this.isLoading = false;
+            }).catch(() => {
+                this.isLoading = false;
+            });
+        },
+        clickSort(sortData: SortData): void {
+            this.sortData = sortData;
+            this.getData();
+        },
+        refreshRecords(page: number): void {
+            this.pagination.pages.current_page = page;
+            this.getData();
+        },
         CSV(): void {
 
         },
@@ -102,6 +150,8 @@ export default defineComponent({
         },
         initFilter(filterData: FilterType): void {
             this.filterParams = filterData;
+            console.log("initFilter");
+            this.getData();
         }
     }
 });

@@ -21,7 +21,7 @@
 
                             <div class="form-group col-md-6">
                                 <label for="comfyCategory">Статус замовлення</label>
-                                <select class="form-select" name="value" v-model="filter.status">
+                                <select multiple class="form-select" name="value" v-model="filter.status">
                                     <template v-for="item in statusOptions">
                                         <option :selected="item.key === filter.status" :value="item.key">{{ item.value }}</option>
                                     </template>
@@ -42,46 +42,24 @@
 
                         <div class="form-group row">
                             <div class="form-group col-md-6">
-                                <label for="vendor_code">№ Замовлення</label>
+                                <label for="comfyCategory">Дата Чеку від</label>
+                                <input name="order_date_from" type="date" class="form-control" v-model="filter.date_check_from">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="order_date_to">Дата Чеку до</label>
+                                <input name="order_date_to" type="date" class="form-control" v-model="filter.date_check_to">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="form-group col-md-6">
+                                <label for="vendor_code">Артикул</label>
                                 <input name="vendor_code" type="text" class="form-control" v-model="filter.vendor_code">
                             </div>
 
                             <div class="form-group col-md-6">
                                 <label for="goods_name">Товар</label>
                                 <input name="goods_name" type="text" class="form-control" v-model="filter.goods_name">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="form-group col-md-6">
-                                <label for="sell_price_from">Ціна від</label>
-                                <input name="sell_price_from" type="number" min="0" class="form-control" v-model="filter.sell_price_from">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="sell_price_to">Ціна до</label>
-                                <input name="sell_price_to" type="number" min="0" class="form-control" v-model="filter.sell_price_to">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="form-group col-md-6">
-                                <label for="amount_in_order_paid_from">К-ть оплачених від</label>
-                                <input name="amount_in_order_paid_from" type="number" min="0" class="form-control" v-model="filter.amount_in_order_paid_from">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="amount_in_order_paid_to">К-ть оплачених до</label>
-                                <input name="amount_in_order_paid_to" type="number" min="0" class="form-control" v-model="filter.amount_in_order_paid_to">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="form-group col-md-6">
-                                <label for="cost_from">Ціна закупки від</label>
-                                <input name="cost_from" type="number" min="0" class="form-control" v-model="filter.cost_from">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="cost_to">Ціна закупки до</label>
-                                <input name="cost_to" type="number" min="0" class="form-control" v-model="filter.cost_to">
                             </div>
                         </div>
 
@@ -107,36 +85,20 @@
 
                         <div class="form-group row">
                             <div class="form-group col-md-6">
-                                <label for="comfy_code">Код номенклатуры</label>
-                                <input name="comfy_code" type="text" class="form-control" v-model="filter.comfy_code">
+                                <label for="vendor_code">Коментар</label>
+                                <input name="vendor_code" type="text" class="form-control" v-model="filter.comment">
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label for="comfy_goods_name">Наименование продукта</label>
-                                <input name="comfy_goods_name" type="text" class="form-control" v-model="filter.comfy_goods_name">
+                                <label for="goods_name">№ Замовлення</label>
+                                <input name="goods_name" type="text" class="form-control" v-model="filter.order_number">
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <div class="form-group col-md-6">
-                                <label for="comfy_brand">Наименование бренда</label>
-                                <input name="comfy_brand" type="text" class="form-control" v-model="filter.comfy_brand">
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label for="comfy_category">Наименование категории</label>
-                                <input name="comfy_category" type="text" class="form-control" v-model="filter.comfy_category">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="form-group col-md-6">
-                                <label for="comfy_price_from">Цена/значение від</label>
-                                <input name="comfy_price_from" type="number" min="0" class="form-control" v-model="filter.comfy_price_from">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="comfy_price_to">Цена/значение до</label>
-                                <input name="comfy_price_to" type="number" min="0" class="form-control" v-model="filter.comfy_price_to">
+                                <label for="vendor_code">Залишок</label>
+                                <input name="vendor_code" type="checkbox" class="form-control" v-model="filter.remainder">
                             </div>
                         </div>
                     </div>
@@ -148,8 +110,8 @@
                     </div>
                 </div>
                     <div v-if="!isLoading" class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="initFilet()">Фильтровать</button>
-                        <button type="submit" class="btn btn-primary">Добавить</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" @click="initFilter">Фильтровать</button>
+                        <button type="submit" class="btn btn-secondary" @click="clearFilter">Очистить</button>
                     </div>
 
             </div>
@@ -179,22 +141,15 @@ export default defineComponent({
                 order_date_to: '',
                 vendor_code: '',
                 goods_name: '',
-                sell_price_from: 0,
-                sell_price_to: 0,
-                amount_in_order_paid_from: 0,
-                amount_in_order_paid_to: 0,
-                cost_from: 0,
-                cost_to: 0,
                 defect: '',
                 provider_start: '',
                 manager: '',
-                status: '',
-                comfy_code: '',
-                comfy_brand: '',
-                comfy_category: '',
-                comfy_goods_name: '',
-                comfy_price_from: 0,
-                comfy_price_to: 0,
+                status: [],
+                date_check_from: '',
+                date_check_to: '',
+                comment: '',
+                order_number: '',
+                remainder: false,
             } as FilterType,
             managersOptions: [] as Option[],
             providerOptions: [] as Option[],
@@ -246,8 +201,24 @@ export default defineComponent({
         closeButton(): void {
             this.$emit('closeButton');
         },
-        initFilet(): void {
-            this.$emit('initFilet', this.filter);
+        initFilter(): void {
+            console.log("Filter::initFilet()");
+            this.$emit('initFilter', this.filter);
+        },
+        clearFilter(): void {
+            this.filter = {
+                order_date_from: '',
+                order_date_to: '',
+                vendor_code: '',
+                goods_name: '',
+                defect: '',
+                provider_start: '',
+                manager: '',
+                status: [],
+                date_check_from: '',
+                date_check_to: '',
+                comment: '',
+            };
         }
     }
 });

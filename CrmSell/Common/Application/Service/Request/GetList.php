@@ -18,15 +18,47 @@ class GetList extends RootRequest
         $this->sortDir = !empty($request['sortDir']) ? $request['sortDir'] : 'desc';
     }
 
-    public function getPage(): int {
-        return $this->pageNumber;
+    public function getPage(): int { return $this->pageNumber; }
+    public function getSortField(): string { return $this->sortField; }
+    public function getSortDir(): string { return $this->sortDir; }
+
+    /**
+     * @return array
+     */
+    public function toValidation(): array
+    {
+        return [
+            "sortDir" => $this->sortDir,
+            "sortField" => $this->sortField,
+            "pageNumber" => $this->pageNumber,
+        ];
     }
 
-    public function getSortField(): string {
-        return $this->sortField;
+    /**
+     * @return string[]
+     */
+    public function getRules(): array
+    {
+        return [
+            "sortDir" => 'required|string|in:asc,desc',
+            "sortField" => "required|string" . $this->getSortFieldRule(),
+            "pageNumber" => 'required|numeric'
+        ];
     }
 
-    public function getSortDir(): string {
-        return $this->sortDir;
+    /**
+     * @return string
+     */
+    private function getSortFieldRule(): string
+    {
+        $fieldList = $this->getSortFieldList();
+        if (empty($fieldList)) {
+            return '';
+        }
+        return "|in:" . implode(",", $fieldList);
+    }
+
+    protected function getSortFieldList(): array {
+        return [];
     }
 }

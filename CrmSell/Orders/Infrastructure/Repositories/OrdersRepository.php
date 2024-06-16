@@ -18,9 +18,16 @@ class OrdersRepository implements OrdersRepositoryInterface
      */
     public function getListCount(array $filter): int
     {
-        //$results = DB::select('select * from users where id = :id', ['id' => 1]);
+        $params = $this->getFilter($filter);
+        $where = implode("AND", array_filter($params["condition"], fn($item) => $item !== ''));
+        $where = $where === '' ? $where : " AND $where ";
+
         try {
-            $results = DB::select("SELECT COUNT(o.id) as count FROM orders as o");
+            $sql = "SELECT COUNT(t.id) as count
+                FROM ({$this->getQuerySQL()}) as t
+                $where";
+
+            $results = DB::select($sql, $params["bindings"]);
         } catch (QueryException $e) {
             Log::error($e->getMessage() . $e->getTraceAsString());
             throw new \Exception("OrdersRepository::getListCount() error.");
@@ -29,64 +36,12 @@ class OrdersRepository implements OrdersRepositoryInterface
         return !empty($results) ? $results[0]->count : 0;
     }
 
-    /*
-     SELECT o.id,
-       o.amount_in_order,
-       o.amount_in_order_paid,
-       o.sell_price,
-       o.cost,
-       o.date_check,
-       o.order_date,
-       o.order_number,
-       o.vendor_code,
-       o.goods_name,
-       o.manager_comment,
-       o.comment,
-       o.comfy_code,
-       o.comfy_goods_name,
-       o.comfy_brand,
-       o.comfy_category,
-       CONCAT(COALESCE(u.first_name,''), ' ', COALESCE(u.last_name,'')) as manager,
-       s.name as status,
-       d.name as defect,
-       p.name as provider,
-       shipments.shipments_amount
-FROM orders as o
-    LEFT JOIN users u
-       ON o.manager = u.id
-    LEFT JOIN status s
-       ON s.alias = o.status
-    LEFT JOIN defects d
-       ON d.alias = o.defect
-    LEFT JOIN providers p
-       ON p.id = o.provider_start
-    LEFT JOIN (
-        SELECT order_id,
-               shipments_amount,
-               t.rn
-        FROM (SELECT order_id,
-                     IF(CONVERT(@prev USING utf8) <> CONVERT(order_id USING utf8), @rn:=0, @rn),
-                     IF(CONVERT(@prev USING utf8) <> CONVERT(order_id USING utf8), @shipments_amount:=0, @shipments_amount:=@shipments_amount + amount) as shipments_amount,
-                     @prev:=order_id,
-                     @rn:=@rn+1 AS rn
-              FROM shipments, (SELECT @rn:=0) rn, (SELECT @prev:='' ) prev, (SELECT @shipments_amount:=0) shipments_amount
-              ORDER BY order_id ASC
-             ) AS t
-        WHERE t.rn = 1
-    ) as shipments
-        ON shipments.order_id = o.id
-    */
-
     /**
-     * @param GetListDTO $dto
-     * @return array
-     * @throws \Exception
+     * @return string
      */
-    public function getList(GetListDTO $dto): array
+    public function getQuerySQL(): string
     {
-        try {
-            $sql = "
-            SELECT o.id,
+        return "SELECT o.id,
                    o.amount_in_order as amount_in_order,
                    o.amount_in_order_paid as amount_in_order_paid,
                    o.sell_price as sell_price,
@@ -127,17 +82,94 @@ FROM orders as o
                     FROM shipments as s
                     GROUP BY order_id
                 ) as shipments
-                    ON shipments.order_id = o.id
+                    ON shipments.order_id = o.id";
+    }
+
+    /**
+     * @param GetListDTO $dto
+     * @return array
+     * @throws \Exception
+     */
+    public function getList(GetListDTO $dto): array
+    {
+        $params = $this->getFilter($dto->getFilter());
+        $where = implode("AND", array_filter($params["condition"], fn($item) => $item !== ''));
+        $where = $where === '' ? $where : " AND $where ";
+
+        try {
+            $sql = "
+                SELECT t.*
+                FROM ({$this->getQuerySQL()}) as t
+                $where
                 ORDER BY {$dto->getSortField()} {$dto->getSortDir()}
                 LIMIT {$dto->getPagination()->getLimit()} OFFSET {$dto->getPagination()->getOffset()}
             ";
 
-            $results = DB::select($sql);
+            $results = DB::select($sql, $params["bindings"]);
         } catch (QueryException $e) {
             Log::error($e->getMessage() . $e->getTraceAsString());
             throw new \Exception("OrdersRepository::getList() error.");
         }
 
         return !empty($results) ? $results : [];
+    }
+
+    /**
+     * @param array $params
+     * @return array|array[]
+     */
+    private function getFilter(array $params): array
+    {
+        $filter = [
+            "condition" => [],
+            "bindings" => [],
+        ];
+
+        if (!empty($params["order_date_from"])) {
+            $filter["condition"][] = " t.created_at >= :order_date_from";
+            $filter["bindings"]["order_date_from"] = $params["order_date_from"];
+        }
+        if (!empty($params["order_date_to"])) {
+            $filter["condition"][] = " t.created_at <= :order_date_to";
+            $filter["bindings"]["order_date_to"] = $params["order_date_to"];
+        }
+        if (!empty($params["date_check_from"])) {
+            $filter["condition"][] = " t.date_check >= :date_check_from";
+            $filter["bindings"]["date_check_from"] = $params["date_check_from"];
+        }
+        if (!empty($params["date_check_to"])) {
+            $filter["condition"][] = " t.created_at <= :date_check_to";
+            $filter["bindings"]["date_check_to"] = $params["date_check_to"];
+        }
+        if (!empty($params["vendor_code"])) {
+            $filter["condition"][] = " t.vendor_code = :vendor_code";
+            $filter["bindings"]["vendor_code"] = $params["vendor_code"];
+        }
+        if (!empty($params["goods_name"])) {
+            $filter["condition"][] = " t.goods_name LIKE :goods_name";
+            $filter["bindings"]["goods_name"] = "{$params["goods_name"]}";
+        }
+        if (!empty($params["status"])) {
+            $filter["condition"][] = " t.status IN (:status)";
+            $filter["bindings"]["status"] = "{$params["status"]}";
+        }
+        if (!empty($params["remainder"])) {
+            $filter["condition"][] = " t.status IN (:status)";
+            $filter["bindings"]["remainder"] = "t.remainder > 0";
+        }
+        if (!empty($params["provider_start"])) {
+            $filter["condition"][] = " t.provider_start = :provider_start";
+            $filter["bindings"]["provider_start"] = $params["provider_start"];
+        }
+        if (!empty($params["defect"])) {
+            $filter["condition"][] = " t.defect = :defect";
+            $filter["bindings"]["provider_start"] = $params["defect"];
+        }
+        if (!empty($params["comment"])) {
+            $filter["condition"][] = " t.comment LIKE :comment";
+            $filter["bindings"]["goods_name"] = "{$params["comment"]}";
+        }
+
+        return $filter;
     }
 }

@@ -1,11 +1,6 @@
 <template>
     <div class="tab-pane fade show active" id="providers-all" role="tabpanel" aria-labelledby="orders-all-tab">
-        <div v-if="isLoading" class="d-flex justify-content-center">
-            <div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
-        <div v-if="!isLoading">
+        <div>
             <div class="app-card app-card-orders-table shadow-sm mb-5">
                 <div class="app-card-body">
                     <div class="table-responsive">
@@ -30,7 +25,7 @@
                 </div>
             </div>
             <Pagination
-                :pagination="pagination"
+                :pagination="paginationProp"
                 @clickPagination="refreshRecords"
             />
         </div>
@@ -55,13 +50,13 @@
 import {defineAsyncComponent, defineComponent} from "vue";
 import {HeadColumn} from "../../../../common/components/Table/Type/HeadColumn";
 import {SortData} from "../../../../common/components/Table/Type/SortData";
-import axios from "axios";
+
 import {getLocalDateTime} from "../../../../common/helpers/DateTime";
-import pagination from "../../../../common/components/Table/mixins/Pagination";
 import {InlineEdit, InlineOptionEdit} from "./components/InlineEdit/Types/InlineEdit";
 import {OrderType} from "./components/Type/OrderType";
 import {PropType} from "vue/dist/vue";
 import {FilterType} from "./Types/FilterType";
+
 const HeadTable = defineAsyncComponent(() => import("@/js/src/common/components/Table/HeadTable.vue"));
 const Pagination = defineAsyncComponent(() => import('@/js/src/common/components/Table/Pagination.vue'));
 const AddShipment = defineAsyncComponent(() => import('@/js/src/modules/Orders/pages/List/components/AddShipments.vue'));
@@ -72,7 +67,6 @@ const TableRow = defineAsyncComponent(() => import('@/js/src/modules/Orders/page
 
 export default defineComponent({
     name: "OrdersTable",
-    mixins: [pagination],
     components: {
         HeadTable,
         Pagination,
@@ -84,11 +78,18 @@ export default defineComponent({
         filterParams: {
             type: Object as PropType<FilterType>,
             required: true,
+        },
+        paginationProp: {
+            type: Object,
+            required: true,
+        },
+        recordsProp: {
+            type: Array,
+            required: true,
         }
     },
     data() {
         return {
-            isLoading: false,
             headColumns: [
                 {name: 'manager', translate: 'Менеджер', sort: true, width: 'width: 125px'},
                 {name: 'order_date', translate: 'Дата', sort: true, width: 'width: 125px'},
@@ -125,39 +126,14 @@ export default defineComponent({
         }
     },
     created() {
-
-        this.getData();
+        this.records = this.recordsProp;
     },
     methods: {
-        getData(): void {
-            this.isLoading = true;
-            axios.get('/api/v1/orders', {
-                params: {
-                    pageNumber: this.pagination.pages.current_page,
-                    filterParams: this.filterParams,
-                    sortDir: this.sortData.sortDir,
-                    sortField: this.sortData.sortField,
-                }
-            }).then((response) => {
-                if (response.status === 200) {
-                    const result = response.data.data;
-                    this.pagination = result.pagination;
-                    this.records = result.records;
-                } else {
-                    alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
-                }
-                this.isLoading = false;
-            }).catch(() => {
-                this.isLoading = false;
-            });
-        },
         clickSort(sortData: SortData) {
-            this.sortData = sortData;
-            this.getData();
+            this.$emit("clickSort", this.sortData);
         },
         refreshRecords(page: number): void {
-            this.pagination.pages.current_page = page;
-            this.getData();
+            this.$emit("refreshRecords", page);
         },
         getLocalDateTime(date: string): string {
             return getLocalDateTime(date);
