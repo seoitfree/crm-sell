@@ -66,8 +66,8 @@ class OrdersRepository implements OrdersRepositoryInterface
                    o.defect as defect_alias,
                    p.id as provider_start_id,
                    p.name as provider_start,
-                   shipments.shipments_amount as shipments_amount,
-                   o.amount_in_order_paid - shipments.shipments_amount as remainder
+                   IFNULL(shipments.shipments_amount, 0) as shipments_amount,
+                   IFNULL(o.amount_in_order_paid - shipments.shipments_amount, 0) as remainder
             FROM orders as o
                 LEFT JOIN goods g
                    ON o.goods_id = g.id
@@ -144,12 +144,12 @@ class OrdersRepository implements OrdersRepositoryInterface
             $filter["bindings"]["date_check_to"] = $params["date_check_to"];
         }
         if (!empty($params["vendor_code"])) {
-            $filter["condition"][] = " t.vendor_code = :vendor_code";
+            $filter["condition"][] = " g.vendor_code = :vendor_code";
             $filter["bindings"]["vendor_code"] = $params["vendor_code"];
         }
         if (!empty($params["goods_name"])) {
-            $filter["condition"][] = " t.goods_name LIKE :goods_name";
-            $filter["bindings"]["goods_name"] = "{$params["goods_name"]}";
+            $filter["condition"][] = " g.name LIKE :goods_name";
+            $filter["bindings"]["goods_name"] = "%{$params["goods_name"]}%";
         }
         if (!empty($params["status"])) {
             $filter["condition"][] = " t.status IN (:status)";
@@ -165,11 +165,11 @@ class OrdersRepository implements OrdersRepositoryInterface
         }
         if (!empty($params["defect"])) {
             $filter["condition"][] = " t.defect = :defect";
-            $filter["bindings"]["provider_start"] = $params["defect"];
+            $filter["bindings"]["defect"] = $params["defect"];
         }
         if (!empty($params["comment"])) {
             $filter["condition"][] = " t.comment LIKE :comment";
-            $filter["bindings"]["goods_name"] = "{$params["comment"]}";
+            $filter["bindings"]["comment"] = "%{$params["comment"]}%";
         }
 
         return $filter;

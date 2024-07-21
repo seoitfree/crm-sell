@@ -61,7 +61,7 @@ class CreateHandler extends AbstractHandler
             "comment" => '',
             'manager' => $userId,
             'status' => OrderStatusEnum::NEW->value,
-            'defect' => '',
+            'defect' => DefectEnum::IN_ORDER->value,
         ]));
 
         if (!$order->save()) {

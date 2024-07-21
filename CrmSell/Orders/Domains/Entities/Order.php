@@ -36,6 +36,7 @@ class Order extends Model
         'manager',
         'status',
         'defect',
+        'goods_id'
     ];
 
     /**
