@@ -163,6 +163,7 @@ return [
         \CrmSell\Users\Infrastructure\Laravel\Provider\UserProvider::class,
         \CrmSell\Providers\Infrastructure\Laravel\Provider\ProvidersProvider::class,
         \CrmSell\Orders\Infrastructure\Laravel\Provider\OrdersProvider::class,
+        \CrmSell\Goods\Infrastructure\Laravel\Provider\GoodsProvider::class,
         \CrmSell\Status\Infrastructure\Laravel\Provider\StatusProvider::class,
         /*
          * Application Service Providers...

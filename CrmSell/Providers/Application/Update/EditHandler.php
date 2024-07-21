@@ -52,7 +52,7 @@ class EditHandler extends AbstractHandler
         $provider = Provider::find($command->getId());
 
         if (empty($provider->id)) {
-            $this->resultHandler->setStatusCode(404)->setErrors(["Access is denied."])->setStatus(ResponseCodeErrors::BUSINESS_LOGIC_ERROR);
+            $this->resultHandler->setStatusCode(404)->setErrors(["Entity not exist."])->setStatus(ResponseCodeErrors::BUSINESS_LOGIC_ERROR);
             return;
         }
 

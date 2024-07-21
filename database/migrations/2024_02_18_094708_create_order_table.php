@@ -19,7 +19,7 @@ return new class extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
 
-
+            $table->string('goods_id', 36)->nullable()->index();
             $table->integer('amount_in_order'); //К-ть в замовленні
             $table->integer('amount_in_order_paid');
             $table->float('sell_price', 10,2);
@@ -28,8 +28,10 @@ return new class extends Migration
 
             $table->date('date_check')->nullable();
             $table->string('order_number', 50);
-            $table->string('vendor_code', 100);//Артикул
-            $table->string('goods_name', 150);
+
+            //$table->string('vendor_code', 100);//Артикул ALTER TABLE orders DROP COLUMN vendor_code, DROP COLUMN goods_name;
+            //$table->string('goods_name', 150);
+
             $table->text('manager_comment');
             $table->text('comment');
 

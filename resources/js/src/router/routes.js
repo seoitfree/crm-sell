@@ -112,6 +112,33 @@ const routes = [
         },
     },
     {
+        path: '/goods',
+        name: 'goods-list',
+        component: () => import("../modules/Admin/pages/Goods/List/GoodsList.vue"),
+        meta: {
+            accessScopes: [RolesEnum.ADMIN],
+            sidepanel: 'admin',
+        },
+    },
+    {
+        path: '/goods/create',
+        name: 'goods-add',
+        component: () => import("../modules/Admin/pages/Goods/Edit/GoodsEdit.vue"),
+        meta: {
+            accessScopes: [RolesEnum.ADMIN],
+            sidepanel: 'admin',
+        },
+    },
+    {
+        path: '/goods/edit/:recordId',
+        name: 'goods-edit',
+        component: () => import("../modules/Admin/pages/Goods/Edit/GoodsEdit.vue"),
+        meta: {
+            accessScopes: [RolesEnum.ADMIN],
+            sidepanel: 'admin',
+        },
+    },
+    {
         path: '/provider/edit/:recordId',
         component: () => import("../modules/Admin/pages/Providers/Edit/ProviderEdit.vue"),
         meta: {
