@@ -61,9 +61,65 @@ class GoodsRepository implements GoodsRepositoryInterface
     {
         $goods = Goods::where([
             ['id', '<>', $id],
-            [$fieldValue, '=', 'john@example.com']
+            [$fieldName, '=', $fieldValue]
         ])->first();
 
         return !empty($goods->id);
+    }
+
+    /**
+     * @param array $params
+     * @param string $sortField
+     * @return array
+     * @throws \Exception
+     */
+    public function getListByParam(array $params, string $sortField): array
+    {
+        $params = $this->getFilter($params);
+        $where = implode("AND", array_filter($params["condition"], fn($item) => $item !== ''));
+        $where = $where === '' ? "$where" : " $where AND g.deprecated = 0 ";
+
+        try {
+            $sql = "
+                SELECT g.id,
+                       g.vendor_code,
+                       g.name
+                FROM goods as g
+                WHERE $where
+                ORDER BY {$sortField} ASC
+                LIMIT 30
+            ";
+
+            $results = DB::select($sql, $params["bindings"]);
+        } catch (QueryException $e) {
+            Log::error($e->getMessage() . $e->getTraceAsString());
+            throw new \Exception("GoodsRepository::getListByParam() error.");
+        }
+
+        return !empty($results) ? $results : [];
+    }
+
+    /**
+     * @param array $params
+     * @return array|array[]
+     */
+    private function getFilter(array $params): array
+    {
+        $filter = [
+            "condition" => [],
+            "bindings" => [],
+        ];
+
+        if (!empty($params["name"])) {
+            $filter["condition"][] = " g.name LIKE :name";
+            $filter["bindings"][":name"] = "%{$params["name"]}%";
+        }
+        if (!empty($params["vendor_code"])) {
+            $filter["condition"][] = " g.vendor_code LIKE :vendor_code";
+            $filter["bindings"][":vendor_code"] = "%{$params["vendor_code"]}%";
+            $params["bindings"][":vendor_code"] = "%{$params["vendor_code"]}%";
+        }
+
+        return $filter;
     }
 }

@@ -13,24 +13,10 @@
             />
         </td>
         <td class="cell">
-            <TextInlineEdit :value="item.vendor_code"
-                            :entityId="item.id"
-                            :field="`vendor_code`"
-                            :max="50"
-                            :urlEdit="`order`"
-                            :required="true"
-                            @update="updateInline"
-            />
+            {{ item.vendor_code }}
         </td>
         <td class="cell">
-            <TextInlineEdit :value="item.goods_name"
-                            :field="`goods_name`"
-                            :entityId="item.id"
-                            :max="150"
-                            :urlEdit="`order`"
-                            :required="true"
-                            @update="updateInline"
-            />
+            {{ item.goods_name }}
         </td>
         <td class="cell">
             <TextAreaInlineEdit :value="item.manager_comment"

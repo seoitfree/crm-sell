@@ -49,8 +49,8 @@ class OrdersRepository implements OrdersRepositoryInterface
                    IFNULL(o.date_check, '') as date_check,
                    o.created_at as order_date,
                    o.order_number as order_number,
-                   o.vendor_code as vendor_code,
-                   o.goods_name as goods_name,
+                   g.vendor_code as vendor_code,
+                   g.name as goods_name,
                    o.manager_comment as manager_comment,
                    o.comment as comment,
                    o.comfy_code as comfy_code,
@@ -69,6 +69,8 @@ class OrdersRepository implements OrdersRepositoryInterface
                    shipments.shipments_amount as shipments_amount,
                    o.amount_in_order_paid - shipments.shipments_amount as remainder
             FROM orders as o
+                LEFT JOIN goods g
+                   ON o.goods_id = g.id
                 LEFT JOIN users u
                    ON o.manager = u.id
                 LEFT JOIN status s

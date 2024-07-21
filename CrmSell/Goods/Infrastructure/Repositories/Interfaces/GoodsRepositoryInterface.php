@@ -27,4 +27,11 @@ interface GoodsRepositoryInterface
      * @return bool
      */
     public function checkExistSimilar(string $id, string $fieldName, string $fieldValue): bool;
+
+    /**
+     * @param array $params
+     * @param string $sortField
+     * @return array
+     */
+    public function getListByParam(array $params, string $sortField): array;
 }

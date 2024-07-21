@@ -10,6 +10,7 @@ Route::middleware(['api', 'auth:sanctum'])->group(function () {
             Route::get('/goods/{id}', 'GoodsController@getGoodsById')->whereUuid('id');
             Route::post('/goods', 'GoodsController@create');
             Route::put('/goods', 'GoodsController@update');
-            //Route::get('/providers/all', 'ProvidersController@getListAll');
+            Route::get('/goods/vendor_code/{value}', 'GoodsController@getListByVendorCode');
+            Route::get('/goods/goods_name/{value}', 'GoodsController@getListByGoodsName');
         });
 });

@@ -76,7 +76,6 @@ export default defineComponent({
         getStatus(): void {
             axios.get('/api/v1/goods/' + this.recordId).then((response) => {
                 if (response.status === 200) {
-                    console.log(response.data);
                     this.form.id = this.recordId;
                     this.form.name = response.data.data.name;
                     this.form.deprecated = response.data.data.deprecated;

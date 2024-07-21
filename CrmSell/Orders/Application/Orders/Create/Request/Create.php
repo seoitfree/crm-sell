@@ -11,14 +11,12 @@ class Create extends RootRequest
     use PropertyTrait;
 
     private string $numberOrder = '';
-    private string $vendorCode = '';
+    private string $goodsId = '';
 
     private float $sellPrice =  0.0;
     private string $managerComment = '';
 
-    private string $goodsName = '';
     private string $providerStart = '';
-
     private int $amountInOrder = 0;
     private string $comfyCode = '';
 
@@ -40,10 +38,9 @@ class Create extends RootRequest
     {
         return [
             "numberOrder" => $this->numberOrder,
-            "vendorCode" => $this->vendorCode,
             "sellPrice" => $this->sellPrice,
             "managerComment" => $this->managerComment,
-            "goodsName" => $this->goodsName,
+            "goodsId" => $this->goodsId,
             "providerStart" => $this->providerStart,
             "amountInOrder" => $this->amountInOrder,
             "comfyCode" => $this->comfyCode,
@@ -57,12 +54,11 @@ class Create extends RootRequest
     public function getRules(): array
     {
         return [
+            "providerStart" => 'required|string|exists:CrmSell\Providers\Domains\Entities\Provider,id',
             "numberOrder" => 'required|string|max:50',
-            "vendorCode" => 'required|string|max:50',
             "sellPrice" => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/|gt:0',
             "managerComment" => 'required|string|max:1000',
-            "goodsName" => 'required|string|max:150',
-            "providerStart" => 'required|string|exists:CrmSell\Providers\Domains\Entities\Provider,id',
+            "goodsId" => 'required|string|exists:CrmSell\Goods\Domains\Entities\Goods,id',
             "amountInOrder" => 'required|numeric|gt:0',
 
             "comfyCode" => 'required|string|max:50',
@@ -80,10 +76,8 @@ class Create extends RootRequest
     {
         return [
             "order_number" => $this->numberOrder,
-            "vendor_code" => $this->vendorCode,
             "sell_price" => $this->sellPrice,
             "manager_comment" => $this->managerComment,
-            "goods_name" => $this->goodsName,
             "provider_start" => $this->providerStart,
             "amount_in_order" => $this->amountInOrder,
             "comfy_code" => $this->comfyCode,
@@ -92,6 +86,7 @@ class Create extends RootRequest
             "comfy_category" => $this->comfyCategory,
             "comfy_price" => $this->comfyPrice,
             'amount_in_order_paid' => $this->amountInOrder,
+            "goods_id" => $this->goodsId,
         ];
     }
 

@@ -10,6 +10,7 @@ use CrmSell\Goods\Application\CRUD\GetList\GetListHandler;
 use CrmSell\Goods\Application\CRUD\GetList\Request\GetList;
 use CrmSell\Goods\Application\CRUD\Update\Request\Update;
 use CrmSell\Goods\Application\CRUD\Update\UpdateHandler;
+use CrmSell\Goods\Application\GetListByParam\GetListByParam;
 use CrmSell\Goods\Domains\Entities\Goods;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -84,6 +85,40 @@ class GoodsController
         }
 
         $result = $handler->handle(new GetList($request->toArray()));
+
+        return $this->getResponse($result);
+    }
+
+    /**
+     * @param string $value
+     * @param GetListByParam $handler
+     * @return JsonResponse
+     */
+    public function getListByVendorCode(string $value, GetListByParam $handler): JsonResponse
+    {
+        $user = Auth::user();
+        if (empty($user) || $user->isNotActive()) {
+            return $this->getErrorsResponse(["Access is denied."], 403);
+        }
+
+        $result = $handler->getListByVendorCode($value);
+
+        return $this->getResponse($result);
+    }
+
+    /**
+     * @param string $value
+     * @param GetListByParam $handler
+     * @return JsonResponse
+     */
+    public function getListByGoodsName(string $value, GetListByParam $handler): JsonResponse
+    {
+        $user = Auth::user();
+        if (empty($user) || $user->isNotActive()) {
+            return $this->getErrorsResponse(["Access is denied."], 403);
+        }
+
+        $result = $handler->getListByGoodsName($value);
 
         return $this->getResponse($result);
     }
