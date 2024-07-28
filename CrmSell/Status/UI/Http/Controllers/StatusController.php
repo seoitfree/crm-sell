@@ -85,13 +85,13 @@ class StatusController
         if (empty($authUser) || !$authUser->hasRole('admin') || $authUser->isNotActive()) {
             return $this->getErrorsResponse(["Access is denied."]);
         }
-        if ($type === StatusEnum::DEFECT->value) {
+        if ($type === StatusEnum::STATUS->value) {
             $status = Status::find($id);
             return $this->getSuccessfulResponse([
                 "status" => $status->getDetail(),
             ]);
         }
-        if ($type === StatusEnum::STATUS->value) {
+        if ($type === StatusEnum::DEFECT->value ) {
             $defect = Defect::find($id);
             return $this->getSuccessfulResponse([
                 "status" => $defect->getDetail(),

@@ -202,9 +202,9 @@ export default defineComponent({
             item: {} as OrderType
         };
     },
-    mounted() {
+    created() {
         this.item = this.value;
-        console.log(this.item.id);
+        console.log(this.item);
     },
     methods: {
         getLocalDateTime(date: string): string {

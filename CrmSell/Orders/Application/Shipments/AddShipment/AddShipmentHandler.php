@@ -76,8 +76,7 @@ class AddShipmentHandler extends AbstractHandler
             throw new \DomainException("Order does not exist");
         }
         $totalShipment = $this->repository->getTotalShipmentForByOrder($order->id);
-
-        if ($order->amount_in_order_paid - $totalShipment < $request->getAmount()) {
+        if (($order->amount_in_order_paid - $totalShipment) < $request->getAmount()) {
             throw new \DomainException("Amount more `amount order paid`");
         }
 

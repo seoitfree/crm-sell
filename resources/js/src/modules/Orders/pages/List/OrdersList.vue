@@ -19,10 +19,6 @@
                                 </div>
 
                                 <div class="col-auto">
-                                    <a class="btn app-btn-secondary">CSV</a>
-                                </div>
-
-                                <div class="col-auto">
                                     <a class="btn app-btn-secondary" @click="switchFilter()">Filter</a>
                                 </div>
                             </div>
@@ -38,6 +34,7 @@
                 <OrdersTable
                     v-else
                     :key="ordersTableKey"
+                    :sortDataProp="sortData"
                     :filterParams="filterParams"
                     :paginationProp="pagination"
                     :recordsProp="records"
@@ -114,13 +111,14 @@ export default defineComponent({
     methods: {
         getData(): void {
             this.isLoading = true;
-            axios.get('/api/v1/orders', {
-                params: {
-                    pageNumber: this.pagination.pages.current_page,
-                    filterParams: this.filterParams,
-                    sortDir: this.sortData.sortDir,
-                    sortField: this.sortData.sortField,
-                }
+            const params =  {
+                pageNumber: this.pagination.pages.current_page,
+                sortDir: this.sortData.sortDir,
+                sortField: this.sortData.sortField,
+                filterParams: this.filterParams
+            };
+            axios.post('/api/v1/orders', params, {
+                headers: {'Content-Type': 'application/json'}
             }).then((response) => {
                 if (response.status === 200) {
                     const result = response.data.data;
@@ -142,15 +140,11 @@ export default defineComponent({
             this.pagination.pages.current_page = page;
             this.getData();
         },
-        CSV(): void {
-
-        },
         switchFilter(): void {
             this.isFilter = !this.isFilter;
         },
         initFilter(filterData: FilterType): void {
             this.filterParams = filterData;
-            console.log("initFilter");
             this.getData();
         }
     }

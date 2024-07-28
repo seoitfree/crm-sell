@@ -8,16 +8,18 @@
                             <HeadTable
                                 :headColumns="headColumns"
                                 :sortData="sortData"
-                                @clickSort="clickSort"
+                                @sort="clickSort"
                             />
                             <tbody>
-                            <template v-for="item in records">
-                                <TableRow :value="item"
-                                          @addShipments="addShipments"
-                                          @showShipments="showShipments"
-                                          @updateInline="updateInline"
-                                          @updateOption="updateOption"
-                                />
+                            <template v-if="records.length > 0">
+                                <template v-for="item in records">
+                                    <TableRow :value="item"
+                                              @addShipments="addShipments"
+                                              @showShipments="showShipments"
+                                              @updateInline="updateInline"
+                                              @updateOption="updateOption"
+                                    />
+                                </template>
                             </template>
                             </tbody>
                         </table>
@@ -86,7 +88,11 @@ export default defineComponent({
         recordsProp: {
             type: Array,
             required: true,
-        }
+        },
+        sortDataProp: {
+            type: Object,
+            required: true,
+        },
     },
     data() {
         return {
@@ -127,9 +133,12 @@ export default defineComponent({
     },
     created() {
         this.records = this.recordsProp;
+        this.sortData = this.sortDataProp;
     },
     methods: {
         clickSort(sortData: SortData) {
+            this.sortData = sortData;
+            console.log()
             this.$emit("clickSort", this.sortData);
         },
         refreshRecords(page: number): void {

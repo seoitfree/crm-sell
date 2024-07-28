@@ -12,7 +12,7 @@ class AddShipment extends RootRequest
     use PropertyTrait;
 
     private string $orderId = '';
-    private string $amount = '';
+    private int $amount = 0;
     private string $shipmentDate = '';
 
     /**

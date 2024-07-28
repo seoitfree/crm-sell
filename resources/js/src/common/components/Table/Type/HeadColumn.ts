@@ -4,4 +4,5 @@ export interface HeadColumn {
     translate: string;
     sort: boolean;
     width?: string;
+    sortIcon?: string;
 }

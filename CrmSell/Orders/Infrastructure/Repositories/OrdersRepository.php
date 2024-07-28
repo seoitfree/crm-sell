@@ -20,7 +20,7 @@ class OrdersRepository implements OrdersRepositoryInterface
     {
         $params = $this->getFilter($filter);
         $where = implode("AND", array_filter($params["condition"], fn($item) => $item !== ''));
-        $where = $where === '' ? $where : " AND $where ";
+        $where = $where === '' ? $where : " WHERE $where ";
 
         try {
             $sql = "SELECT COUNT(t.id) as count
@@ -96,7 +96,7 @@ class OrdersRepository implements OrdersRepositoryInterface
     {
         $params = $this->getFilter($dto->getFilter());
         $where = implode("AND", array_filter($params["condition"], fn($item) => $item !== ''));
-        $where = $where === '' ? $where : " AND $where ";
+        $where = $where === '' ? $where : " WHERE $where ";
 
         try {
             $sql = "
@@ -128,47 +128,47 @@ class OrdersRepository implements OrdersRepositoryInterface
         ];
 
         if (!empty($params["order_date_from"])) {
-            $filter["condition"][] = " t.created_at >= :order_date_from";
+            $filter["condition"][] = " t.created_at >= :order_date_from ";
             $filter["bindings"]["order_date_from"] = $params["order_date_from"];
         }
         if (!empty($params["order_date_to"])) {
-            $filter["condition"][] = " t.created_at <= :order_date_to";
+            $filter["condition"][] = " t.created_at <= :order_date_to ";
             $filter["bindings"]["order_date_to"] = $params["order_date_to"];
         }
         if (!empty($params["date_check_from"])) {
-            $filter["condition"][] = " t.date_check >= :date_check_from";
+            $filter["condition"][] = " t.date_check >= :date_check_from ";
             $filter["bindings"]["date_check_from"] = $params["date_check_from"];
         }
         if (!empty($params["date_check_to"])) {
-            $filter["condition"][] = " t.created_at <= :date_check_to";
+            $filter["condition"][] = " t.created_at <= :date_check_to ";
             $filter["bindings"]["date_check_to"] = $params["date_check_to"];
         }
         if (!empty($params["vendor_code"])) {
-            $filter["condition"][] = " g.vendor_code = :vendor_code";
+            $filter["condition"][] = " t.vendor_code = :vendor_code ";
             $filter["bindings"]["vendor_code"] = $params["vendor_code"];
         }
         if (!empty($params["goods_name"])) {
-            $filter["condition"][] = " g.name LIKE :goods_name";
+            $filter["condition"][] = " t.goods_name LIKE :goods_name ";
             $filter["bindings"]["goods_name"] = "%{$params["goods_name"]}%";
         }
         if (!empty($params["status"])) {
-            $filter["condition"][] = " t.status IN (:status)";
+            $filter["condition"][] = " t.status IN (:status) ";
             $filter["bindings"]["status"] = "{$params["status"]}";
         }
         if (!empty($params["remainder"])) {
-            $filter["condition"][] = " t.status IN (:status)";
+            $filter["condition"][] = " t.status IN (:status) ";
             $filter["bindings"]["remainder"] = "t.remainder > 0";
         }
         if (!empty($params["provider_start"])) {
-            $filter["condition"][] = " t.provider_start = :provider_start";
+            $filter["condition"][] = " t.provider_start = :provider_start ";
             $filter["bindings"]["provider_start"] = $params["provider_start"];
         }
         if (!empty($params["defect"])) {
-            $filter["condition"][] = " t.defect = :defect";
+            $filter["condition"][] = " t.defect = :defect ";
             $filter["bindings"]["defect"] = $params["defect"];
         }
         if (!empty($params["comment"])) {
-            $filter["condition"][] = " t.comment LIKE :comment";
+            $filter["condition"][] = " t.comment LIKE :comment ";
             $filter["bindings"]["comment"] = "%{$params["comment"]}%";
         }
 

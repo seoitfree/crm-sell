@@ -18,14 +18,12 @@
                 <div class="form-group row">
                     <div class="form-group col-md-6">
                         <label for="email"><strong>Тип</strong></label>
-
                         <Field class="form-select" name="type" v-model="form.type" as="select">
                             <template v-for="type in typeOptions">
                                 <option :value="type.key">{{ type.value }}</option>
                             </template>
                         </Field>
                         <ErrorMessage name="type" class="text-danger" />
-
                     </div>
                 </div>
             </div>
@@ -88,15 +86,16 @@ export default defineComponent({
         }
     },
     created() {
+        console.log(this.type);
         if (this.recordId !== '') {
             this.getStatus();
-        } else {
-            this.form.type = this.type
         }
+        this.form.type = this.type
     },
     methods: {
         getStatus(): void {
             axios.get(`/api/v1/status/${this.type}/${this.recordId}`).then((response) => {
+                console.log(response);
                 if (response.status === 200) {
                     const status = response.data.data.status;
                     this.form.name = status.name;
@@ -133,7 +132,6 @@ export default defineComponent({
             });
         },
         errorHandle(error): void {
-            console.error(error)
             alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
             this.isLoading = false;
         },

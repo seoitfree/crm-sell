@@ -192,15 +192,13 @@ export default defineComponent({
                 return this.form.vendorCodeValue;
             },
             set(value): void {
-                console.log("vendorCodeValueComputed");
                 this.form.vendorCodeValue = value;
                 const goods = this.vendorCodeList.find((item: OptionGoods) => {
                     return item.id = value;
                 });
                 this.form.goodsId = goods.id;
-                console.log(this.form.goodsId);
                 this.form.goodsName = goods.name;
-                console.log(this.form.goodsId);
+                this.form.vendorCodeValue = goods.vendor_code;
             }
         },
         goodsNameValueComputed: {
@@ -209,10 +207,11 @@ export default defineComponent({
             },
             set(value): void {
                 this.form.goodsNameValue = value;
-                const goods = this.vendorCodeList.find((item: OptionGoods) => {
+                const goods = this.goodsNameList.find((item: OptionGoods) => {
                     return item.id = value;
                 });
                 this.form.goodsId = goods.id;
+                this.form.goodsName = goods.name;
                 this.form.vendorCode = goods.vendor_code;
             }
         }

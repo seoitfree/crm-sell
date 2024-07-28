@@ -50,8 +50,8 @@ class OrdersController
         if (empty($user) || $user->isNotActive()) {
             return $this->getErrorsResponse(["Access is denied."], 403);
         }
-
-        $result = $handler->handle(new GetList($request->toArray()));
+        $data = json_decode($request->getContent(), true);
+        $result = $handler->handle(new GetList($data));
 
         return $this->getResponse($result);
     }
