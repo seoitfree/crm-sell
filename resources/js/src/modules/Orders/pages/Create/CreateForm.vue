@@ -198,7 +198,7 @@ export default defineComponent({
                 });
                 this.form.goodsId = goods.id;
                 this.form.goodsName = goods.name;
-                this.form.vendorCodeValue = goods.vendor_code;
+                this.form.vendorCode = goods.vendor_code;
             }
         },
         goodsNameValueComputed: {
@@ -276,11 +276,9 @@ export default defineComponent({
             this.inputTimerVendorCode = setTimeout(() => {
                 if (event.target.value !== '') {
                     axios.get('/api/v1/goods/vendor_code/' + event.target.value).then((response) => {
-                        console.log(response);
                         if (response.status !== 200) {
                             throw Error("Error");
                         }
-                        console.log(response.data.data);
                         this.vendorCodeList = response.data.data.records;
                         this.goodsNameList = [];
                     }).catch((error) => {

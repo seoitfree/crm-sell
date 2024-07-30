@@ -204,7 +204,6 @@ export default defineComponent({
     },
     created() {
         this.item = this.value;
-        console.log(this.item);
     },
     methods: {
         getLocalDateTime(date: string): string {
