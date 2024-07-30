@@ -34,9 +34,11 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import * as yup from "yup";
-import axios from "axios";
 import {InlineEdit} from "./Types/InlineEdit";
 import {getLocalDateTime} from "../../../../../../common/helpers/DateTime";
+import {$http, ServerResponseId} from "../../../../../../api/$http";
+import {FormType} from "./Types/FormType";
+import {ResponseStatusEnum} from "../../../../../../api/enum/ResponseStatusEnum";
 
 export default defineComponent({
     name: "DateInlineEdite",
@@ -66,7 +68,7 @@ export default defineComponent({
                 entityId: '',
                 field: '',
                 value: '',
-            },
+            } as FormType,
             validation: {}
         }
     },
@@ -98,30 +100,36 @@ export default defineComponent({
         },
         async update(): void {
             this.isLoading = true;
-            axios.patch(`/api/v1/${this.urlEdit}`, this.form).then(async (response) => {
-                if (response.status === 422) {
-                    response.data.errors.forEach((item) => {
-                        this.validation[item.field] = item.message;
-                    })
-                    this.isLoading = false;
-                    return;
-                }
-                if (response.status !== 200) {
-                    alert(response.data.errors[0]);
-                    this.isLoading = false;
-                } else {
+            $http.patch<FormType, ServerResponseId>(this.urlEdit, this.form)
+                .then((response) => {
+                    if (response.status === ResponseStatusEnum.VALIDATE_ERROR) {
+                        response.errors.forEach((item) => {
+                            this.validation[item.field] = item.message;
+                        })
+                        this.isLoading = false;
+                        return;
+                    }
+                    if (response.status !== ResponseStatusEnum.STATUS_OK) {
+                        alert(response.errors[0]);
+                        this.isLoading = false;
+                        return;
+                    }
+                    if (response.status !== ResponseStatusEnum.STATUS_OK) {
+                        alert(response.errors[0]);
+                        this.isLoading = false;
+                        return;
+                    }
+                    this.edit = false;
                     this.$emit('update', {
-                        value: new Date(Date.parse(this.value)).toJSON(),
+                        value: String(this.form.value),
                         entityId: String(this.form.entityId),
                         field: this.form.field,
                     } as InlineEdit);
-                    this.edit = false;
-                }
-            }).catch((error) => {
-                console.error(error)
-                alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
-                this.isLoading = false;
-            });
+                }).catch((error) => {
+                    console.error(error);
+                    alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
+                    this.isLoading = false;
+                });
         }
     }
 });

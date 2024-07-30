@@ -39,6 +39,9 @@ import {defineComponent} from "vue";
 import axios from "axios";
 import {Option} from "../../../../../../common/Types/Option";
 import {InlineOptionEdit} from "./Types/InlineEdit";
+import {$http, ServerResponseId} from "../../../../../../api/$http";
+import {FormType} from "./Types/FormType";
+import {ResponseStatusEnum} from "../../../../../../api/enum/ResponseStatusEnum";
 
 export default defineComponent({
     name: "DefectInlineEdit",
@@ -64,7 +67,7 @@ export default defineComponent({
                 entityId: '',
                 field: 'defect',
                 value: '',
-            },
+            } as FormType,
             defectOptions: [] as Option[],
         }
     },
@@ -100,18 +103,14 @@ export default defineComponent({
         },
         async update(): void {
             this.isLoading = true;
-            axios.patch(`/api/v1/order`, this.form).then(async (response) => {
-                if (response.status === 422) {
-                    response.data.errors.forEach((item) => {
-                        this.validation.value = item.message;
-                    })
-                    this.isLoading = false;
-                    return;
-                }
-                if (response.status !== 200) {
-                    alert(response.data.errors[0]);
-                    this.isLoading = false;
-                } else {
+            $http.patch<FormType, ServerResponseId>('order', this.form)
+                .then((response) => {
+                    if (response.status !== ResponseStatusEnum.STATUS_OK) {
+                        alert(response.errors[0]);
+                        this.isLoading = false;
+                        return;
+                    }
+                    this.edit = false;
                     const item = this.defectOptions.find(item => item.key === this.form.value);
                     this.$emit('update', {
                         value: String(this.form.value),
@@ -119,12 +118,10 @@ export default defineComponent({
                         entityId: String(this.form.entityId),
                         field: this.form.field,
                     } as InlineOptionEdit);
-                    this.edit = false;
-                }
-            }).catch((error) => {
-                console.error(error)
-                alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
-                this.isLoading = false;
+                }).catch((error) => {
+                    console.error(error);
+                    alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
+                    this.isLoading = false;
             });
         }
     }
