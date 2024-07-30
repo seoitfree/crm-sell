@@ -171,6 +171,13 @@ class OrdersRepository implements OrdersRepositoryInterface
             $filter["condition"][] = " t.comment LIKE :comment ";
             $filter["bindings"]["comment"] = "%{$params["comment"]}%";
         }
+        if (!empty($params["comment"])) {
+            $filter["condition"][] = " t.comment LIKE :comment ";
+            $filter["bindings"]["comment"] = "%{$params["comment"]}%";
+        }
+        if (!empty($params["remainder"])) {
+            $filter["condition"][] = " IFNULL(o.amount_in_order_paid - shipments.shipments_amount, 0) > 0 ";
+        }
 
         return $filter;
     }

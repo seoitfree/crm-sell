@@ -97,8 +97,8 @@
 
                         <div class="form-group row">
                             <div class="form-group col-md-6">
-                                <label for="vendor_code">Залишок</label>
-                                <input name="vendor_code" type="checkbox" class="form-control" v-model="filter.remainder">
+                                <label for="remainder">Залишок</label>
+                                <input type="checkbox" id="remainder" name="deprecated" style="margin-left: 5px;" v-model="filter.remainder" @change="changeDeprecated">
                             </div>
                         </div>
                     </div>
@@ -159,7 +159,6 @@ export default defineComponent({
     },
     created() {
         this.isLoading = true;
-        console.log("Filter");
         this.filter = this.filterParams;
         const providers = axios.get('/api/v1/providers/all').then((response) => {
             if (response.status !== 200) {
@@ -191,7 +190,6 @@ export default defineComponent({
             this.providerOptions = values[2].data;
             this.statusOptions = values[3].data;
 
-            console.log(values);
             this.isLoading = false;
         }).catch(() => {
             alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
@@ -202,8 +200,10 @@ export default defineComponent({
             this.$emit('closeButton');
         },
         initFilter(): void {
-            console.log("Filter::initFilet()");
             this.$emit('initFilter', this.filter);
+        },
+        changeDeprecated() {
+            this.form.deprecated = !this.form.deprecated;
         },
         clearFilter(): void {
             this.filter = {
@@ -218,6 +218,7 @@ export default defineComponent({
                 date_check_from: '',
                 date_check_to: '',
                 comment: '',
+                remainder: false,
             };
         }
     }
