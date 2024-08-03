@@ -17,8 +17,8 @@ return new class extends Migration
                 $table->string('name', 100);
                 $table->string('created_by', 36)->index();
                 $table->string('modified_user_id', 36)->index();
-                $table->timestamp('created_at')->nullable();
-                $table->timestamp('updated_at')->nullable()->useCurrent();
+                $table->dateTime('created_at');
+                $table->dateTime('updated_at');
             });
         }
 
@@ -30,8 +30,8 @@ return new class extends Migration
                 $table->string('type', 30);
                 $table->string('created_by', 36)->index();
                 $table->string('modified_user_id', 36)->index();
-                $table->timestamp('created_at')->nullable()->nullable();
-                $table->timestamp('updated_at')->nullable()->useCurrent();
+                $table->dateTime('created_at');
+                $table->dateTime('updated_at');
             });
         }
     }

@@ -49,7 +49,7 @@ class CreateHandler extends AbstractHandler
     private function addProvider(Create $command): string
     {
         $userId = auth()->id();
-        $date = Carbon::now()->format('Y-m-d H:i:s');
+        $date = Carbon::now()->utc()->format('Y-m-d H:i:s');
 
         $status = Provider::create(array_merge($command->toArray(), [
             'created_by' => $userId,

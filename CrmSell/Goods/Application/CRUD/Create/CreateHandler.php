@@ -66,7 +66,7 @@ class CreateHandler extends AbstractHandler
     private function getData(Create $command): array
     {
         $userId = auth()->id();
-        $date = Carbon::now()->format('Y-m-d H:i:s');
+        $date = Carbon::now()->utc()->format('Y-m-d H:i:s');
 
         return array_merge($command->toArray(), [
             'created_by' => $userId,

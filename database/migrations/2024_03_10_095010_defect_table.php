@@ -18,8 +18,8 @@ return new class extends Migration
                 $table->string('alias', 50)->index();
                 $table->string('created_by', 36)->index();
                 $table->string('modified_user_id', 36)->index();
-                $table->timestamp('created_at')->nullable()->nullable();
-                $table->timestamp('updated_at')->nullable()->useCurrent();
+                $table->dateTime('created_at');
+                $table->dateTime('updated_at');
             });
         }
 

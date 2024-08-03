@@ -16,8 +16,8 @@ return new class extends Migration
 
             $table->string('created_by', 36)->index();
             $table->string('modified_user_id', 36)->index();
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
+            $table->dateTime('created_at');
+            $table->dateTime('updated_at');
 
             $table->string('goods_id', 36)->nullable()->index();
             $table->integer('amount_in_order'); //К-ть в замовленні
@@ -56,8 +56,8 @@ return new class extends Migration
                 $table->uuid("order_id")->index();
                 $table->date('shipment_date');
                 $table->integer('amount');
-                $table->timestamp('created_at')->useCurrent();
-                $table->timestamp('updated_at')->useCurrent();
+                $table->dateTime('created_at');
+                $table->dateTime('updated_at');
                 $table->string('created_by', 36)->index();
 
                 $table->foreign("order_id")

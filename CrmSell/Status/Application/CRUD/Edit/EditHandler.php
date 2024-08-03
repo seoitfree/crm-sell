@@ -74,7 +74,7 @@ class EditHandler extends AbstractHandler
 
         if (!$status->update(array_merge($command->toArray(), [
             'modified_user_id' => auth()->id(),
-            'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->utc()->format('Y-m-d H:i:s'),
         ]))) {
             throw new \Exception("Error save, try next time.", 500);
         }
@@ -119,7 +119,7 @@ class EditHandler extends AbstractHandler
     {
         return array_merge($command->toArray(), [
             'modified_user_id' => auth()->id(),
-            'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->utc()->format('Y-m-d H:i:s'),
         ]);
     }
 }

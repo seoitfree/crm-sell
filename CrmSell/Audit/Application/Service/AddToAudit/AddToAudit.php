@@ -19,7 +19,7 @@ class AddToAudit
     public function add(Model $entity, string $createdBy, array $auditParams): void
     {
         $toInsertData = [];
-        $dateCreated = Carbon::now()->format('Y-m-d H:i:s');
+        $dateCreated = Carbon::now()->utc()->format('Y-m-d H:i:s');
 
         foreach ($auditParams as $fieldName => $value) {
             $before = $entity->getAttribute($fieldName);

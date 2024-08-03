@@ -15,7 +15,7 @@ return new class extends Migration
             Schema::create('orders_audit', function (Blueprint $table) {
                 $table->uuid('id')->primary();
                 $table->uuid("parent_id")->index();
-                $table->timestamp('date_created');
+                $table->dateTime('date_created');
                 $table->string('created_by', 36)->index();
                 $table->string('field_name', 255);
                 $table->string('data_type', 255);

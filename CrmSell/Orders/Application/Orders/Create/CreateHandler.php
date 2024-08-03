@@ -51,7 +51,7 @@ class CreateHandler extends AbstractHandler
     private function create(Create $request): string
     {
         $userId = auth()->id();
-        $date = Carbon::now()->format('Y-m-d H:i:s');
+        $date = Carbon::now()->utc()->format('Y-m-d H:i:s');
 
         $order = Order::create(array_merge($request->toMap(), [
             'created_by' => $userId,

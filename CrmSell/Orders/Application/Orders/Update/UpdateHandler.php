@@ -87,7 +87,7 @@ class UpdateHandler extends AbstractHandler
         $this->check($order, $request);
         $order->fill(array_merge($request->forUpdate(), [
             'modified_user_id' => auth()->id(),
-            'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->utc()->format('Y-m-d H:i:s'),
         ]));
 
         $this->audit->add($order, auth()->id(), $order->getAuditParams());

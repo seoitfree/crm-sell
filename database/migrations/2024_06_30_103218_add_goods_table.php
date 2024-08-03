@@ -14,8 +14,8 @@ return new class extends Migration
         if(!Schema::hasTable('goods')) {
             Schema::create('goods', function (Blueprint $table) {
                 $table->uuid('id')->primary();
-                $table->timestamp('created_at')->nullable();
-                $table->timestamp('updated_at')->nullable()->useCurrent();
+                $table->dateTime('created_at')->nullable();
+                $table->dateTime('updated_at')->nullable();
                 $table->string('created_by', 36)->index();
                 $table->string('modified_user_id', 36)->index();
                 $table->string('vendor_code', 60);

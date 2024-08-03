@@ -91,7 +91,7 @@ class AddShipmentHandler extends AbstractHandler
     private function add(AddShipment $request): string
     {
         $userId = auth()->id();
-        $date = Carbon::now()->format('Y-m-d H:i:s');
+        $date = Carbon::now()->utc()->format('Y-m-d H:i:s');
 
         $shipment = Shipment::create(array_merge($request->toArray(), [
             'created_by' => $userId,
