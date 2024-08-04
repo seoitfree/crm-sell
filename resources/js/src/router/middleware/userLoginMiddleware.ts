@@ -1,31 +1,21 @@
 
 import {useUserStore} from "../../stores/UserStore";
 import {RouteNamesEnum} from "../RouteNamesEnum";
+import {NavigationGuardNext, RouteLocationNormalized} from "vue-router";
 
 
-//TODO refactoring add type;
-export function userLoginMiddleware(to, from, next): any {
+export function userLoginMiddleware(to, from: RouteLocationNormalized, next: NavigationGuardNext): any {
     const userStore = useUserStore();
     const token = userStore.isAuthenticated;
 
-    notAuth(token, to, next);
-
-    if (token && to.name === RouteNamesEnum.USER_LOGIN) {
-        return next({
-            name: RouteNamesEnum.MAIN
-        });
+    if (!token) {
+        if (to.name !== RouteNamesEnum.USER_LOGIN) {
+            return next({ name: RouteNamesEnum.USER_LOGIN });
+        }
+    } else {
+        if (to.name === RouteNamesEnum.USER_LOGIN) {
+            return next({ name: RouteNamesEnum.MAIN });
+        }
     }
     next();
-}
-
-function notAuth(token, to, next) {
-    if (token) {
-        return;
-    }
-    if (to.name !== RouteNamesEnum.USER_LOGIN) {
-        return next({
-            name: RouteNamesEnum.USER_LOGIN
-        });
-    }
-    return next();
 }
