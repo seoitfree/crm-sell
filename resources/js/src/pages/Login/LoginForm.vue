@@ -77,11 +77,20 @@ export default defineComponent({
         async onSubmit(values): void {
             this.processing = true;
             this.errorServerValidation = '';
-            axios.get('/sanctum/csrf-cookie').then(() => {
+            axios.get('/sanctum/csrf-cookie').then((response) => {
                 this.login();
             }).catch(() => {
                 this.processing = false;
             });
+        },
+        getXsrfToken(): string {
+            return this.getCookie('XSRF-TOKEN');
+        },
+        getCookie(name) : string {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
         },
         login(): void {
             axios.post('/login', this.form).then((response) => {
@@ -89,7 +98,7 @@ export default defineComponent({
                     this.errorServerValidation = 'Некоректный email или пароль.'
                     this.processing = false;
                 } else {
-                    this.getUserData(response.config.headers['X-XSRF-TOKEN']);
+                    this.getUserData(this.getXsrfToken());
                 }
             }).catch((error) => {
                 this.processing = false;

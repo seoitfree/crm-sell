@@ -28,6 +28,7 @@ export const useUserStore = defineStore("UserStore", {
         },
         logOut(): void {
             localStorage.removeItem('x_xsrf_token');
+            this.token = null;
         },
     },
 })

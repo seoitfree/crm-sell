@@ -14,7 +14,7 @@ import Router from '@/js/src/router/router.js';
 import {RouteNamesEnum} from "./src/router/RouteNamesEnum";
 
 const app = createApp(App);
-app.use(createPinia);
+app.use(createPinia());
 app.use(Router);
 
 

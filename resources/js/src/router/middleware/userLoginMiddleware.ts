@@ -4,9 +4,12 @@ import {RouteNamesEnum} from "../RouteNamesEnum";
 import {NavigationGuardNext, RouteLocationNormalized} from "vue-router";
 
 
-export function userLoginMiddleware(to, from: RouteLocationNormalized, next: NavigationGuardNext): any {
+export function userLoginMiddleware(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): any {
     const userStore = useUserStore();
     const token = userStore.isAuthenticated;
+
+    console.log('userLoginMiddleware');
+    console.log(token);
 
     if (!token) {
         if (to.name !== RouteNamesEnum.USER_LOGIN) {
