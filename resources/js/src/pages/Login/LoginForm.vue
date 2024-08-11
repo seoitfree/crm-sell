@@ -50,6 +50,7 @@ import { useUserStore } from "../../stores/UserStore";
 import {UserInfo} from "../../types/userInfo";
 import { Form, Field, ErrorMessage} from 'vee-validate';
 import * as yup from 'yup';
+import {initAuth} from "../../modules/Auth/auth.service";
 const userStore = useUserStore();
 
 export default defineComponent({
@@ -105,12 +106,9 @@ export default defineComponent({
             });
         },
         getUserData(token: string): void {
-            axios.get('/api/v1/user').then((response) => {
-                userStore.login(token, response as UserInfo);
-                this.$router.push({name: 'main'});
-            }).catch(() => {
-                this.processing = false;
-            });
+            initAuth().init();
+            userStore.login(token);
+            this.$router.push({name: 'main'});
         },
     }
 });

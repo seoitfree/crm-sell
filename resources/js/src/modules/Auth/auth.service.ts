@@ -40,7 +40,7 @@ const init = async function(): Promise<void>  {
     userStore.setUser(data.user as UserInfo);
 
     rolesList = new Set(data.roles);
-    permissionList = new Set(data.permissions)
+    permissionList = new Set(data.permissions);
 };
 
 const initAuth = function(): Permission {

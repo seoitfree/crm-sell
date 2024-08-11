@@ -18,3 +18,6 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
+Route::post('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])
+    ->middleware('auth:web');
+

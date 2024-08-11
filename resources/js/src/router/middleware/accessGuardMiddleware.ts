@@ -9,7 +9,7 @@ export function accessGuardMiddleware(to: RouteLocationNormalized, from, next) {
         return next();
     }
     const permission = initAuth();
-    if (permission.hasRoles(accessScopes)) {
+    if (permission.hasRoles(accessScopes as string[])) {
         return next();
     }
     return next({

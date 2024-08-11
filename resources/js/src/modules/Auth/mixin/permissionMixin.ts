@@ -10,6 +10,7 @@ const permissionMixin =  {
     },
     methods: {
         hasRoles(roles: string[]) {
+            console.log(initAuth().hasRoles(roles))
             return initAuth().hasRoles(roles);
         },
         hasPermission(permission: string[]) {

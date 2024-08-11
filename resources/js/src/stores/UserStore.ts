@@ -18,9 +18,8 @@ export const useUserStore = defineStore("UserStore", {
         },
     },
     actions: {
-        login(token: string, user: UserInfo): void {
+        login(token: string): void {
             localStorage.setItem('x_xsrf_token', token);
-            this.setUser(user);
             this.token = token;
         },
         setUser(user: UserInfo): void {
