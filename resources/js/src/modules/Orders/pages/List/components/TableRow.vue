@@ -154,7 +154,9 @@
                                @update="updateInline"
             />
         </td>
-
+        <td class="cell">
+            {{ item.comfy_price_cost }}
+        </td>
         <td class="cell">
             <router-link class="btn-sm app-btn-secondary" :to="`/delivery-order/edit/${item.id}`">
                 Edit

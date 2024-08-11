@@ -25,4 +25,5 @@ export interface OrderType {
     comfy_brand: string;
     comfy_category: string;
     comfy_price: number;
+    comfy_price_cost: string;
 }

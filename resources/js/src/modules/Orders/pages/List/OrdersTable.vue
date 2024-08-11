@@ -119,6 +119,7 @@ export default defineComponent({
                 {name: 'comfy_brand', translate: 'Наименование бренда', sort: true, width: 'width: 150px'},
                 {name: 'comfy_category', translate: 'Наименование категории', sort: true, width: 'width: 150px'},
                 {name: 'comfy_price', translate: 'Цена/значение', sort: true, width: 'width: 150px'},
+                {name: 'comfy_price_cost', translate: 'Цена/значение - Ціна закупки', sort: true, width: 'width: 150px'},
                 {name: 'view_edit', translate: '', sort: false}
             ] as HeadColumn[],
             orderId: '',
