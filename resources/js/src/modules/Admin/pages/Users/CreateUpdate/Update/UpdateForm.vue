@@ -1,28 +1,28 @@
 <template>
     <div>
-        <Form tag="form" ref="myForm" @submit="onSubmit" :validation-schema="validation">
+        <form tag="form" ref="myForm"  :validation-schema="validation">
             <div class="form-group row">
                 <div class="form-group col-md-6">
                     <label for="firstName">Имя</label>
-                    <Field name="firstName" type="text" class="form-control" placeholder="Имя"  v-model="form.firstName"></Field>
-                    <ErrorMessage name="firstName" class="text-danger" />
+                    <input name="firstName" type="text" class="form-control" placeholder="Имя"  v-model="form.firstName">
+                    <span v-if="'firstName' in errors" role="alert" class="text-danger" >{{ errors.firstName }}</span>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="lastName">Фамилия</label>
-                    <Field name="lastName" type="text" class="form-control" placeholder="Фамилия"  v-model="form.lastName"></Field>
-                    <ErrorMessage name="lastName" class="text-danger" />
+                    <input name="lastName" type="text" class="form-control" placeholder="Фамилия"  v-model="form.lastName">
+                    <span v-if="'lastName' in errors" role="alert" class="text-danger" >{{ errors.lastName }}</span>
                 </div>
             </div>
 
             <div class="form-group row">
                 <div class="form-group col-md-6">
                     <label for="email">Email</label>
-                    <Field name="email" type="email" class="form-control" placeholder="Email" v-model="form.email"></Field>
-                    <ErrorMessage name="email" class="text-danger" />
+                    <input name="email" type="email" class="form-control" placeholder="Email" v-model="form.email">
+                    <span v-if="'email' in errors" role="alert" class="text-danger" >{{ errors.email }}</span>
                 </div>
 
                 <div class="form-group col-md-6">
-                    <Field name="switchResetPassword" class="form-check-input" type="checkbox" id="switch-reset-password" :value="true" :unchecked-value="false" v-model="form.switchResetPassword"></Field>
+                    <input name="switchResetPassword" class="form-check-input" type="checkbox" id="switch-reset-password" :value="true" :unchecked-value="false" v-model="form.switchResetPassword"></input>
                     <label class="form-check-label" for="flexSwitchCheckDefault">Сбросить пароль пользователю</label>
                 </div>
             </div>
@@ -31,37 +31,37 @@
             <div class="form-group row" v-if="form.switchResetPassword">
                 <div class="form-group col-md-6">
                     <label for="password">Пароль</label>
-                    <Field name="password" type="password" ref="password" class="form-control" placeholder="Пароль" v-model="form.password"></Field>
-                    <ErrorMessage name="password" class="text-danger" />
+                    <input name="password" type="password" ref="password" class="form-control" placeholder="Пароль" v-model="form.password">
+                    <span v-if="'password' in errors" role="alert" class="text-danger" >{{ errors.password }}</span>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="confirmPassword">Подвердите пароль</label>
-                    <Field name="confirmPassword" type="password" class="form-control" placeholder="Подвердите пароль" v-model="form.confirmPassword"></Field>
-                    <ErrorMessage name="confirmPassword" class="text-danger" />
+                    <input name="confirmPassword" type="password" class="form-control" placeholder="Подвердите пароль" v-model="form.confirmPassword">
+                    <span v-if="'confirmPassword' in errors" role="alert" class="text-danger" >{{ errors.confirmPassword }}</span>
                 </div>
             </div>
 
             <div class="form-group row" v-if="hasRoles([rolesEnum.ADMIN])">
                 <div class="form-group col-md-6">
                     <label for="email">Статус</label>
-                    <Field class="form-select" name="roles" v-model="form.status" as="select">
+                    <ErrorMessage name="roles" class="text-danger" />
+                    <select class="form-select" name="status" v-model="form.status" >
                         <template v-for="status in statusEnum">
                             <option :value="status.key">{{ status.value }}</option>
                         </template>
-                    </Field>
-                    <ErrorMessage name="roles" class="text-danger" />
+                    </select>
                 </div>
             </div>
 
             <div v-if="!isLoading" class="text-center mt-2">
-                <button type="submit" class="btn app-btn-primary">Редактировать</button>
+                <button type="submit" @submit="onSubmit" class="btn app-btn-primary">Редактировать</button>
             </div>
             <div v-if="isLoading" class="d-flex justify-content-center mt-2">
                 <div class="spinner-border" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>
             </div>
-        </Form>
+        </form>
     </div>
 </template>
 
@@ -69,18 +69,12 @@
 
 import permissionMixin from "../../../../../Auth/mixin/permissionMixin";
 import {defineComponent} from "vue";
-import {ErrorMessage, Field, Form} from "vee-validate";
 import * as yup from "yup";
 import axios from "axios";
 
 export default defineComponent({
     name: "UpdateForm",
     mixins: [permissionMixin],
-    components: {
-        Form,
-        Field,
-        ErrorMessage
-    },
     props: {
         userId: {
             type: String,
@@ -124,6 +118,7 @@ export default defineComponent({
                         otherwise: (schema) => yup.string(),
                     }),
             }),
+            errors: {},
         }
     },
     created() {
@@ -145,25 +140,36 @@ export default defineComponent({
                 alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
             })
         },
-        onSubmit(values, actions): void {
-            this.update(actions);
+        onSubmit(e): void {
+            e.preventDefault();
+            this.errors = {};
+            const schema = this.validation;
+            schema.validate(this.form, { abortEarly: false })
+                .then(valid => this.update())
+                .catch(errors => {
+                    const errorsObject = {};
+                    errors.inner.forEach(err => {
+                        errorsObject[err.path] = err.message;
+                    });
+                    this.errors = errorsObject;
+                });
         },
-        update(actions): void {
+        update(): void {
             this.isLoading = true;
             axios.put('/api/v1/user', this.form).then(async (response) => {
                 if (response.status === 422) {
                     response.data.errors.forEach((item) => {
-                        actions.setFieldError(item.field, item.message);
+                        this.errors[item.field] = item.message;
                     })
                     this.isLoading = false;
                     return;
                 }
                 if (response.status === 200) {
                     this.$router.push({name: 'users-list'});
-                } else {
-                    alert(response.data.errors[0]);
-                    this.isLoading = false;
+                    return;
                 }
+                alert(response.data.errors[0]);
+                this.isLoading = false;
             }).catch((error) => {
                 console.error(error)
                 alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");

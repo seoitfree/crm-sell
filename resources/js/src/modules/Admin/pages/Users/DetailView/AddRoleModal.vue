@@ -12,14 +12,12 @@
                     <div class="form-group row">
                         <div class="form-group col-md-6">
                             <label for="email"><strong>Роль</strong></label>
-
-                            <Field class="form-select" name="roles" v-model="role" as="select">
+                            <select class="form-select" name="roles" v-model="role">
                                 <template v-for="role in rolesEnum">
                                     <option :value="role.key">{{ role.value }}</option>
                                 </template>
-                            </Field>
-                            <ErrorMessage name="roles" class="text-danger" />
-
+                            </select>
+                            <span v-if="'roles' in errors" role="alert" class="text-danger" >{{ errors.roles }}</span>
                         </div>
                     </div>
                 </div>
@@ -41,16 +39,10 @@
 
 import {defineComponent} from "vue";
 import axios from "axios";
-import { Form, Field, ErrorMessage, useForm } from 'vee-validate';
 import * as yup from "yup";
 
 export default defineComponent({
     name: "AddRoleModal",
-    components: {
-        Form,
-        Field,
-        ErrorMessage,
-    },
     props: {
         userId: {
             type: String,
@@ -64,7 +56,8 @@ export default defineComponent({
             rolesEnum: [],
             validation: yup.object().shape({
                 role:  yup.string().required('Поле обзательное')
-            })
+            }),
+            errors: {}
         }
     },
     created() {
@@ -74,7 +67,18 @@ export default defineComponent({
         closeButton(): void {
             this.$emit('closeButton');
         },
-        addButton(): void {
+        addButton() {
+            this.validation.validate(this.form, { abortEarly: false })
+                .then(valid => this.add())
+                .catch(errors => {
+                    const errorsObject = {};
+                    errors.inner.forEach(err => {
+                        errorsObject[err.path] = err.message;
+                    });
+                    this.errors = errorsObject;
+                });
+        },
+        add(): void {
             this.isLoading = true;
             axios.post('/api/v1/user/role/', {
                 userId: this.userId,
@@ -82,10 +86,10 @@ export default defineComponent({
             }).then((response) => {
                if (response.status === 200) {
                    this.$emit('addRole');
-               } else {
-                   alert(response.data.errors[0]);
-                   this.isLoading = false;
+                   return;
                }
+               alert(response.data.errors[0]);
+               this.isLoading = false;
             }).catch((error) => {
                 console.error(error)
                 alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
