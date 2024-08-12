@@ -44,11 +44,6 @@ import axios from "axios";
 
 export default defineComponent({
     name: "GoodsForm",
-    components: {
-        Form,
-        Field,
-        ErrorMessage
-    },
     props: {
         recordId: {
             type: String,

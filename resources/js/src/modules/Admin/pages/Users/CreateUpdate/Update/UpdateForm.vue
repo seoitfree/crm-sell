@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form tag="form" ref="myForm"  :validation-schema="validation">
+        <form tag="form" ref="myForm">
             <div class="form-group row">
                 <div class="form-group col-md-6">
                     <label for="firstName">Имя</label>

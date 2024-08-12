@@ -67,7 +67,9 @@ export default defineComponent({
         closeButton(): void {
             this.$emit('closeButton');
         },
-        addButton() {
+        addButton(e) {
+            e.preventDefault();
+            this.errors = {};
             this.validation.validate(this.form, { abortEarly: false })
                 .then(valid => this.add())
                 .catch(errors => {

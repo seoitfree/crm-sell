@@ -1,23 +1,23 @@
 <template>
     <div>
-        <Form tag="form" ref="myForm" @submit="onSubmit" :validation-schema="validation">
+        <form tag="form" ref="myForm">
             <div class="form-group row">
                 <div class="form-group col-md-6">
                     <label for="firstName">Название</label>
-                    <Field name="name" type="text" class="form-control" placeholder="Название"  v-model="form.name"></Field>
-                    <ErrorMessage name="firstName" class="text-danger" />
+                    <input name="name" type="text" class="form-control" placeholder="Название"  v-model="form.name">
+                    <span v-if="'name' in errors" role="alert" class="text-danger" >{{ errors.name }}</span>
                 </div>
             </div>
 
             <div v-if="!isLoading" class="text-center mt-2">
-                <button type="submit" class="btn app-btn-primary">{{recordId === '' ? 'Создать' : 'Редактировать'}}</button>
+                <button type="submit" class="btn app-btn-primary" @submit="onSubmit">{{recordId === '' ? 'Создать' : 'Редактировать'}}</button>
             </div>
             <div v-if="isLoading" class="d-flex justify-content-center mt-2">
                 <div class="spinner-border" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>
             </div>
-        </Form>
+        </form>
     </div>
 </template>
 
@@ -25,17 +25,11 @@
 
 import {defineComponent} from "vue";
 import * as yup from "yup";
-import { Form, Field, ErrorMessage } from 'vee-validate';
 
 import axios from "axios";
 
 export default defineComponent({
     name: "ProviderForm",
-    components: {
-        Form,
-        Field,
-        ErrorMessage
-    },
     props: {
         recordId: {
             type: String,
@@ -52,6 +46,7 @@ export default defineComponent({
             validation: yup.object().shape({
                 name:  yup.string().required('Поле обзательное').min(2, 'Минимальное количество символов 2'),
             }),
+            errors: {},
         }
     },
     created() {
@@ -71,26 +66,34 @@ export default defineComponent({
                 alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
             })
         },
-        onSubmit(values, actions): void {
-            if (this.recordId === '') {
-                this.create(actions);
-            } else {
-                this.update(actions);
-            }
+        onSubmit(e): void {
+            e.preventDefault();
+            this.errors = {};
+            const schema = this.validation;
+            schema.validate(this.form, { abortEarly: false })
+                .then(valid => {
+                    this.recordId === '' ? this.create() : this.update();
+                }).catch(errors => {
+                const errorsObject = {};
+                errors.inner.forEach(err => {
+                    errorsObject[err.path] = err.message;
+                });
+                this.errors = errorsObject;
+            });
         },
-        create(actions): void {
+        create(): void {
             this.isLoading = true;
             axios.post('/api/v1/provider', this.form).then(async (response) => {
-                this.responseHandle(response, actions, 201);
+                this.responseHandle(response, 201);
             }).catch((error) => {
                 this.errorHandle(error);
             });
         },
-        update(actions): void {
+        update(): void {
             this.isLoading = true;
             this.form.id = this.recordId;
             axios.put('/api/v1/provider', this.form).then(async (response) => {
-                this.responseHandle(response, actions, 200);
+                this.responseHandle(response,200);
             }).catch((error) => {
                 this.errorHandle(error);
             });
@@ -100,20 +103,20 @@ export default defineComponent({
             alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
             this.isLoading = false;
         },
-        responseHandle(response, actions, successStatus): void {
+        responseHandle(response, successStatus): void {
             if (response.status === 422) {
                 response.data.errors.forEach((item) => {
-                    actions.setFieldError(item.field, item.message);
+                    this.errors[item.field] = item.message;
                 })
                 this.isLoading = false;
                 return;
             }
             if (response.status === successStatus) {
                 this.$router.push({name: 'providers'});
-            } else {
-                alert(response.data.errors[0]);
-                this.isLoading = false;
+                return;
             }
+            alert(response.data.errors[0]);
+            this.isLoading = false;
         }
     }
 });

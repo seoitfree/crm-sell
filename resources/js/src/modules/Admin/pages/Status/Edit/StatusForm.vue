@@ -1,16 +1,16 @@
 <template>
     <div>
-        <Form tag="form" ref="myForm" @submit="onSubmit" :validation-schema="validation">
+        <form tag="form" ref="myForm">
             <div class="form-group row">
                 <div class="form-group col-md-6">
                     <label for="firstName">Название</label>
-                    <Field name="name" type="text" class="form-control" placeholder="Название"  v-model="form.name"></Field>
-                    <ErrorMessage name="firstName" class="text-danger" />
+                    <input name="name" type="text" class="form-control" placeholder="Название"  v-model="form.name">
+                    <span v-if="'name' in errors" role="alert" class="text-danger" >{{ errors.name }}</span>
                 </div>
                 <div v-show="recordId === ''" class="form-group col-md-6" >
                     <label for="alias">Alias</label>
-                    <Field name="alias" type="text" class="form-control" placeholder="Alias"  v-model="form.alias"></Field>
-                    <ErrorMessage name="lastName" class="text-danger" />
+                    <input name="alias" type="text" class="form-control" placeholder="Alias"  v-model="form.alias">
+                    <span v-if="'alias' in errors" role="alert" class="text-danger" >{{ errors.alias }}</span>
                 </div>
             </div>
 
@@ -18,43 +18,37 @@
                 <div class="form-group row">
                     <div class="form-group col-md-6">
                         <label for="email"><strong>Тип</strong></label>
-                        <Field class="form-select" name="type" v-model="form.type" as="select">
+                        <select class="form-select" name="type" v-model="form.type" >
                             <template v-for="type in typeOptions">
                                 <option :value="type.key">{{ type.value }}</option>
                             </template>
-                        </Field>
-                        <ErrorMessage name="type" class="text-danger" />
+                        </select>
+                        <span v-if="'type' in errors" role="alert" class="text-danger" >{{ errors.name }}</span>
                     </div>
                 </div>
             </div>
 
             <div v-if="!isLoading" class="text-center mt-2">
-                <button type="submit" class="btn app-btn-primary"> {{recordId === '' ? 'Создать' : 'Редактировать'}}</button>
+                <button type="submit" class="btn app-btn-primary" @submit="onSubmit"> {{recordId === '' ? 'Создать' : 'Редактировать'}}</button>
             </div>
             <div v-if="isLoading" class="d-flex justify-content-center mt-2">
                 <div class="spinner-border" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>
             </div>
-        </Form>
+        </form>
     </div>
 </template>
 
 <script lang="ts">
 
 import {defineComponent} from "vue";
-import {ErrorMessage, Field, Form} from "vee-validate";
 import * as yup from "yup";
 import axios from "axios";
 import {StatusEnum} from "../enum/StatusEnum";
 
 export default defineComponent({
     name: "StatusForm",
-    components: {
-        Form,
-        Field,
-        ErrorMessage
-    },
     props: {
         recordId: {
             type: String,
@@ -83,6 +77,7 @@ export default defineComponent({
                 alias: yup.string().required('Поле обзательное').min(2, 'Минимальное количество символов 2'),
                 type: yup.string().required('Поле обзательное'),
             }),
+            errors: {},
         }
     },
     created() {
@@ -107,48 +102,57 @@ export default defineComponent({
                 alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
             })
         },
-        onSubmit(values, actions): void {
-            if (this.recordId === '') {
-                this.create(actions);
-            } else {
-                this.update(actions);
-            }
+        onSubmit(e): void {
+            e.preventDefault();
+            this.errors = {};
+            const schema = this.validation;
+            schema.validate(this.form, { abortEarly: false })
+                .then(valid => {
+                    this.recordId === '' ? this.create() : this.update();
+                }).catch(errors => {
+                    const errorsObject = {};
+                    errors.inner.forEach(err => {
+                        errorsObject[err.path] = err.message;
+                    });
+                    this.errors = errorsObject;
+                });
         },
-        create(actions): void {
+        create(): void {
             this.isLoading = true;
             axios.post('/api/v1/status', this.form).then(async (response) => {
-                this.responseHandle(response, actions, 201);
+                this.responseHandle(response, 201);
             }).catch((error) => {
                 this.errorHandle(error);
             });
         },
-        update(actions): void {
+        update(): void {
             this.isLoading = true;
             this.form.id = this.recordId;
             axios.put('/api/v1/status', this.form).then(async (response) => {
-                this.responseHandle(response, actions, 200);
+                this.responseHandle(response, 200);
             }).catch((error) => {
                 this.errorHandle(error);
             });
         },
         errorHandle(error): void {
             alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
+            console.error(error);
             this.isLoading = false;
         },
-        responseHandle(response, actions, successStatus): void {
+        responseHandle(response, successStatus): void {
             if (response.status === 422) {
                 response.data.errors.forEach((item) => {
-                    actions.setFieldError(item.field, item.message);
+                    this.errors[item.field] = item.message;
                 })
                 this.isLoading = false;
                 return;
             }
             if (response.status === successStatus) {
                 this.$router.push({path: `/status/${this.form.type}`});
-            } else {
-                alert(response.data.errors[0]);
-                this.isLoading = false;
+                return;
             }
+            alert(response.data.errors[0]);
+            this.isLoading = false;
         }
     }
 });
