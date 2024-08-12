@@ -38,7 +38,6 @@
 
 import {defineComponent} from "vue";
 import * as yup from "yup";
-import { Form, Field, ErrorMessage } from 'vee-validate';
 
 import axios from "axios";
 
