@@ -13,6 +13,7 @@ use CrmSell\Orders\Application\Shipments\AddShipment\AddShipmentHandler;
 use CrmSell\Orders\Application\Shipments\AddShipment\Request\AddShipment;
 use CrmSell\Orders\Application\Shipments\ShipmentsHistory\Request\ShipmentsHistory;
 use CrmSell\Orders\Application\Shipments\ShipmentsHistory\ShipmentsHistoryHandler;
+use CrmSell\Providers\Infrastructure\Repositories\ProvidersRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,7 +35,7 @@ class OrdersController
         }
 
         $data = json_decode($request->getContent(), true);
-        $result = $handler->handle(new Create($data));
+        $result = $handler->handle(new Create($data, new ProvidersRepository()));
 
         return $this->getResponse($result);
     }

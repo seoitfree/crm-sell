@@ -5,6 +5,8 @@ namespace CrmSell\Orders\Application\Orders\Create\Request;
 
 use CrmSell\Common\Application\Service\Request\RootRequest;
 use CrmSell\Common\Helpers\Traits\PropertyTrait;
+use CrmSell\Providers\Domains\Enum\ProviderEnum;
+use CrmSell\Providers\Infrastructure\Repositories\Interfaces\ProvidersRepositoryInterface;
 
 class Create extends RootRequest
 {
@@ -26,12 +28,20 @@ class Create extends RootRequest
     private string $comfyCategory = '';
     private float $comfyPrice = 0.0;
 
+    private string $providerType = '';
+
     /**
      * @param array $request
+     * @param ProvidersRepositoryInterface $repository
      */
-    public function __construct(array $request)
+    public function __construct(array $request, ProvidersRepositoryInterface $repository)
     {
-        $this->mapField($request, ['roles']);
+        $this->mapField($request, ['providerType']);
+
+        $value = $repository->getListAll()->first(function (\stdClass $value) {
+            return $this->providerStart === $value->id;
+        });
+        $this->providerType = $value->alias;
     }
 
     public function toValidation(): array
@@ -61,12 +71,59 @@ class Create extends RootRequest
             "goodsId" => 'required|string|exists:CrmSell\Goods\Domains\Entities\Goods,id',
             "amountInOrder" => 'required|numeric|gt:0',
 
-            "comfyCode" => 'required|string|max:50',
-            "comfyGoodsName" => 'required|string|max:150',
-            "comfyBrand" => 'required|string|max:50',
-            "comfyCategory" => 'required|string|max:150',
-            "comfyPrice" => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/|gt:0',
+            "comfyCode" => $this->comfyCode(),
+            "comfyGoodsName" => $this->comfyGoodsName(),
+            "comfyBrand" => $this->comfyBrand(),
+            "comfyCategory" => $this->comfyCategory(),
+            "comfyPrice" => $this->comfyPrice()
         ];
+    }
+
+    /**
+     * @param array $rules
+     * @return array
+     */
+    private function addRequired(array $rules): array
+    {
+        if ($this->providerType === ProviderEnum::COMFY->value) {
+            array_unshift($rules, 'required');
+        }
+        return $rules;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function comfyCode(): array {
+        return $this->addRequired(['string', 'max:50']);
+    }
+
+    /**
+     * @return array
+     */
+    public function comfyGoodsName(): array {
+        return $this->addRequired(['string','max:150']);
+    }
+
+    /**
+     * @return array
+     */
+    public function comfyBrand(): array {
+        return $this->addRequired(['string','max:50']);
+    }
+
+    /**
+     * @return array
+     */
+    public function comfyCategory(): array {
+        return $this->addRequired(['string','max:150']);
+    }
+
+    /**
+     * @return array
+     */
+    public function comfyPrice(): array {
+        return $this->addRequired(['numeric','regex:/^\d+(\.\d{1,2})?$/', 'gt:0']);
     }
 
     /**

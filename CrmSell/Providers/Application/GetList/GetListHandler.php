@@ -78,6 +78,7 @@ class GetListHandler extends AbstractHandler
                 return [
                     "key" => $item->id,
                     "value" => $item->name,
+                    "alias" => $item->alias,
                 ];
             });
 

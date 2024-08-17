@@ -42,7 +42,7 @@ class ProvidersRepository implements ProvidersRepositoryInterface
     {
         try {
             $result = DB::table('providers as p')
-                ->select(['p.id', 'p.name'])
+                ->select(['p.id', 'p.name', 'p.alias'])
                 ->orderBy('p.name')
                 ->get();
         } catch (QueryException $e) {

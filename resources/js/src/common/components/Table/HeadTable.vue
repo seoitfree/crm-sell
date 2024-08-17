@@ -22,7 +22,7 @@ import sort from '@/assets/images/sort/sort.png';
 import sortDown from '@/assets/images/sort/sort-down.png';
 import sortUp from '@/assets/images/sort/sort-up.png';
 
-export default defineComponent({
+export default defineComponent({ //C:\Users\Vlad\my-project\crm-sell\public\build
     name: "HeadTable",
     props: {
         headColumns: {

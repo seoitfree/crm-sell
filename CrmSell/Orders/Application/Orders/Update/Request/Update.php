@@ -5,6 +5,7 @@ namespace CrmSell\Orders\Application\Orders\Update\Request;
 use Carbon\Carbon;
 use CrmSell\Common\Application\Service\Request\RootRequest;
 use CrmSell\Common\Helpers\Traits\PropertyTrait;
+use CrmSell\Providers\Infrastructure\Repositories\Interfaces\ProvidersRepositoryInterface;
 
 class Update extends RootRequest
 {
@@ -40,10 +41,13 @@ class Update extends RootRequest
     private string $fieldName = '';
     private string $entityId = '';
 
+    private string $providerType = '';
+
     /**
      * @param array $request
+     * @param ProvidersRepositoryInterface $repository
      */
-    public function __construct(array $request = [])
+    public function __construct(array $request, ProvidersRepositoryInterface $repository)
     {
         $this->fieldName = !empty($request['field']) ? $request['field'] : '';
         $this->entityId = !empty($request['entityId']) ? $request['entityId'] : '';

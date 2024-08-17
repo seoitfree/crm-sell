@@ -44,6 +44,7 @@ class ProvidersSeeder extends Seeder
                 'modified_user_id' =>  '1',
                 'created_at' => $date,
                 'updated_at' => $date,
+                'alias' => str_contains($item, 'Comfy') ? 'comfy' : ''
             ];
         }
         DB::table('providers')->insert($data);

@@ -12,7 +12,7 @@ use CrmSell\Users\Domains\Entities\Role;
 
 class RolesSeeder extends Seeder
 {
-    private string $commandForStart = 'php artisan db:seed --class=CrmSell\Users\Infrastructure\Laravel\Database\Seeders\RolesSeeder';
+    private string $commandForStart = 'php artisan db:seed --class=CrmSell\Users\Infrastructure\Laravel\Database\Seeders\RolesSeeder'; //php8.2 artisan db:seed --class='CrmSell\Users\Infrastructure\Laravel\Database\Seeders\RolesSeeder'
 
     const ROLES = [
         'admin',
