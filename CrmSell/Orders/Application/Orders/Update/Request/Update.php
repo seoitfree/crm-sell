@@ -45,9 +45,8 @@ class Update extends RootRequest
 
     /**
      * @param array $request
-     * @param ProvidersRepositoryInterface $repository
      */
-    public function __construct(array $request, ProvidersRepositoryInterface $repository)
+    public function __construct(array $request)
     {
         $this->fieldName = !empty($request['field']) ? $request['field'] : '';
         $this->entityId = !empty($request['entityId']) ? $request['entityId'] : '';
@@ -104,6 +103,7 @@ class Update extends RootRequest
             "sell_price" => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/|gt:0',
             "cost" => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/|gt:0',
             "manager_comment" => 'required|string|max:1000',
+            'comment' => 'string|max:1000',
             "goods_name" => 'required|string|max:150',
             "provider_start" => 'required|string|exists:CrmSell\Providers\Domains\Entities\Provider,id',
             "amount_in_order" => 'required|numeric|gt:0',

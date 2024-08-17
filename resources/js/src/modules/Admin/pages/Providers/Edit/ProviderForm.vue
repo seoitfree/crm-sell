@@ -10,7 +10,7 @@
             </div>
 
             <div v-if="!isLoading" class="text-center mt-2">
-                <button type="submit" class="btn app-btn-primary" @submit="onSubmit">{{recordId === '' ? 'Создать' : 'Редактировать'}}</button>
+                <button type="button" class="btn app-btn-primary" @click="onSubmit">{{recordId === '' ? 'Создать' : 'Редактировать'}}</button>
             </div>
             <div v-if="isLoading" class="d-flex justify-content-center mt-2">
                 <div class="spinner-border" role="status">
@@ -66,8 +66,7 @@ export default defineComponent({
                 alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
             })
         },
-        onSubmit(e): void {
-            e.preventDefault();
+        onSubmit(): void {
             this.errors = {};
             const schema = this.validation;
             schema.validate(this.form, { abortEarly: false })

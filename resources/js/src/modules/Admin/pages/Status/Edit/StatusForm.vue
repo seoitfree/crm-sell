@@ -29,7 +29,7 @@
             </div>
 
             <div v-if="!isLoading" class="text-center mt-2">
-                <button type="submit" class="btn app-btn-primary" @submit="onSubmit"> {{recordId === '' ? 'Создать' : 'Редактировать'}}</button>
+                <button type="button" class="btn app-btn-primary" @click="onSubmit"> {{recordId === '' ? 'Создать' : 'Редактировать'}}</button>
             </div>
             <div v-if="isLoading" class="d-flex justify-content-center mt-2">
                 <div class="spinner-border" role="status">
@@ -90,7 +90,6 @@ export default defineComponent({
     methods: {
         getStatus(): void {
             axios.get(`/api/v1/status/${this.type}/${this.recordId}`).then((response) => {
-                console.log(response);
                 if (response.status === 200) {
                     const status = response.data.data.status;
                     this.form.name = status.name;

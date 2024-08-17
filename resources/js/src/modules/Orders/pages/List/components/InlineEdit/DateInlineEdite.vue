@@ -114,11 +114,6 @@ export default defineComponent({
                         this.isLoading = false;
                         return;
                     }
-                    if (response.status !== ResponseStatusEnum.STATUS_OK) {
-                        alert(response.errors[0]);
-                        this.isLoading = false;
-                        return;
-                    }
                     this.edit = false;
                     this.$emit('update', {
                         value: String(this.form.value),

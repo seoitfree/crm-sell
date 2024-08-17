@@ -46,7 +46,7 @@
             </div>
 
             <div v-if="!isLoading" class="text-center mt-2">
-                <button type="submit" @submit="onSubmit" class="btn app-btn-primary">Создать</button>
+                <button type="button" @click="onSubmit" class="btn app-btn-primary">Создать</button>
             </div>
             <div v-if="isLoading" class="d-flex justify-content-center mt-2">
                 <div class="spinner-border" role="status">
@@ -109,8 +109,7 @@ export default defineComponent({
         }
     },
     methods: {
-       onSubmit(e) {
-           e.preventDefault();
+       onSubmit() {
            this.errors = {};
            const schema = this.validation;
            schema.validate(this.form, { abortEarly: false })
