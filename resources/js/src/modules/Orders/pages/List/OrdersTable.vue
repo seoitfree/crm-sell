@@ -164,7 +164,7 @@ export default defineComponent({
         },
         addShipmentsToCRM(): void {
             this.addShipmentModal = !this.addShipmentModal;
-            this.getData();
+            this.$emit('addShipmentsToCRM');
         },
         updateInline(dto: InlineEdit): void {
             const index = this.records.findIndex(item => item.id === dto.entityId);

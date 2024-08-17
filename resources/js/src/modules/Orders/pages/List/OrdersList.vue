@@ -40,6 +40,7 @@
                     :recordsProp="records"
                     @clickSort="clickSort"
                     @refreshRecords="refreshRecords"
+                    @addShipmentsToCRM="addShipmentsToCRM"
                 />
                 <Filter
                     v-if="isFilter"
@@ -134,6 +135,9 @@ export default defineComponent({
         },
         clickSort(sortData: SortData): void {
             this.sortData = sortData;
+            this.getData();
+        },
+        addShipmentsToCRM() {
             this.getData();
         },
         refreshRecords(page: number): void {

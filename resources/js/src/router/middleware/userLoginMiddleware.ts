@@ -8,9 +8,6 @@ export function userLoginMiddleware(to: RouteLocationNormalized, from: RouteLoca
     const userStore = useUserStore();
     const token = userStore.isAuthenticated;
 
-    console.log('userLoginMiddleware');
-    console.log(token);
-
     if (!token) {
         if (to.name !== RouteNamesEnum.USER_LOGIN) {
             return next({ name: RouteNamesEnum.USER_LOGIN });
