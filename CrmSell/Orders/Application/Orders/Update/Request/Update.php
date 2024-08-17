@@ -110,11 +110,11 @@ class Update extends RootRequest
             "amount_in_order_paid" => 'required|numeric|gt:0',
             "date_check" => 'date_format:Y-m-d',
 
-            "comfy_code" => 'required|string|max:50',
-            "comfy_goods_name" => 'required|string|max:150',
-            "comfy_brand" => 'required|string|max:50',
-            "comfy_category" => 'required|string|max:150',
-            "comfy_price" => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/|gt:0',
+            "comfy_code" => 'string|max:50',
+            "comfy_goods_name" => 'string|max:150',
+            "comfy_brand" => 'string|max:50',
+            "comfy_category" => 'string|max:150',
+            "comfy_price" => 'numeric|regex:/^\d+(\.\d{1,2})?$/|gt:0',
         ];
     }
 
