@@ -26,8 +26,7 @@ class OrdersRepository implements OrdersRepositoryInterface
 
         try {
             $sql = "SELECT COUNT(t.id) as count
-                FROM ({$this->getQuerySQL()}) as t
-                $where";
+                FROM ({$this->getQuerySQL()} $where) as t";
 
             $results = DB::select($sql, $params["bindings"]);
         } catch (QueryException $e) {
@@ -102,15 +101,20 @@ class OrdersRepository implements OrdersRepositoryInterface
         $where = $where === '' ? $where : " WHERE $where ";
 
         try {
+            DB::enableQueryLog();
             $sql = "
                 SELECT t.*
-                FROM ({$this->getQuerySQL()}) as t
-                $where
+                FROM ({$this->getQuerySQL()} $where) as t
                 ORDER BY {$dto->getSortField()} {$dto->getSortDir()}
                 LIMIT {$dto->getPagination()->getLimit()} OFFSET {$dto->getPagination()->getOffset()}
             ";
 
+
             $results = DB::select($sql, $params["bindings"]);
+
+            $queries = DB::getQueryLog();
+            $lastQuery = end($queries);
+
         } catch (QueryException $e) {
             Log::error($e->getMessage() . $e->getTraceAsString());
             throw new \Exception("OrdersRepository::getList() error.");
@@ -131,51 +135,47 @@ class OrdersRepository implements OrdersRepositoryInterface
         ];
 
         if (!empty($params["order_date_from"])) {
-            $filter["condition"][] = " t.created_at >= :order_date_from ";
+            $filter["condition"][] = " o.created_at >= :order_date_from ";
             $filter["bindings"]["order_date_from"] = $params["order_date_from"];
         }
         if (!empty($params["order_date_to"])) {
-            $filter["condition"][] = " t.created_at <= :order_date_to ";
+            $filter["condition"][] = " o.created_at <= :order_date_to ";
             $filter["bindings"]["order_date_to"] = $params["order_date_to"];
         }
         if (!empty($params["date_check_from"])) {
-            $filter["condition"][] = " t.date_check >= :date_check_from ";
+            $filter["condition"][] = " o.date_check >= :date_check_from ";
             $filter["bindings"]["date_check_from"] = $params["date_check_from"];
         }
         if (!empty($params["date_check_to"])) {
-            $filter["condition"][] = " t.created_at <= :date_check_to ";
+            $filter["condition"][] = " o.created_at <= :date_check_to ";
             $filter["bindings"]["date_check_to"] = $params["date_check_to"];
         }
         if (!empty($params["vendor_code"])) {
-            $filter["condition"][] = " t.vendor_code = :vendor_code ";
+            $filter["condition"][] = " o.vendor_code = :vendor_code ";
             $filter["bindings"]["vendor_code"] = $params["vendor_code"];
         }
         if (!empty($params["goods_name"])) {
-            $filter["condition"][] = " t.goods_name LIKE :goods_name ";
+            $filter["condition"][] = " o.goods_name LIKE :goods_name ";
             $filter["bindings"]["goods_name"] = "%{$params["goods_name"]}%";
         }
         if (!empty($params["status"]) && !in_array(self::FILTER_ALL, $params["status"])) {
-            $filter["condition"][] = " t.status IN (:status) ";
+            $filter["condition"][] = " o.status IN (:status) ";
             $filter["bindings"]["status"] = "{$params["status"]}";
         }
         if (!empty($params["remainder"])) {
-            $filter["condition"][] = " t.status IN (:status) ";
-            $filter["bindings"]["remainder"] = "t.remainder > 0";
+            $filter["bindings"]["remainder"] = " IF(shipments.shipments_amount > 0, o.amount_in_order_paid - shipments.shipments_amount, o.amount_in_order_paid) > 0 ";
         }
         if (!empty($params["provider_start"]) && $params["provider_start"] !== self::FILTER_ALL) {
-            $filter["condition"][] = " t.provider_start = :provider_start ";
+            $filter["condition"][] = " o.provider_start = :provider_start ";
             $filter["bindings"]["provider_start"] = $params["provider_start"];
         }
         if (!empty($params["defect"]) && $params["defect"] !== self::FILTER_ALL) {
-            $filter["condition"][] = " t.defect = :defect ";
+            $filter["condition"][] = " o.defect = :defect ";
             $filter["bindings"]["defect"] = $params["defect"];
         }
         if (!empty($params["comment"])) {
-            $filter["condition"][] = " t.comment LIKE :comment ";
+            $filter["condition"][] = " o.comment LIKE :comment ";
             $filter["bindings"]["comment"] = "%{$params["comment"]}%";
-        }
-        if (!empty($params["remainder"])) {
-            $filter["condition"][] = " IFNULL(o.amount_in_order_paid - shipments.shipments_amount, 0) > 0 ";
         }
 
         return $filter;
