@@ -219,6 +219,9 @@ export default defineComponent({
         },
         updateInline(dto: InlineEdit): void {
             this.item[dto.field] = dto.value;
+            if (dto.field === 'comfy_price' || dto.field === 'cost') {
+                this.item.comfy_price_cost = this.item.comfy_price - this.item.cost;
+            }
             this.$emit('updateInline', dto);
         },
         updateOption(dto: InlineOptionEdit): void {
