@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form tag="form" ref="myForm">
+        <form tag="form" ref="myForm" @submit.prevent="onSubmit">
             <div class="form-group row">
                 <div class="form-group col-md-6">
                     <label for="numberOrder">№ Замовлення</label>
@@ -9,7 +9,7 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label for="providerStart">Постачальник (потенційний)</label>
-                    <select class="form-select" name="providerStart" v-model="form.providerStart" @change="providerTypeChange">
+                    <select class="form-select" name="providerStart" v-model="providerStartComputed">
                         <template v-for="provider in providerOptions">
                             <option :value="provider.key">{{ provider.value }}</option>
                         </template>
@@ -104,7 +104,7 @@
 
 
             <div v-if="!isLoading" class="text-center mt-2">
-                <button type="submit" class="btn app-btn-primary" @click="onSubmit" >Додати</button>
+                <button type="submit" class="btn app-btn-primary">Додати</button>
             </div>
             <div v-if="isLoading" class="d-flex justify-content-center mt-2">
                 <div class="spinner-border" role="status">
@@ -129,7 +129,7 @@ interface OptionGoods {
 }
 
 interface OptionProvider extends Option {
-    alias: string;
+    type: string;
 }
 
 export default defineComponent({
@@ -176,60 +176,50 @@ export default defineComponent({
                     .required('Поле обзательное')
                     .positive('Поле должно быть больше 0')
                     .integer('Поле должно быть целочисельное'),
-                comfyCode: yup.lazy((value, { context }) => {
-                    return yup.string().when(['providerType'], {
-                        is: (providerType) => {
-                            return providerType === ProvidersEnum.COMFY;
-                        },
-                        then: (schema) => yup.string().trim().required('Поле обзательное').max(50, 'Максимальное количество символов 50'),
-                        otherwise: (schema) => yup.string().trim().max(50, 'Максимальное количество символов 50'),
-                    })
+                comfyCode: yup.string().when(['providerType'], {
+                    is: (providerType) => {
+                        return providerType === ProvidersEnum.COMFY;
+                    },
+                    then: (schema) => yup.string().trim().required('Поле обзательное').max(50, 'Максимальное количество символов 50'),
+                    otherwise: (schema) => yup.string().trim().max(50, 'Максимальное количество символов 50'),
                 }),
-                comfyGoodsName: yup.lazy((value, { context }) => {
-                    return yup.string().when(['providerType'], {
-                        is: (providerType) => {
-                            return providerType === ProvidersEnum.COMFY;
-                        },
-                        then: (schema) => yup.string().trim().required('Поле обзательное').max(150, 'Максимальное количество символов 150'),
-                        otherwise: (schema) => yup.string().trim().max(150, 'Максимальное количество символов 150'),
-                    })
+                comfyGoodsName: yup.string().when(['providerType'], {
+                    is: (providerType) => {
+                        return providerType === ProvidersEnum.COMFY;
+                    },
+                    then: (schema) => yup.string().trim().required('Поле обзательное').max(150, 'Максимальное количество символов 150'),
+                    otherwise: (schema) => yup.string().trim().max(150, 'Максимальное количество символов 150'),
                 }),
-                comfyBrand: yup.lazy((value, { context }) => {
-                    return yup.string().when(['providerType'], {
-                        is: (providerType) => {
-                            return providerType === ProvidersEnum.COMFY;
-                        },
-                        then: (schema) => yup.string().trim().required('Поле обзательное').max(50, 'Максимальное количество символов 50'),
-                        otherwise: (schema) => yup.string().trim().max(50, 'Максимальное количество символов 50'),
-                    })
+                comfyBrand: yup.string().when(['providerType'], {
+                    is: (providerType) => {
+                        return providerType === ProvidersEnum.COMFY;
+                    },
+                    then: (schema) => yup.string().trim().required('Поле обзательное').max(50, 'Максимальное количество символов 50'),
+                    otherwise: (schema) => yup.string().trim().max(50, 'Максимальное количество символов 50'),
                 }),
-                comfyCategory: yup.lazy((value, { context }) => {
-                    return yup.string().when(['providerType'], {
-                        is: (providerType) => {
-                            return providerType === ProvidersEnum.COMFY;
-                        },
-                        then: (schema) => yup.string().trim().required('Поле обзательное').max(100, 'Максимальное количество символов 100'),
-                        otherwise: (schema) => yup.string().trim().max(100, 'Максимальное количество символов 100'),
-                    })
+                comfyCategory: yup.string().when(['providerType'], {
+                    is: (providerType) => {
+                        return providerType === ProvidersEnum.COMFY;
+                    },
+                    then: (schema) => yup.string().trim().required('Поле обзательное').max(100, 'Максимальное количество символов 100'),
+                    otherwise: (schema) => yup.string().trim().max(100, 'Максимальное количество символов 100'),
                 }),
-                comfyPrice: yup.lazy((value, { context }) => {
-                    return yup.string().when(['providerType'], {
-                        is: (providerType) => {
-                            return providerType === ProvidersEnum.COMFY;
-                        },
-                        then: (schema) => yup.number().required('Поле обзательное')
-                            .transform((value) => (isNaN(value) ? undefined : value))
-                            .positive('Поле должно быть больше 0')
-                            .test('is-decimal', 'Должно иметь два знака после запятой', (value) => {
-                                return (value) ? /^\d+(\.\d{1,2})?$/.test(value.toString()) : true;
-                            }),
-                        otherwise: (schema) => yup.number()
-                            .transform((value) => (isNaN(value) ? undefined : value))
-                            .positive('Поле должно быть больше 0')
-                            .test('is-decimal', 'Должно иметь два знака после запятой', (value) => {
-                                return (value) ? /^\d+(\.\d{1,2})?$/.test(value.toString()) : true;
-                            }),
-                    })
+                comfyPrice: yup.string().when(['providerType'], {
+                    is: (providerType) => {
+                        return providerType === ProvidersEnum.COMFY;
+                    },
+                    then: (schema) => yup.number().required('Поле обзательное')
+                        .transform((value) => (isNaN(value) ? undefined : value))
+                        .positive('Поле должно быть больше 0')
+                        .test('is-decimal', 'Должно иметь два знака после запятой', (value) => {
+                            return (value) ? /^\d+(\.\d{1,2})?$/.test(value.toString()) : true;
+                        }),
+                    otherwise: (schema) => yup.number()
+                        .transform((value) => (isNaN(value) ? undefined : value))
+                        .positive('Поле должно быть больше 0')
+                        .test('is-decimal', 'Должно иметь два знака после запятой', (value) => {
+                            return (value) ? /^\d+(\.\d{1,2})?$/.test(value.toString()) : true;
+                        }),
                 })
                     ,
             }),
@@ -245,11 +235,23 @@ export default defineComponent({
             set(value): void {
                 this.form.vendorCodeValue = value;
                 const goods = this.vendorCodeList.find((item: OptionGoods) => {
-                    return item.id = value;
+                    return item.id === value;
                 });
                 this.form.goodsId = goods.id;
                 this.form.goodsName = goods.name;
                 this.form.vendorCode = goods.vendor_code;
+            }
+        },
+        providerStartComputed: {
+            get() {
+                return this.form.providerStart;
+            },
+            set(value): void {
+                this.form.providerStart = value;
+                const provider = this.providerOptions.find((item: OptionProvider) => {
+                    return item.key === value;
+                });
+                this.form.providerType = provider.type;
             }
         },
         goodsNameValueComputed: {
@@ -259,7 +261,7 @@ export default defineComponent({
             set(value): void {
                 this.form.goodsNameValue = value;
                 const goods = this.goodsNameList.find((item: OptionGoods) => {
-                    return item.id = value;
+                    return item.id === value;
                 });
                 this.form.goodsId = goods.id;
                 this.form.goodsName = goods.name;
@@ -279,7 +281,6 @@ export default defineComponent({
     },
     methods: {
         onSubmit(e) {
-            e.preventDefault();
             this.errors = {};
             const schema = this.validation;
             schema.validate(this.form, { abortEarly: false })
@@ -357,10 +358,6 @@ export default defineComponent({
                 }
             }, 500);
         },
-        providerTypeChange() {
-            const type = this.providerOptions.find((item: OptionProvider) => item.alias = ProvidersEnum.COMFY);
-            this.form.providerType = type ? type.alias : '';
-        }
     }
 });
 </script>

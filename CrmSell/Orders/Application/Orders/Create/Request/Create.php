@@ -41,7 +41,7 @@ class Create extends RootRequest
         $value = $repository->getListAll()->first(function (\stdClass $value) {
             return $this->providerStart === $value->id;
         });
-        $this->providerType = $value->alias;
+        $this->providerType = $value->type;
     }
 
     public function toValidation(): array
