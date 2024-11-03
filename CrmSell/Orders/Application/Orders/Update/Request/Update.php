@@ -103,6 +103,7 @@ class Update extends RootRequest
             "sell_price" => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/|gt:0',
             "cost" => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/|gt:0',
             "manager_comment" => 'required|string|max:1000',
+            "status" => 'required',
             'comment' => 'string|max:1000',
             "goods_name" => 'required|string|max:150',
             "provider_start" => 'required|string|exists:CrmSell\Providers\Domains\Entities\Provider,id',

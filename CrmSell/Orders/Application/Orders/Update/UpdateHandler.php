@@ -118,13 +118,13 @@ class UpdateHandler extends AbstractHandler
         if ($request->isThisField("amount_in_order")) {
             $order->changeAmountInOrderPaid($forUpdate["amount_in_order"], $totalShipmentForByOrder);
         }
-        if ($request->isThisField("status") && !Status::firstOrNew(['alias' => $forUpdate['status']])->exist) {
+        if ($request->isThisField("status") && !Status::firstOrNew(['alias' => $forUpdate['status']])->exists()) {
             throw new \DomainException("Status does not exist: {$forUpdate['status']}");
         }
-        if ($request->isThisField("defect") && !Defect::firstOrNew(['alias' => $forUpdate['defect']])->exist) {
+        if ($request->isThisField("defect") && !Defect::firstOrNew(['alias' => $forUpdate['defect']])->exists()) {
             throw new \DomainException("Defect does not exist: {$forUpdate['defect']}");
         }
-        if ($request->isThisField("provider") && !Provider::firstOrNew(['id' => $forUpdate['provider']])->exist) {
+        if ($request->isThisField("provider") && !Provider::firstOrNew(['id' => $forUpdate['provider']])->exists()) {
             throw new \DomainException("Provider does not exist: {$forUpdate['provider']}");
         }
     }
