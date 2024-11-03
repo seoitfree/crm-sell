@@ -185,17 +185,22 @@ export default defineComponent({
             return response.data;
         });
         Promise.all([managers, defects, providers, status]).then(values => {
-            this.managersOptions = values[0].data;
-            this.defectsOptions = values[1].data;
-            this.providerOptions = values[2].data;
-            this.statusOptions = values[3].data;
+            this.managersOptions = this.addAll(values[0].data);
+            this.defectsOptions = this.addAll(values[1].data);
+            this.providerOptions = this.addAll(values[2].data);
+            this.statusOptions = this.addAll(values[3].data);
 
             this.isLoading = false;
-        }).catch(() => {
+        }).catch((e) => {
+            console.error(e);
             alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
         });
     },
     methods: {
+        addAll(options: Option[]): Option[] {
+            options.unshift({key: 'all', value: 'Все'} as Option);
+            return options;
+        },
         closeButton(): void {
             this.$emit('closeButton');
         },

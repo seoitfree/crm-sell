@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Log;
 
 class OrdersRepository implements OrdersRepositoryInterface
 {
+    const FILTER_ALL = 'all';
+
     /**
      * @param array $filter
      * @return int
@@ -152,7 +154,7 @@ class OrdersRepository implements OrdersRepositoryInterface
             $filter["condition"][] = " t.goods_name LIKE :goods_name ";
             $filter["bindings"]["goods_name"] = "%{$params["goods_name"]}%";
         }
-        if (!empty($params["status"])) {
+        if (!empty($params["status"]) && !in_array(self::FILTER_ALL, $params["status"])) {
             $filter["condition"][] = " t.status IN (:status) ";
             $filter["bindings"]["status"] = "{$params["status"]}";
         }
@@ -160,17 +162,13 @@ class OrdersRepository implements OrdersRepositoryInterface
             $filter["condition"][] = " t.status IN (:status) ";
             $filter["bindings"]["remainder"] = "t.remainder > 0";
         }
-        if (!empty($params["provider_start"])) {
+        if (!empty($params["provider_start"]) && $params["provider_start"] !== self::FILTER_ALL) {
             $filter["condition"][] = " t.provider_start = :provider_start ";
             $filter["bindings"]["provider_start"] = $params["provider_start"];
         }
-        if (!empty($params["defect"])) {
+        if (!empty($params["defect"]) && $params["defect"] !== self::FILTER_ALL) {
             $filter["condition"][] = " t.defect = :defect ";
             $filter["bindings"]["defect"] = $params["defect"];
-        }
-        if (!empty($params["comment"])) {
-            $filter["condition"][] = " t.comment LIKE :comment ";
-            $filter["bindings"]["comment"] = "%{$params["comment"]}%";
         }
         if (!empty($params["comment"])) {
             $filter["condition"][] = " t.comment LIKE :comment ";
