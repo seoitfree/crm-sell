@@ -67,7 +67,7 @@ class OrdersRepository implements OrdersRepositoryInterface
                    p.id as provider_start_id,
                    p.name as provider_start,
                    IFNULL(shipments.shipments_amount, 0) as shipments_amount,
-                   IFNULL(o.amount_in_order_paid - shipments.shipments_amount, 0) as remainder,
+                   IF(shipments.shipments_amount > 0, o.amount_in_order_paid - shipments.shipments_amount, o.amount_in_order_paid) as remainder,
                    o.comfy_price - o.cost as comfy_price_cost
             FROM orders as o
                 LEFT JOIN goods g
