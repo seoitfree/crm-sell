@@ -22,8 +22,8 @@ return new class extends Migration
             $table->string('goods_id', 36)->nullable()->index();
             $table->integer('amount_in_order'); //К-ть в замовленні
             $table->integer('amount_in_order_paid');
-            $table->float('sell_price', 10,2);
-            $table->float('cost', 10,2)->default(0.0);
+            $table->decimal('sell_price', 10,2);
+            $table->decimal('cost', 10,2)->default(0.0);
 
 
             $table->date('date_check')->nullable();
@@ -40,7 +40,7 @@ return new class extends Migration
             $table->string('comfy_goods_name', 200);
             $table->string('comfy_brand', 50);
             $table->string('comfy_category', 100);
-            $table->float('comfy_price', 10,2);
+            $table->decimal('comfy_price', 10,2);
 
             $table->string('status', 50)->index();
             $table->string('defect', 50)->index();
