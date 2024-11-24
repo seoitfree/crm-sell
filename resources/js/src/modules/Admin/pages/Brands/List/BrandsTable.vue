@@ -1,3 +1,4 @@
+
 <template>
     <div class="tab-pane fade show active" id="providers-all" role="tabpanel" aria-labelledby="orders-all-tab">
         <div v-if="isLoading" class="d-flex justify-content-center">
@@ -22,7 +23,7 @@
                                     <td class="cell">{{ getLocalDateTime(item.created_at) }}</td>
                                     <td class="cell">{{ getLocalDateTime(item.updated_at) }}</td>
                                     <td class="cell">
-                                        <router-link class="btn-sm app-btn-secondary" :to="`/provider/edit/${item.id}`">
+                                        <router-link class="btn-sm app-btn-secondary" :to="`/brand/edit/${item.id}`">
                                             Edit
                                         </router-link>
                                     </td>
@@ -70,7 +71,7 @@ export default defineComponent({
         return {
             isLoading: false,
             headColumns: [
-                {name: 'name', translate: 'Название поставщика', sort: true},
+                {name: 'name', translate: 'Название бренда', sort: true},
                 {name: 'created_at', translate: 'Дата создания', sort: true},
                 {name: 'updated_at', translate: 'Дата модификации', sort: true},
                 {name: 'view_edit', translate: '', sort: false}
@@ -88,7 +89,7 @@ export default defineComponent({
     methods: {
         getData(): void {
             this.isLoading = true;
-            axios.get('/api/v1/providers', {
+            axios.get('/api/v1/brands', {
                 params: {
                     pageNumber: this.pagination.pages.current_page,
                     sortDir: this.sortData.sortDir,
@@ -125,4 +126,3 @@ export default defineComponent({
 <style scoped>
 
 </style>
-

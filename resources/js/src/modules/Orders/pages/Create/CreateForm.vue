@@ -40,8 +40,8 @@
                             </template>
                         </select>
                     </template>
+                    <span v-if="'goodsId' in errors" role="alert" class="text-danger" >{{ errors.goodsId }}</span>
                 </div>
-                <span v-if="'goodsId' in errors" role="alert" class="text-danger" >{{ errors.goodsId }}</span>
             </div>
 
             <div class="form-group row">
@@ -82,8 +82,15 @@
 
                 <div class="form-group col-md-6">
                     <label for="comfyBrand">Наименование бренда</label>
-                    <input name="comfyBrand" type="text" class="form-control"  v-model="form.comfyBrand">
-                    <span v-if="'comfyBrand' in errors" role="alert" class="text-danger" >{{ errors.comfyGoodsName }}</span>
+                    <input name="comfyBrand" class="form-control" type="text" v-model="form.comfyBrandText" @input="searchByBrandName">
+                    <template v-if="brandsNameList.length > 0">
+                        <select class="form-select" v-model="form.comfyBrand" size="5">
+                            <template v-for="item in brandsNameList">
+                                <option :value="item.key">{{ item.value }}</option>
+                            </template>
+                        </select>
+                    </template>
+                    <span v-if="'comfyBrand' in errors" role="alert" class="text-danger" >{{ errors.comfyBrand }}</span>
                 </div>
             </div>
 
@@ -139,8 +146,10 @@ export default defineComponent({
             isLoading: false,
             vendorCodeList: [] as OptionGoods[],
             goodsNameList: [] as OptionGoods[],
+            brandsNameList: [] as Option[],
             inputTimerVendorCode: 0,
             inputTimerGoodsName: 0,
+            inputTimerBrandName: 0,
             form: {
                 numberOrder: '',
                 vendorCode: '',
@@ -154,6 +163,8 @@ export default defineComponent({
                 comfyGoodsName: '',
                 comfyCode: '',
                 comfyBrand: '',
+                comfyBrandText: '',
+                goodsNameText: '',
                 comfyCategory: '',
                 comfyPrice: '',
                 goodsId: '',
@@ -301,7 +312,7 @@ export default defineComponent({
                 this.providerOptions = response.data.data;
             });
         },
-        async create(): void {
+        create(): void {
             this.isLoading = true;
             axios.post('/api/v1/order', this.form).then(async (response) => {
                 if (response.status === 422) {
@@ -351,6 +362,23 @@ export default defineComponent({
                         }
                         this.goodsNameList = response.data.data.records;
                         this.vendorCodeList = [];
+                    }).catch((error) => {
+                        console.error(error);
+                        alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
+                    })
+                }
+            }, 500);
+        },
+        searchByBrandName(event) {
+            clearTimeout(this.inputTimerGoodsName);
+            this.inputTimerBrandName = setTimeout(() => {
+                if (event.target.value !== '') {
+                    axios.get('/api/v1/brands/' + event.target.value).then((response) => {
+                        if (response.status !== 200) {
+                            throw Error("Error");
+                        }
+                        this.brandsNameList = response.data.data.records;
+                        console.log(this.brandsNameList);
                     }).catch((error) => {
                         console.error(error);
                         alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");

@@ -162,6 +162,7 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         \CrmSell\Users\Infrastructure\Laravel\Provider\UserProvider::class,
         \CrmSell\Providers\Infrastructure\Laravel\Provider\ProvidersProvider::class,
+        \CrmSell\Brands\Infrastructure\Laravel\Provider\BrandsProvider::class,
         \CrmSell\Orders\Infrastructure\Laravel\Provider\OrdersProvider::class,
         \CrmSell\Goods\Infrastructure\Laravel\Provider\GoodsProvider::class,
         \CrmSell\Status\Infrastructure\Laravel\Provider\StatusProvider::class,

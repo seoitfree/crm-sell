@@ -117,7 +117,6 @@ class GoodsRepository implements GoodsRepositoryInterface
         if (!empty($params["vendor_code"])) {
             $filter["condition"][] = " g.vendor_code LIKE :vendor_code";
             $filter["bindings"][":vendor_code"] = "%{$params["vendor_code"]}%";
-            $params["bindings"][":vendor_code"] = "%{$params["vendor_code"]}%";
         }
 
         return $filter;

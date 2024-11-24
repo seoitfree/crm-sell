@@ -164,6 +164,42 @@ const routes = [
         },
     },
     {
+        path: '/brands',
+        name: 'brands',
+        component: () => import("../modules/Admin/pages/Brands/List/BrandsList.vue"),
+        meta: {
+            accessScopes: [RolesEnum.ADMIN],
+            sidepanel: 'admin',
+        },
+    },
+    {
+        path: '/brand/create',
+        name: 'brand-add',
+        component: () => import("../modules/Admin/pages/Brands/Edit/BrandEdit.vue"),
+        meta: {
+            accessScopes: [RolesEnum.ADMIN],
+            sidepanel: 'admin',
+        },
+    },
+    {
+        path: '/brand/edit/:recordId',
+        name: 'brand-edit',
+        component: () => import("../modules/Admin/pages/Brands/Edit/BrandEdit.vue"),
+        meta: {
+            accessScopes: [RolesEnum.ADMIN],
+            sidepanel: 'admin',
+        },
+    },
+    {
+        path: '/order/add',
+        name: 'order-add',
+        component: () => import("../modules/Orders/pages/Create/OrderCreate.vue"),
+        meta: {
+            //accessScopes: [],
+            sidepanel: 'main',
+        },
+    },
+    {
         path: '/access-error',
         name: RouteNamesEnum.ACCESS_ERROR,
         meta: {

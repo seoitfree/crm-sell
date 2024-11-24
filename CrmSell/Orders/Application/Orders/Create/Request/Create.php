@@ -109,7 +109,7 @@ class Create extends RootRequest
      * @return array
      */
     public function comfyBrand(): array {
-        return $this->addRequired(['string','max:50']);
+        return $this->addRequired(['string','exists:CrmSell\Brands\Domains\Entities\Brand,id']);
     }
 
     /**
