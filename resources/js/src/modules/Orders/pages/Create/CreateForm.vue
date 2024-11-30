@@ -1,27 +1,27 @@
 <template>
     <div>
-        <form tag="form" ref="myForm" @submit.prevent="onSubmit">
+        <form tag="form" ref="myForm" >
             <div class="form-group row">
-                <div class="form-group col-md-6">
-                    <label for="numberOrder">№ Замовлення</label>
-                    <input name="numberOrder" type="text" class="form-control"  v-model="form.numberOrder">
-                    <span v-if="'numberOrder' in errors" role="alert" class="text-danger" >{{ errors.numberOrder }}</span>
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="providerStart">Постачальник (потенційний)</label>
-                    <select class="form-select" name="providerStart" v-model="providerStartComputed">
-                        <template v-for="provider in providerOptions">
-                            <option :value="provider.key">{{ provider.value }}</option>
-                        </template>
-                    </select>
-                    <span v-if="'providerStart' in errors" role="alert" class="text-danger" >{{ errors.providerStart }}</span>
-                </div>
+                <TextInput
+                    v-model="form.numberOrder"
+                    :label="'№ Замовлення'"
+                    :name="'numberOrder'"
+                    :errors="errors"
+                />
+
+                <SelectFiled
+                    v-model="providerStartComputed"
+                    :selected="providerStartComputed"
+                    :label="'Постачальник (потенційний)'"
+                    :name="'providerStart'"
+                    :options="providerOptions"
+                />
             </div>
 
             <div class="form-group row">
                 <div class="form-group col-md-6">
                     <label for="vendorCode">Артикул</label>
-                    <input name="vendorCode"  class="form-control" type="text" v-model="form.vendorCode" @input="searchByVendorCode">
+                    <input name="vendorCode" class="form-control" type="text" v-model="form.vendorCode" @input="searchByVendorCode">
                     <template v-if="vendorCodeList.length > 0">
                         <select class="form-select" v-model="vendorCodeValueComputed" size="5">
                             <template v-for="item in vendorCodeList">
@@ -45,40 +45,48 @@
             </div>
 
             <div class="form-group row">
-                <div class="form-group col-md-6">
-                    <label for="managerComment">Коментар/уточнення постачальника</label>
-                    <textarea name="managerComment"  class="form-control"  style="height: 5rem !important;" v-model="form.managerComment" cols="30" rows="10"></textarea>
-                    <span v-if="'managerComment' in errors" role="alert" class="text-danger" >{{ errors.managerComment }}</span>
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="=sellPrice">Ціна</label>
-                    <input name="sellPrice" type="number" class="form-control"   v-model="form.sellPrice">
-                    <span v-if="'sellPrice' in errors" role="alert" class="text-danger" >{{ errors.sellPrice }}</span>
-                </div>
+                <TextAreaInput
+                    v-model="form.managerComment"
+                    :label="'Коментар/уточнення постачальника'"
+                    :name="'managerComment'"
+                    :cols="'30'"
+                    :rows="'10'"
+                    :errors="errors"
+                />
+
+                <NumberInput
+                    v-model="form.sellPrice"
+                    :label="'Ціна'"
+                    :name="'sellPrice'"
+                    :errors="errors"
+                />
             </div>
 
 
             <div class="form-group row">
-                <div class="form-group col-md-6">
-                    <label for="amountInOrder">К-ть в замовленні</label>
-                    <input name="amountInOrder" type="number" class="form-control" v-model="form.amountInOrder">
-                    <span v-if="'amountInOrder' in errors" role="alert" class="text-danger" >{{ errors.amountInOrder }}</span>
-                </div>
+                <NumberInput
+                    v-model="form.amountInOrder"
+                    :label="'К-ть в замовленні'"
+                    :name="'amountInOrder'"
+                    :errors="errors"
+                />
 
-                <div class="form-group col-md-6">
-                    <label for="comfyCode">Код номенклатуры</label>
-                    <input name="comfyCode" type="text" class="form-control"   v-model="form.comfyCode">
-                    <span v-if="'comfyCode' in errors" role="alert" class="text-danger" >{{ errors.comfyCode }}</span>
-                </div>
+                <TextInput
+                    v-model="form.comfyCode"
+                    :label="'Код номенклатуры'"
+                    :name="'comfyCode'"
+                    :errors="errors"
+                />
             </div>
 
 
             <div class="form-group row">
-                <div class="form-group col-md-6">
-                    <label for="comfyGoodsName">Наименование продукта</label>
-                    <input name="comfyGoodsName" type="text" class="form-control"   v-model="form.comfyGoodsName">
-                    <span v-if="'comfyGoodsName' in errors" role="alert" class="text-danger" >{{ errors.comfyGoodsName }}</span>
-                </div>
+                <TextInput
+                    v-model="form.comfyGoodsName"
+                    :label="'Наименование продукта'"
+                    :name="'comfyGoodsName'"
+                    :errors="errors"
+                />
 
                 <div class="form-group col-md-6">
                     <label for="comfyBrand">Наименование бренда</label>
@@ -96,22 +104,24 @@
 
 
             <div class="form-group row">
-                <div class="form-group col-md-6">
-                    <label for="comfyCategory">Наименование категории</label>
-                    <input name="comfyCategory" type="text" class="form-control" v-model="form.comfyCategory">
-                    <span v-if="'comfyCategory' in errors" role="alert" class="text-danger" >{{ errors.comfyCategory }}</span>
-                </div>
+                <TextInput
+                    v-model="form.comfyCategory"
+                    :label="'Наименование категории'"
+                    :name="'comfyCategory'"
+                    :errors="errors"
+                />
 
-                <div class="form-group col-md-6">
-                    <label for="comfyPrice">Цена/значение</label>
-                    <input name="comfyPrice" type="number" min="0" class="form-control" v-model="form.comfyPrice">
-                    <span v-if="'comfyPrice' in errors" role="alert" class="text-danger" >{{ errors.comfyPrice }}</span>
-                </div>
+                <NumberInput
+                    v-model="form.comfyPrice"
+                    :label="'Цена/значение'"
+                    :name="'comfyPrice'"
+                    :errors="errors"
+                />
             </div>
 
 
             <div v-if="!isLoading" class="text-center mt-2">
-                <button type="submit" class="btn app-btn-primary">Додати</button>
+                <button type="button" class="btn app-btn-primary" @click="onSubmit">Додати</button>
             </div>
             <div v-if="isLoading" class="d-flex justify-content-center mt-2">
                 <div class="spinner-border" role="status">
@@ -123,11 +133,16 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
+import {defineAsyncComponent, defineComponent} from "vue";
 import * as yup from "yup";
 import {Option} from "../../../../common/Types/Option";
 import axios from "axios";
 import {ProvidersEnum} from "../../../Admin/pages/Providers/enum/ProvidersEnum";
+
+const TextInput = defineAsyncComponent(() => import('@/js/src/common/components/EditPage/Fields/TextInput.vue'));
+const TextAreaInput = defineAsyncComponent(() => import('@/js/src/common/components/EditPage/Fields/TextAreaInput.vue'));
+const SelectFiled = defineAsyncComponent(() => import('@/js/src/common/components/EditPage/Fields/SelectFiled.vue'));
+const NumberInput = defineAsyncComponent(() => import('@/js/src/common/components/EditPage/Fields/NumberInput.vue'));
 
 interface OptionGoods {
     id: string;
@@ -141,6 +156,12 @@ interface OptionProvider extends Option {
 
 export default defineComponent({
     name: "CreateForm",
+    components: {
+        TextInput,
+        TextAreaInput,
+        SelectFiled,
+        NumberInput,
+    },
     data() {
         return {
             isLoading: false,
@@ -231,8 +252,7 @@ export default defineComponent({
                         .test('is-decimal', 'Должно иметь два знака после запятой', (value) => {
                             return (value) ? /^\d+(\.\d{1,2})?$/.test(value.toString()) : true;
                         }),
-                })
-                    ,
+                }),
             }),
             errors: {},
             providerOptions: [] as OptionProvider[],
@@ -263,6 +283,8 @@ export default defineComponent({
                     return item.key === value;
                 });
                 this.form.providerType = provider.type;
+                console.log(value);
+                console.log(this.form.providerType);
             }
         },
         goodsNameValueComputed: {
@@ -291,7 +313,7 @@ export default defineComponent({
         }
     },
     methods: {
-        onSubmit(e) {
+        onSubmit() {
             this.errors = {};
             const schema = this.validation;
             schema.validate(this.form, { abortEarly: false })

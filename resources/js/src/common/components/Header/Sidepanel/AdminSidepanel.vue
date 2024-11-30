@@ -8,73 +8,22 @@
 
             <nav id="app-nav-main" class="app-nav app-nav-main flex-grow-1">
                 <ul class="app-menu list-unstyled accordion" id="menu-accordion">
-                    <li class="nav-item has-submenu">
-                      <router-link class="nav-link submenu-toggle" to="/users" >
-                            <span class="nav-icon">
-                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-columns-gap" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" d="M6 1H1v3h5V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H1zm14 12h-5v3h5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-5zM6 8H1v7h5V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H1zm14-6h-5v7h5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1h-5z"/>
-                                </svg>
-                            </span>
-                            <span class="nav-link-text">Пользователи</span>
-                      </router-link>
-                    </li>
-                    <li class="nav-item has-submenu">
-                        <router-link class="nav-link submenu-toggle" :to="`/status/` + statusEnum.STATUS" >
-                            <span class="nav-icon">
-                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-columns-gap" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" d="M6 1H1v3h5V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H1zm14 12h-5v3h5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-5zM6 8H1v7h5V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H1zm14-6h-5v7h5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1h-5z"/>
-                                </svg>
-                            </span>
-                            <span class="nav-link-text">Статуси замовлення</span>
-                        </router-link>
-                    </li>
-                    <li class="nav-item has-submenu">
-                        <router-link class="nav-link submenu-toggle" :to="`/status/` + statusEnum.DEFECT" >
-                            <span class="nav-icon">
-                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-columns-gap" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" d="M6 1H1v3h5V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H1zm14 12h-5v3h5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-5zM6 8H1v7h5V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H1zm14-6h-5v7h5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1h-5z"/>
-                                </svg>
-                            </span>
-                            <span class="nav-link-text">Статуси повернень</span>
-                        </router-link>
-                    </li>
-                    <li class="nav-item has-submenu">
-                        <router-link class="nav-link submenu-toggle" to="/providers" >
-                            <span class="nav-icon">
-                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-columns-gap" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" d="M6 1H1v3h5V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H1zm14 12h-5v3h5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-5zM6 8H1v7h5V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H1zm14-6h-5v7h5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1h-5z"/>
-                                </svg>
-                            </span>
-                            <span class="nav-link-text">Постачальники</span>
-                        </router-link>
-                    </li>
-                    <li class="nav-item has-submenu">
-                        <router-link class="nav-link submenu-toggle" to="/goods" >
-                            <span class="nav-icon">
-                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-columns-gap" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" d="M6 1H1v3h5V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H1zm14 12h-5v3h5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-5zM6 8H1v7h5V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H1zm14-6h-5v7h5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1h-5z"/>
-                                </svg>
-                            </span>
-                            <span class="nav-link-text">Товари</span>
-                        </router-link>
-                    </li>
-
-                    <li class="nav-item has-submenu">
-                        <router-link class="nav-link submenu-toggle" to="/brands" >
-                            <span class="nav-icon">
-                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-columns-gap" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" d="M6 1H1v3h5V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H1zm14 12h-5v3h5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-5zM6 8H1v7h5V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H1zm14-6h-5v7h5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1h-5z"/>
-                                </svg>
-                            </span>
-                            <span class="nav-link-text">Бренди</span>
-                        </router-link>
-                    </li>
-                </ul><!--//app-menu-->
-            </nav><!--//app-nav-->
+                    <template v-for="item in menu">
+                        <li class="nav-item has-submenu">
+                            <router-link class="nav-link submenu-toggle" :to="item.to" >
+                                <span class="nav-icon">
+                                    <TileIcon v-if="item.icon === 'tileIcon'"/>
+                                </span>
+                                <span class="nav-link-text">{{ item.title }}</span>
+                            </router-link>
+                        </li>
+                    </template>
+                </ul>
+            </nav>
 
             <FooterSidepanel/>
-        </div><!--//sidepanel-inner-->
-    </div><!--//app-sidepanel-->
+        </div>
+    </div>
 </template>
 
 <script lang="ts">
@@ -83,18 +32,34 @@ import {StatusEnum} from "../../../../modules/Admin/pages/Status/enum/StatusEnum
 
 const Branding = defineAsyncComponent(() => import('@/js/src/common/components/Header/Branding.vue'));
 const FooterSidepanel = defineAsyncComponent(() => import('@/js/src/common/components/Header/Sidepanel/FooterSidepanel.vue'));
+const TileIcon = defineAsyncComponent(() => import('@/js/src/common/components/icons/NavIcon/TileIcon.vue'));
 
 import {defineAsyncComponent, defineComponent, PropType} from "vue";
+
+interface MenuItem {
+    to: string;
+    icon: string;
+    title: string;
+}
 
 export default defineComponent({
     name: "AdminSidepanel",
     components: {
         Branding,
-        FooterSidepanel
+        FooterSidepanel,
+        TileIcon
     },
     data() {
         return {
-            statusEnum: StatusEnum,
+            menu: [
+                {to:"/users", icon: 'tileIcon', title: 'Пользователи'},
+                {to:"/providers", icon: 'tileIcon', title: 'Постачальники'},
+                {to:`/status/` + StatusEnum.STATUS, icon: 'tileIcon', title: 'Статуси замовлення'},
+                {to:`/status/` + StatusEnum.DEFECT, icon: 'tileIcon', title: 'Статуси повернень'},
+                {to:"/providers", icon: 'tileIcon', title: 'Постачальники'},
+                {to:"/goods", icon: 'tileIcon', title: 'Товари'},
+                {to:"/brands", icon: 'tileIcon', title: 'Бренди'},
+            ] as MenuItem[]
         }
     },
     props: {
