@@ -8,20 +8,21 @@ use CrmSell\Common\Application\Service\Enum\ResponseCodeErrors;
 use CrmSell\Common\Application\Service\Handler\AbstractHandler;
 use CrmSell\Common\Application\Service\Handler\ResultHandler;
 use CrmSell\Common\Application\Service\Request\RequestInterface;
-use CrmSell\Orders\Application\Orders\Create\Request\Create;
 use CrmSell\Orders\Application\Orders\Update\Request\Update;
 use CrmSell\Orders\Domains\Entities\Order;
 use CrmSell\Orders\Infrastructure\Repositories\Interfaces\ShipmentsRepositoryInterface;
 use CrmSell\Providers\Domains\Entities\Provider;
+use CrmSell\Providers\Domains\Enum\ProviderEnum;
 use CrmSell\Status\Domains\Entities\Defect;
 use CrmSell\Status\Domains\Entities\Status;
-use CrmSell\Status\Domains\Enum\OrderStatusEnum;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class UpdateHandler extends AbstractHandler
 {
+
+
     private ShipmentsRepositoryInterface $repository;
     private AddToAudit $audit;
 
@@ -127,5 +128,23 @@ class UpdateHandler extends AbstractHandler
         if ($request->isThisField("provider") && !Provider::firstOrNew(['id' => $forUpdate['provider']])->exists()) {
             throw new \DomainException("Provider does not exist: {$forUpdate['provider']}");
         }
+        if ($this->checkRequiredComfy($order, $request)) {
+            throw new \DomainException("Field is Required for 'Comfy' provider.");
+        }
+    }
+
+    /**
+     * @param Order $order
+     * @param Update $request
+     * @return bool
+     */
+    private function checkRequiredComfy(Order $order, Update $request): bool
+    {
+        if (!$request->isComfyField()) {
+            return false;
+        }
+
+        $provider = Provider::find($order->provider_start);
+        return $provider->type === ProviderEnum::COMFY->value;
     }
 }

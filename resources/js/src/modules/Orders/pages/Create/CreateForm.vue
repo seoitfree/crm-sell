@@ -370,7 +370,7 @@ export default defineComponent({
             }, 500);
         },
         searchByBrandName(event) {
-            clearTimeout(this.inputTimerGoodsName);
+            clearTimeout(this.inputTimerBrandName);
             this.inputTimerBrandName = setTimeout(() => {
                 if (event.target.value !== '') {
                     axios.get('/api/v1/brands/' + event.target.value).then((response) => {
@@ -378,7 +378,6 @@ export default defineComponent({
                             throw Error("Error");
                         }
                         this.brandsNameList = response.data.data.records;
-                        console.log(this.brandsNameList);
                     }).catch((error) => {
                         console.error(error);
                         alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");

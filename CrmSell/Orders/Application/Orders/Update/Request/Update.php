@@ -11,6 +11,14 @@ class Update extends RootRequest
 {
     use PropertyTrait;
 
+    const COMFY_FIELD = [
+        "comfy_code",
+        "comfy_goods_name",
+        "comfy_brand",
+        "comfy_category",
+        "comfy_price",
+    ];
+
     private string $order_number = '';
     private string $vendor_code = '';
 
@@ -69,6 +77,10 @@ class Update extends RootRequest
 
     public function isThisField(string $fieldName): bool {
         return $this->fieldName === $fieldName;
+    }
+
+    public function isComfyField(): bool {
+        return in_array($this->fieldName, self::COMFY_FIELD);
     }
 
     public function forUpdate(): array {

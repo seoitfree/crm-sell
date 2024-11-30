@@ -45,8 +45,8 @@ class OrdersRepository implements OrdersRepositoryInterface
         return "SELECT o.id,
                    o.amount_in_order as amount_in_order,
                    o.amount_in_order_paid as amount_in_order_paid,
-                   o.sell_price as sell_price,
-                   o.cost as cost,
+                   CAST(o.sell_price AS DECIMAL(10, 2)) as sell_price,
+                   CAST(o.cost AS DECIMAL(10, 2)) as cost,
                    IFNULL(o.date_check, '') as date_check,
                    o.created_at as order_date,
                    o.order_number as order_number,
@@ -56,7 +56,8 @@ class OrdersRepository implements OrdersRepositoryInterface
                    o.comment as comment,
                    o.comfy_code as comfy_code,
                    o.comfy_goods_name as comfy_goods_name,
-                   o.comfy_brand as comfy_brand,
+                   IFNULL(o.comfy_brand, '') as comfy_brand_id,
+                   IFNULL(b.name, '') as comfy_brand,
                    o.comfy_category as comfy_category,
                    o.comfy_price as comfy_price,
                    o.created_at,
@@ -67,6 +68,7 @@ class OrdersRepository implements OrdersRepositoryInterface
                    o.defect as defect_alias,
                    p.id as provider_start_id,
                    p.name as provider_start,
+                   p.type as provider_type,
                    IFNULL(shipments.shipments_amount, 0) as shipments_amount,
                    IF(shipments.shipments_amount > 0, o.amount_in_order_paid - shipments.shipments_amount, o.amount_in_order_paid) as remainder,
                    o.comfy_price - o.cost as comfy_price_cost
@@ -79,6 +81,8 @@ class OrdersRepository implements OrdersRepositoryInterface
                    ON s.alias = o.status
                 LEFT JOIN defects d
                    ON d.alias = o.defect
+                LEFT JOIN brands b
+                   ON b.id = o.comfy_brand
                 LEFT JOIN providers p
                    ON p.id = o.provider_start
                 LEFT JOIN (
@@ -112,8 +116,8 @@ class OrdersRepository implements OrdersRepositoryInterface
 
             $results = DB::select($sql, $params["bindings"]);
 
-            $queries = DB::getQueryLog();
-            $lastQuery = end($queries);
+//            $queries = DB::getQueryLog();
+//            $lastQuery = end($queries);
 
         } catch (QueryException $e) {
             Log::error($e->getMessage() . $e->getTraceAsString());

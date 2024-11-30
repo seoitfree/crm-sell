@@ -112,7 +112,7 @@
                             :entityId="item.id"
                             :max="50"
                             :urlEdit="`order`"
-                            :required="true"
+                            :required="item.provider_type === comfyProviderComputed"
                             @update="updateInline"
             />
         </td>
@@ -122,18 +122,16 @@
                             :entityId="item.id"
                             :max="150"
                             :urlEdit="`order`"
-                            :required="true"
+                            :required="item.provider_type === comfyProviderComputed"
                             @update="updateInline"
             />
         </td>
         <td class="cell">
-            <TextInlineEdit :value="item.comfy_brand"
-                            :field="`comfy_brand`"
-                            :entityId="item.id"
-                            :max="50"
-                            :urlEdit="`order`"
-                            :required="true"
-                            @update="updateInline"
+            <ComfyBrandEdit
+                :value="item.comfy_brand"
+                :selected="item.comfy_brand_id"
+                :entityId="item.id"
+                @update="updateOption"
             />
         </td>
         <td class="cell">
@@ -142,7 +140,7 @@
                             :entityId="item.id"
                             :max="100"
                             :urlEdit="`order`"
-                            :required="true"
+                            :required="item.provider_type === comfyProviderComputed"
                             @update="updateInline"
             />
         </td>
@@ -170,6 +168,7 @@ import {defineComponent, defineAsyncComponent, PropType} from "vue";
 import {InlineEdit, InlineOptionEdit} from "./InlineEdit/Types/InlineEdit";
 import {OrderType} from "./Type/OrderType";
 import {getLocalDateTime} from "../../../../../common/helpers/DateTime";
+import {ProvidersEnum} from "@/js/src/modules/Admin/pages/Providers/enum/ProvidersEnum";
 
 const TextInlineEdit = defineAsyncComponent(() => import('@/js/src/modules/Orders/pages/List/components/InlineEdit/TextInlineEdit.vue'));
 const TextAreaInlineEdit = defineAsyncComponent(() => import('@/js/src/modules/Orders/pages/List/components/InlineEdit/TextAreaInlineEdit.vue'));
@@ -179,7 +178,7 @@ const StatusInlineEdit = defineAsyncComponent(() => import('@/js/src/modules/Ord
 const ProviderInlineEdit = defineAsyncComponent(() => import('@/js/src/modules/Orders/pages/List/components/InlineEdit/ProviderInlineEdit.vue'));
 const DefectInlineEdit = defineAsyncComponent(() => import('@/js/src/modules/Orders/pages/List/components/InlineEdit/DefectInlineEdit.vue'));
 const DateInlineEdite = defineAsyncComponent(() => import('@/js/src/modules/Orders/pages/List/components/InlineEdit/DateInlineEdite.vue'));
-
+const ComfyBrandEdit = defineAsyncComponent(() => import("@/js/src/modules/Orders/pages/List/components/InlineEdit/ComfyBrandEdit.vue"));
 
 export default defineComponent({
     name: "TableRow",
@@ -191,7 +190,8 @@ export default defineComponent({
         StatusInlineEdit,
         ProviderInlineEdit,
         DefectInlineEdit,
-        DateInlineEdite
+        DateInlineEdite,
+        ComfyBrandEdit,
     },
     props: {
         value: {
@@ -203,6 +203,11 @@ export default defineComponent({
         return {
             item: {} as OrderType
         };
+    },
+    computed: {
+        comfyProviderComputed() {
+            return ProvidersEnum.COMFY;
+        }
     },
     created() {
         this.item = this.value;
@@ -226,11 +231,15 @@ export default defineComponent({
         },
         updateOption(dto: InlineOptionEdit): void {
             this.item[dto.field] = dto.label;
+            if (dto.field === 'comfy_brand') {
+                this.item[`${dto.field}_id`] = dto.value;
+                return;
+            }
             if (dto.field === 'defect') {
                 this.item[`${dto.field}_id`] = dto.value;
-            } else {
-                this.item[`${dto.field}_alias`] = dto.value;
+                return;
             }
+            this.item[`${dto.field}_alias`] = dto.value;
         }
     }
 });

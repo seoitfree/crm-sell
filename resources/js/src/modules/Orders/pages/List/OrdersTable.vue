@@ -139,7 +139,6 @@ export default defineComponent({
     methods: {
         clickSort(sortData: SortData) {
             this.sortData = sortData;
-            console.log()
             this.$emit("clickSort", this.sortData);
         },
         refreshRecords(page: number): void {

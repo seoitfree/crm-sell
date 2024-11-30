@@ -1,3 +1,4 @@
+
 <template>
     <div>
         <div :class="$style.container" style="">
@@ -5,24 +6,29 @@
             <EditIcon v-if="edit === false" @click="() => edit = true"/>
         </div>
 
-        <SaveIcon @click="save()" v-if="edit === true"/>
+        <SaveIcon v-if="edit === true" @click="save()"/>
         <CancelIcon v-if="edit === true" @click="cancel()"/>
 
-        <template v-if="edit">
-            <div class="form-group row">
-                <div class="form-group">
-                    <input name="value" type="number" min="0" class="form-control" v-model="form.value">
-                    <span v-if="validation.value !== ''" role="alert" class="text-danger" >{{ validation.value }}</span>
-                </div>
+        <div v-if="edit" class="form-group row">
+            <div class="form-group">
+                <input name="comfyBrand" class="form-control" type="text" v-model="comfyBrandText" @input="searchByBrandName">
+                <template v-if="brandsNameList.length > 0">
+                    <select class="form-select" v-model="form.comfyBrand" size="5">
+                        <template v-for="item in brandsNameList">
+                            <option :value="item.key">{{ item.value }}</option>
+                        </template>
+                    </select>
+                </template>
             </div>
-        </template>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
 import {defineAsyncComponent, defineComponent} from "vue";
-import * as yup from "yup";
-import {InlineEdit} from "./Types/InlineEdit";
+import axios from "axios";
+import {Option} from "../../../../../../common/Types/Option";
+import {InlineOptionEdit} from "./Types/InlineEdit";
 import {$http, ServerResponseId} from "../../../../../../api/$http";
 import {FormType} from "./Types/FormType";
 import {ResponseStatusEnum} from "../../../../../../api/enum/ResponseStatusEnum";
@@ -32,21 +38,17 @@ const SaveIcon = defineAsyncComponent(() => import("@/js/src/common/components/i
 const CancelIcon = defineAsyncComponent(() => import("@/js/src/common/components/icons/OrdersTableIcons/CancelIcon.vue"));
 
 export default defineComponent({
-    name: "IntegerInlineEdit",
+    name: "ComfyBrandEdit",
     props: {
         value: {
-            type: Number,
+            type: String,
             required: true,
         },
-        field: {
+        selected: {
             type: String,
             required: true,
         },
         entityId: {
-            type: String,
-            required: true,
-        },
-        urlEdit: {
             type: String,
             required: true,
         },
@@ -60,17 +62,18 @@ export default defineComponent({
         return {
             isLoading: false,
             edit: false,
+            brandsNameList: [],
+            comfyBrandText: '',
             form: {
                 entityId: '',
-                field: '',
+                field: 'comfy_brand',
                 value: '',
             } as FormType,
-            validation: {}
+            providerOptions: [] as Option[],
         }
     },
-    created() {
-        this.form.value = this.value;
-        this.form.field = this.field;
+    async created() {
+        this.form.value = this.selected;
         this.form.entityId = this.entityId;
     },
     methods: {
@@ -78,53 +81,47 @@ export default defineComponent({
             this.edit = false;
         },
         async save() {
-            const schema = yup.object().shape({
-                value: yup.number()
-                    .transform((value) => (isNaN(value) ? undefined : value))
-                    .required('Поле обзательное')
-                    .positive('Поле должно быть больше 0')
-                    .test('is-decimal', 'Должно иметь два знака после запятой', (value) => {
-                        return (value) ? /^\d+(\.\d{1,2})?$/.test(value.toString()) : true;
-                    })
-            });
-            schema.validate(this.form, { abortEarly: false })
-                .then(valid => this.update())
-                .catch(errors => {
-                    const errorsObject = {};
-                    errors.inner.forEach(err => {
-                        errorsObject[err.path] = err.message;
-                    });
-                    this.validation = errorsObject;
-                });
+            this.update();
         },
-        async update(): void {
+        update(): void {
             this.isLoading = true;
-            $http.patch<FormType, ServerResponseId>(this.urlEdit, this.form)
+            $http.patch<FormType, ServerResponseId>('order', this.form)
                 .then((response) => {
-                    if (response.status === ResponseStatusEnum.VALIDATE_ERROR) {
-                        response.errors.forEach((item) => {
-                            this.validation[item.field] = item.message;
-                        })
-                        this.isLoading = false;
-                        return;
-                    }
                     if (response.status !== ResponseStatusEnum.STATUS_OK) {
                         alert(response.errors[0]);
                         this.isLoading = false;
                         return;
                     }
                     this.edit = false;
+                    const item = this.brandsNameList.find(item => item.key === this.form.value);
                     this.$emit('update', {
                         value: String(this.form.value),
+                        label: item.value,
                         entityId: String(this.form.entityId),
                         field: this.form.field,
-                    } as InlineEdit);
+                    } as InlineOptionEdit);
                 }).catch((error) => {
                     console.error(error);
                     alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
                     this.isLoading = false;
-            });
-        }
+                });
+        },
+        searchByBrandName(event) {
+            clearTimeout(this.inputTimerBrandName);
+            this.inputTimerBrandName = setTimeout(() => {
+                if (event.target.value !== '') {
+                    axios.get('/api/v1/brands/' + event.target.value).then((response) => {
+                        if (response.status !== 200) {
+                            throw Error("Error");
+                        }
+                        this.brandsNameList = response.data.data.records;
+                    }).catch((error) => {
+                        console.error(error);
+                        alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
+                    })
+                }
+            }, 500);
+        },
     }
 });
 </script>

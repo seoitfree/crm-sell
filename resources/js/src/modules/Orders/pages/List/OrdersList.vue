@@ -124,7 +124,12 @@ export default defineComponent({
                 if (response.status === 200) {
                     const result = response.data.data;
                     this.pagination = result.pagination;
-                    this.records = result.records;
+                    this.records = result.records.map((item: OrderType) => {
+                        item.cost = parseFloat(item.cost);
+                        item.sell_price = parseFloat(item.sell_price);
+                        item.comfy_price = parseFloat(item.comfy_price);
+                        return item;
+                    });
                 } else {
                     alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
                 }

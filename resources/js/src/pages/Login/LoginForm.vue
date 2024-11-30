@@ -34,7 +34,7 @@
             <button type="submit" class="btn app-btn-primary w-100 theme-btn mx-auto" @click="onSubmit">Log In</button>
         </div>
         <button v-if="processing" class="btn btn-primary text-center" type="button" disabled>
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span class="spinner-border spinner-border-sm" role="status"></span>
             <span class="visually-hidden">Loading...</span>
         </button>
     </form>
