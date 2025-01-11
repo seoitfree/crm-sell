@@ -66,7 +66,7 @@
                         <div class="form-group row">
                             <div class="form-group col-md-6">
                                 <label>Постачальник</label>
-                                <select class="form-select" name="value" v-model="filter.provider_start">
+                                <select class="form-select" name="provider_start" v-model="filter.provider_start">
                                     <template v-for="item in providerOptions">
                                         <option :selected="item.key === filter.provider_start" :value="item.key">{{ item.value }}</option>
                                     </template>
@@ -75,7 +75,7 @@
 
                             <div class="form-group col-md-6">
                                 <label>Списаний</label>
-                                <select class="form-select" name="value" v-model="filter.defect">
+                                <select class="form-select" name="defect" v-model="filter.defect">
                                     <template v-for="item in defectsOptions">
                                         <option :selected="item.key === filter.defect" :value="item.key">{{ item.value }}</option>
                                     </template>
@@ -85,13 +85,13 @@
 
                         <div class="form-group row">
                             <div class="form-group col-md-6">
-                                <label for="vendor_code">Коментар</label>
-                                <input name="vendor_code" type="text" class="form-control" v-model="filter.comment">
+                                <label for="comment">Коментар</label>
+                                <input name="comment" type="text" class="form-control" v-model="filter.comment">
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label for="goods_name">№ Замовлення</label>
-                                <input name="goods_name" type="text" class="form-control" v-model="filter.order_number">
+                                <label for="order_number">№ Замовлення</label>
+                                <input name="order_number" type="text" class="form-control" v-model="filter.order_number">
                             </div>
                         </div>
 

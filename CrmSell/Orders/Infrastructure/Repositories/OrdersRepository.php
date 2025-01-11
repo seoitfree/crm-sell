@@ -105,20 +105,17 @@ class OrdersRepository implements OrdersRepositoryInterface
         $where = $where === '' ? $where : " WHERE $where ";
 
         try {
-            DB::enableQueryLog();
+            //DB::enableQueryLog();
             $sql = "
                 SELECT t.*
                 FROM ({$this->getQuerySQL()} $where) as t
                 ORDER BY {$dto->getSortField()} {$dto->getSortDir()}
                 LIMIT {$dto->getPagination()->getLimit()} OFFSET {$dto->getPagination()->getOffset()}
             ";
-
-
             $results = DB::select($sql, $params["bindings"]);
 
-//            $queries = DB::getQueryLog();
-//            $lastQuery = end($queries);
-
+            //$queries = DB::getQueryLog();
+            //$lastQuery = end($queries);
         } catch (QueryException $e) {
             Log::error($e->getMessage() . $e->getTraceAsString());
             throw new \Exception("OrdersRepository::getList() error.");
@@ -155,11 +152,11 @@ class OrdersRepository implements OrdersRepositoryInterface
             $filter["bindings"]["date_check_to"] = $params["date_check_to"];
         }
         if (!empty($params["vendor_code"])) {
-            $filter["condition"][] = " o.vendor_code = :vendor_code ";
+            $filter["condition"][] = " g.vendor_code = :vendor_code ";
             $filter["bindings"]["vendor_code"] = $params["vendor_code"];
         }
         if (!empty($params["goods_name"])) {
-            $filter["condition"][] = " o.goods_name LIKE :goods_name ";
+            $filter["condition"][] = " g.goods_name LIKE :goods_name ";
             $filter["bindings"]["goods_name"] = "%{$params["goods_name"]}%";
         }
         if (!empty($params["status"]) && !in_array(self::FILTER_ALL, $params["status"])) {
@@ -180,6 +177,10 @@ class OrdersRepository implements OrdersRepositoryInterface
         if (!empty($params["comment"])) {
             $filter["condition"][] = " o.comment LIKE :comment ";
             $filter["bindings"]["comment"] = "%{$params["comment"]}%";
+        }
+        if (!empty($params["order_number"])) {
+            $filter["condition"][] = " o.order_number = :order_number ";
+            $filter["bindings"]["order_number"] = $params["order_number"];
         }
 
         return $filter;
