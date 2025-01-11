@@ -1,7 +1,7 @@
 <template>
     <div>
         <div :class="$style.container" style="">
-            <span v-if="edit === false">{{ getLocalDateTime(value) }}</span>
+            <span v-if="edit === false">{{ getLocalDate(value) }}</span>
             <EditIcon v-if="edit === false" @click="() => edit = true"/>
         </div>
 
@@ -23,7 +23,7 @@
 import {defineAsyncComponent, defineComponent} from "vue";
 import * as yup from "yup";
 import {InlineEdit} from "./Types/InlineEdit";
-import {getLocalDateTime} from "../../../../../../common/helpers/DateTime";
+import {getLocalDate} from "../../../../../../common/helpers/DateTime";
 import {$http, ServerResponseId} from "../../../../../../api/$http";
 import {FormType} from "./Types/FormType";
 import {ResponseStatusEnum} from "../../../../../../api/enum/ResponseStatusEnum";
@@ -75,8 +75,8 @@ export default defineComponent({
         this.form.entityId = this.entityId;
     },
     methods: {
-        getLocalDateTime(date: string): string {
-            return getLocalDateTime(date);
+        getLocalDate(date: string): string {
+            return getLocalDate(date);
         },
         cancel(): void {
             this.edit = false;
@@ -95,10 +95,11 @@ export default defineComponent({
                     this.validation = errorsObject;
                 });
         },
-        async update(): void {
+        async update(): Promise<void> {
             this.isLoading = true;
             $http.patch<FormType, ServerResponseId>(this.urlEdit, this.form)
                 .then((response) => {
+                    console.log(response);
                     if (response.status === ResponseStatusEnum.VALIDATE_ERROR) {
                         response.errors.forEach((item) => {
                             this.validation[item.field] = item.message;

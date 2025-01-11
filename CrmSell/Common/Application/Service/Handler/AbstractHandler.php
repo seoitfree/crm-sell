@@ -85,6 +85,7 @@ abstract class AbstractHandler
         $isHttpCode = array_key_exists($e->getCode(), Response::$statusTexts);
 
         return $this->resultHandler
+            ->setStatus(ResponseCodeErrors::SERVER_ERROR)
             ->setStatusCode($isHttpCode ? $e->getCode() : 500)
             ->setErrors([$isHttpCode ? $e->getMessage() : "Problem on server. Try next time."]);
     }

@@ -22,8 +22,8 @@ class AddToAudit
         $dateCreated = Carbon::now()->utc()->format('Y-m-d H:i:s');
 
         foreach ($auditParams as $fieldName => $value) {
-            $before = $entity->getAttribute($fieldName);
-            $after = $entity->getOriginal($fieldName);
+            $before = $this->getBefore($entity, $fieldName);
+            $after = $this->getAfter($entity, $fieldName);
 
             if ($before !== $after) {
                 $type = $value["type"];
@@ -45,6 +45,30 @@ class AddToAudit
         foreach (array_chunk($toInsertData, 10) as $chunk) {
             DB::table("{$entity->getTable()}_audit")->insert($chunk);
         }
+    }
+
+    /**
+     * @param Model $entity
+     * @param string $fieldName
+     * @return string
+     */
+    private function getBefore(Model $entity, string $fieldName): string
+    {
+        $before = $entity->getAttribute($fieldName);
+
+        return empty($before) ? '' : $before;
+    }
+
+    /**
+     * @param Model $entity
+     * @param string $fieldName
+     * @return string
+     */
+    private function getAfter(Model $entity, string $fieldName): string
+    {
+        $after = $entity->getOriginal($fieldName);
+
+        return empty($after) ? '' : $after;
     }
     //id, parent_id, date_created, created_by, field_name, data_type, before_value_string, before_value_text, after_value_string, after_value_text
 }

@@ -23,7 +23,7 @@ return new class extends Migration
             $table->integer('amount_in_order'); //К-ть в замовленні
             $table->integer('amount_in_order_paid');
             $table->decimal('sell_price', 10,2);
-            $table->decimal('cost', 10,2)->default(0.0);
+            $table->decimal('cost', 10,2)->default(0.00);
 
 
             $table->date('date_check')->nullable();

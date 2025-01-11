@@ -136,19 +136,19 @@ class OrdersRepository implements OrdersRepositoryInterface
         ];
 
         if (!empty($params["order_date_from"])) {
-            $filter["condition"][] = " o.created_at >= :order_date_from ";
+            $filter["condition"][] = " DATE(o.created_at) >= :order_date_from ";
             $filter["bindings"]["order_date_from"] = $params["order_date_from"];
         }
         if (!empty($params["order_date_to"])) {
-            $filter["condition"][] = " o.created_at <= :order_date_to ";
+            $filter["condition"][] = " DATE(o.created_at) <= :order_date_to ";
             $filter["bindings"]["order_date_to"] = $params["order_date_to"];
         }
         if (!empty($params["date_check_from"])) {
-            $filter["condition"][] = " o.date_check >= :date_check_from ";
+            $filter["condition"][] = " DATE(o.date_check) >= :date_check_from ";
             $filter["bindings"]["date_check_from"] = $params["date_check_from"];
         }
         if (!empty($params["date_check_to"])) {
-            $filter["condition"][] = " o.created_at <= :date_check_to ";
+            $filter["condition"][] = " DATE(o.created_at) <= :date_check_to ";
             $filter["bindings"]["date_check_to"] = $params["date_check_to"];
         }
         if (!empty($params["vendor_code"])) {

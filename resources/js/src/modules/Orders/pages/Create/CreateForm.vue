@@ -177,7 +177,7 @@ export default defineComponent({
                 vendorCodeValue: '',
                 goodsName: '',
                 goodsNameValue: '',
-                sellPrice: '',
+                sellPrice: 0,
                 managerComment: '',
                 providerStart: '',
                 amountInOrder: 0,
