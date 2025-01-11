@@ -167,7 +167,7 @@ class OrdersRepository implements OrdersRepositoryInterface
             $filter["bindings"]["status"] = "{$params["status"]}";
         }
         if (!empty($params["remainder"])) {
-            $filter["bindings"]["remainder"] = " IF(shipments.shipments_amount > 0, o.amount_in_order_paid - shipments.shipments_amount, o.amount_in_order_paid) > 0 ";
+            $filter["condition"]["remainder"] = " IF(shipments.shipments_amount > 0, o.amount_in_order_paid - shipments.shipments_amount, o.amount_in_order_paid) > 0 ";
         }
         if (!empty($params["provider_start"]) && $params["provider_start"] !== self::FILTER_ALL) {
             $filter["condition"][] = " o.provider_start = :provider_start ";
