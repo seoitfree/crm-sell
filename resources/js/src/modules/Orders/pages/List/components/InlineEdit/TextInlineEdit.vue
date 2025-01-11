@@ -12,7 +12,7 @@
             <div class="form-group row">
                 <div class="form-group">
                     <input name="value" type="text" class="form-control" v-model="form.value">
-                    <span v-if="validation.value !== ''" role="alert" class="text-danger" >{{ validation.value }}</span>
+                    <span v-if="'value' in validation" role="alert" class="text-danger" >{{ validation['value'] }}</span>
                 </div>
             </div>
         </template>
@@ -77,7 +77,7 @@ export default defineComponent({
                 field: '',
                 value: '',
             } as FormType,
-            validation: {}
+            validation: {} as Record<string, string>
         }
     },
     created() {

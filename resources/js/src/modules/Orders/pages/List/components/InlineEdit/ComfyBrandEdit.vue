@@ -13,7 +13,7 @@
             <div class="form-group">
                 <input name="comfyBrand" class="form-control" type="text" v-model="comfyBrandText" @input="searchByBrandName">
                 <template v-if="brandsNameList.length > 0">
-                    <select class="form-select" v-model="form.comfyBrand" size="5">
+                    <select class="form-select" v-model="form.value" size="5">
                         <template v-for="item in brandsNameList">
                             <option :value="item.key">{{ item.value }}</option>
                         </template>

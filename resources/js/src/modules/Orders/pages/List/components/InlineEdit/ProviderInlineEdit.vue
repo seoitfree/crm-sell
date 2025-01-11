@@ -2,7 +2,7 @@
     <div>
         <div :class="$style.container" style="">
             <span v-if="edit === false">{{ value }}</span>
-            <EditIcon v-if="edit === false" @click="() => edit = true"/>
+            <EditIcon v-if="edit === false" @click="() => editButton()"/>
         </div>
 
         <SaveIcon @click="save()" v-if="edit === true"/>
@@ -76,7 +76,7 @@ export default defineComponent({
         cancel(): void {
             this.edit = false;
         },
-        async editButton(): void {
+        async editButton(): Promise<void> {
             this.isLoading = true;
             try {
                 await this.getStatusEnum();
