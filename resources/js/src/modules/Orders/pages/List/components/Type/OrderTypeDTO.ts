@@ -1,5 +1,5 @@
 
-export interface OrderType {
+export interface OrderTypeDTO {
     id: string;
     manager: string;
     order_date: string;
@@ -7,11 +7,11 @@ export interface OrderType {
     vendor_code: string;
     goods_name: string;
     manager_comment: string;
-    sell_price: number;
+    sell_price: string;
     status: string;
     status_alias: string;
     amount_in_order_paid: number;
-    cost: number;
+    cost: string;
     shipments_amount: number;
     remainder: number;
     provider_start: string;
@@ -26,6 +26,6 @@ export interface OrderType {
     comfy_brand_id: string;
     comfy_brand: string;
     comfy_category: string;
-    comfy_price: number;
-    comfy_price_cost: number;
+    comfy_price: string;
+    comfy_price_cost: string;
 }

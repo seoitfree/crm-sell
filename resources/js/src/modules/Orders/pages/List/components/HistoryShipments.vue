@@ -90,7 +90,7 @@ export default defineComponent({
             sortData: {
                 sortField: 'created_at',
                 sortDir: 'desc',
-            } as SortData,
+            },
             filter: {},
             records: [] as HistoryShipmentsType[],
         }

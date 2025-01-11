@@ -64,6 +64,7 @@ import axios from "axios";
 import {OrderType} from "./components/Type/OrderType";
 import {SortData} from "../../../../common/components/Table/Type/SortData";
 import pagination from "../../../../common/components/Table/mixins/Pagination";
+import {OrderTypeDTO} from "./components/Type/OrderTypeDTO";
 
 const Header = defineAsyncComponent(() => import('@/js/src/common/components/Header/Header.vue'));
 const Footer = defineAsyncComponent(() => import('@/js/src/common/components/Footer/Footer.vue'));
@@ -102,7 +103,7 @@ export default defineComponent({
             sortData: {
                 sortField: 'created_at',
                 sortDir: 'desc',
-            } as SortData,
+            },
             records: [] as OrderType[],
         };
     },
@@ -124,11 +125,8 @@ export default defineComponent({
                 if (response.status === 200) {
                     const result = response.data.data;
                     this.pagination = result.pagination;
-                    this.records = result.records.map((item: OrderType) => {
-                        item.cost = parseFloat(item.cost);
-                        item.sell_price = parseFloat(item.sell_price);
-                        item.comfy_price = parseFloat(item.comfy_price);
-                        return item;
+                    this.records = result.records.map((item: OrderTypeDTO) => {
+                        return this.convert(item);
                     });
                 } else {
                     alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
@@ -137,6 +135,38 @@ export default defineComponent({
             }).catch(() => {
                 this.isLoading = false;
             });
+        },
+        convert(item: OrderTypeDTO): OrderType {
+            return {
+                id: item.id,
+                manager: item.manager,
+                order_date: item.order_date,
+                order_number: item.order_number,
+                vendor_code: item.vendor_code,
+                goods_name: item.goods_name,
+                manager_comment: item.manager_comment,
+                sell_price: parseFloat(item.sell_price),
+                status: item.status,
+                status_alias: item.status_alias,
+                amount_in_order_paid: item.amount_in_order_paid,
+                cost: parseFloat(item.cost),
+                shipments_amount: item.shipments_amount,
+                remainder: item.remainder,
+                provider_start: item.provider_start,
+                provider_start_id: item.provider_start_id,
+                provider_type: item.provider_type,
+                date_check: item.date_check,
+                comment: item.comment,
+                defect: item.defect,
+                defect_alias: item.defect_alias,
+                comfy_code: item.comfy_code,
+                comfy_goods_name: item.comfy_goods_name,
+                comfy_brand_id: item.comfy_brand_id,
+                comfy_brand: item. comfy_brand,
+                comfy_category: item.comfy_category,
+                comfy_price: parseFloat(item.comfy_price),
+                comfy_price_cost: parseFloat(item.comfy_price_cost),
+            } as OrderType;
         },
         clickSort(sortData: SortData): void {
             this.sortData = sortData;
