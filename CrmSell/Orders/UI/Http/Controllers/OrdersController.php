@@ -2,11 +2,14 @@
 
 namespace CrmSell\Orders\UI\Http\Controllers;
 
+use CrmSell\Common\Application\Service\Enum\ResponseCodeErrors;
 use CrmSell\Common\UI\Traits\ResponseTrait;
 use CrmSell\Orders\Application\Orders\Create\CreateHandler;
 use CrmSell\Orders\Application\Orders\Create\Request\Create;
 use CrmSell\Orders\Application\Orders\GetList\GetListHandler;
 use CrmSell\Orders\Application\Orders\GetList\Request\GetList;
+use CrmSell\Orders\Application\Orders\OrdersCSV\OrdersCSVHandler;
+use CrmSell\Orders\Application\Orders\OrdersCSV\Request\OrdersCSV;
 use CrmSell\Orders\Application\Orders\Update\Request\Update;
 use CrmSell\Orders\Application\Orders\Update\UpdateHandler;
 use CrmSell\Orders\Application\Shipments\AddShipment\AddShipmentHandler;
@@ -107,5 +110,27 @@ class OrdersController
         $result = $handler->handle(new Update($data));
 
         return $this->getResponse($result);
+    }
+
+    /**
+     * @param Request $request
+     * @param OrdersCSVHandler $handler
+     * @return JsonResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function generateFileOrdersCSV(Request $request, OrdersCSVHandler $handler): JsonResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse
+    {
+        $user = Auth::user();
+        if (empty($user) || $user->isNotActive()) {
+            return $this->getErrorsResponse(["Access is denied."], 403);
+        }
+
+        $resultHandler = $handler->handle(new OrdersCSV($request->toArray()));
+        if ($resultHandler->hasErrors()) {
+            return $this->getErrorsResponse($resultHandler->getErrors());
+        }
+
+        return response()
+            ->download($resultHandler->getResult()['file_path'])
+            ->deleteFileAfterSend(true);
     }
 }

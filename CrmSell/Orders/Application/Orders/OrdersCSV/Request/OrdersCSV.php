@@ -1,11 +1,13 @@
 <?php
 
-namespace CrmSell\Orders\Application\Orders\GetList\Request;
-
+namespace CrmSell\Orders\Application\Orders\OrdersCSV\Request;
 
 use CrmSell\Common\Helpers\Traits\PropertyTrait;
 
-class GetList extends \CrmSell\Common\Application\Service\Request\GetList
+
+use CrmSell\Common\Application\Service\Request\RootRequest;
+
+class OrdersCSV extends RootRequest
 {
     use PropertyTrait;
 
@@ -30,9 +32,8 @@ class GetList extends \CrmSell\Common\Application\Service\Request\GetList
      */
     public function __construct(array $request)
     {
-        parent::__construct($request);
         if (!empty($request['filterParams'])) {// TODO think about refactoting
-            $this->mapField($request['filterParams'], ["pageNumber", "sortField", "sortDir", "status"]);
+            $this->mapField($request['filterParams'], ["status"]);
         }
         $this->status = !empty($request["status"]) ? $request["status"] : [];
     }
@@ -56,10 +57,5 @@ class GetList extends \CrmSell\Common\Application\Service\Request\GetList
             "comment" => $this->comment,
             "order_number" => $this->order_number,
         ];
-    }
-
-    protected function getSortFieldList(): array
-    {
-        return parent::getSortFieldList();
     }
 }

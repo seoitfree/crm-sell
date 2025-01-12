@@ -4,6 +4,7 @@ namespace CrmSell\Orders\Infrastructure\Repositories;
 
 
 use CrmSell\Common\Application\Service\DTO\GetListDTO;
+use CrmSell\Orders\Application\Orders\OrdersCSV\Request\OrdersCSV;
 use CrmSell\Orders\Infrastructure\Repositories\Interfaces\OrdersRepositoryInterface;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
@@ -184,5 +185,36 @@ class OrdersRepository implements OrdersRepositoryInterface
         }
 
         return $filter;
+    }
+
+
+    /**
+     * @param OrdersCSV $dto
+     * @return \Generator
+     * @throws \Exception
+     */
+    public function getListOrdersCSV(OrdersCSV $dto): \Generator
+    {
+
+        $params = $this->getFilter($dto->getFilter());
+        $where = implode("AND", array_filter($params["condition"], fn($item) => $item !== ''));
+        $where = $where === '' ? $where : " WHERE $where ";
+
+        try {
+            $sql = "
+                SELECT t.*
+                FROM ({$this->getQuerySQL()} $where) as t
+            ";
+
+            foreach (DB::cursor($sql, $params["bindings"]) as $row) {
+                yield (array) $row; // Преобразуем в массив, если нужно
+            }
+
+            //$queries = DB::getQueryLog();
+            //$lastQuery = end($queries);
+        } catch (QueryException $e) {
+            Log::error($e->getMessage() . $e->getTraceAsString());
+            throw new \Exception("OrdersRepository::getListOrdersCSV error.");
+        }
     }
 }

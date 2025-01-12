@@ -21,6 +21,10 @@
                                 <div class="col-auto">
                                     <a class="btn app-btn-secondary" @click="switchFilter()">Filter</a>
                                 </div>
+
+                                <div class="col-auto">
+                                    <a class="btn app-btn-secondary" @click="switchCSV()">CSV</a>
+                                </div>
                             </div>
                         </div><!--//table-utilities-->
                     </div>
@@ -181,6 +185,9 @@ export default defineComponent({
         },
         switchFilter(): void {
             this.isFilter = !this.isFilter;
+        },
+        switchCSV() {
+
         },
         initFilter(filterData: FilterType): void {
             this.filterParams = filterData;
