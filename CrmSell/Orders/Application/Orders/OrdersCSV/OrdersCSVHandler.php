@@ -36,7 +36,7 @@ class OrdersCSVHandler extends AbstractHandler
             $fileName = 'report_before_hotline' . time() . '.csv';
             Storage::disk('local')->put("orders/$fileName", '');
 
-            $csv = Writer::createFromPath(storage_path('app/docs/') . $fileName , 'w+');
+            $csv = Writer::createFromPath(storage_path('app/orders/') . $fileName , 'w+');
 
             $this->createFile($command, $csv);
 
@@ -45,7 +45,7 @@ class OrdersCSVHandler extends AbstractHandler
                 'file_path' => Storage::disk('local')->path("orders/$fileName"),
             ]);
         } catch (\Exception $e) {
-            Storage::disk('local')->delete("docs/$fileName");
+            Storage::disk('local')->delete("orders/$fileName");
 
             Log::warning($e->getMessage() . " " . $e->getTraceAsString());
 
