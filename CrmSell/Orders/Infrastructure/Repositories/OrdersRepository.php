@@ -152,13 +152,9 @@ class OrdersRepository implements OrdersRepositoryInterface
             $filter["condition"][] = " DATE(o.created_at) <= :date_check_to ";
             $filter["bindings"]["date_check_to"] = $params["date_check_to"];
         }
-        if (!empty($params["vendor_code"])) {
-            $filter["condition"][] = " g.vendor_code = :vendor_code ";
-            $filter["bindings"]["vendor_code"] = $params["vendor_code"];
-        }
-        if (!empty($params["goods_name"])) {
-            $filter["condition"][] = " g.goods_name LIKE :goods_name ";
-            $filter["bindings"]["goods_name"] = "%{$params["goods_name"]}%";
+        if (!empty($params["goods_id"])) {
+            $filter["condition"][] = " o.goods_id = :goods_id ";
+            $filter["bindings"]["goods_id"] = $params["goods_id"];
         }
         if (!empty($params["status"]) && !in_array(self::FILTER_ALL, $params["status"])) {
             list($bindings, $placeholders) = $this->getFilterStatus($params["status"]);

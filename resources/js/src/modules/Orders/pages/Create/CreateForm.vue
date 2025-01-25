@@ -135,7 +135,7 @@
 <script lang="ts">
 import {defineAsyncComponent, defineComponent} from "vue";
 import * as yup from "yup";
-import {Option} from "../../../../common/Types/Option";
+import {Option, OptionGoods} from "../../../../common/Types/Option";
 import axios from "axios";
 import {ProvidersEnum} from "../../../Admin/pages/Providers/enum/ProvidersEnum";
 
@@ -143,12 +143,6 @@ const TextInput = defineAsyncComponent(() => import('@/js/src/common/components/
 const TextAreaInput = defineAsyncComponent(() => import('@/js/src/common/components/EditPage/Fields/TextAreaInput.vue'));
 const SelectFiled = defineAsyncComponent(() => import('@/js/src/common/components/EditPage/Fields/SelectFiled.vue'));
 const NumberInput = defineAsyncComponent(() => import('@/js/src/common/components/EditPage/Fields/NumberInput.vue'));
-
-interface OptionGoods {
-    id: string;
-    vendor_code: string;
-    name: string;
-}
 
 interface OptionProvider extends Option {
     type: string;
@@ -282,9 +276,7 @@ export default defineComponent({
                 const provider = this.providerOptions.find((item: OptionProvider) => {
                     return item.key === value;
                 });
-                this.form.providerType = provider.type;
-                console.log(value);
-                console.log(this.form.providerType);
+                this.form.providerType = provider.type;=
             }
         },
         goodsNameValueComputed: {
@@ -358,6 +350,7 @@ export default defineComponent({
         },
         searchByVendorCode(event) {
             clearTimeout(this.inputTimerVendorCode);
+            this.clearGoods();
             this.inputTimerVendorCode = setTimeout(() => {
                 if (event.target.value !== '') {
                     axios.get('/api/v1/goods/vendor_code/' + event.target.value).then((response) => {
@@ -376,6 +369,7 @@ export default defineComponent({
         },
         searchByGoodsName(event) {
             clearTimeout(this.inputTimerGoodsName);
+            this.clearGoods();
             this.inputTimerGoodsName = setTimeout(() => {
                 if (event.target.value !== '') {
                     axios.get('/api/v1/goods/goods_name/' + event.target.value).then((response) => {
@@ -390,6 +384,10 @@ export default defineComponent({
                     })
                 }
             }, 500);
+        },
+        clearGoods(): void {
+            this.goodsNameList = [];
+            this.vendorCodeList = [];
         },
         searchByBrandName(event) {
             clearTimeout(this.inputTimerBrandName);

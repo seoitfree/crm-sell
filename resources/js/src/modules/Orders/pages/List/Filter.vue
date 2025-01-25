@@ -53,13 +53,26 @@
 
                     <div class="form-group row">
                         <div class="form-group col-md-6">
-                            <label for="vendor_code">Артикул</label>
-                            <input name="vendor_code" type="text" class="form-control" v-model="filter.vendor_code">
+                            <label for="vendorCode">Артикул</label>
+                            <input name="vendorCode" class="form-control" type="text" v-model="filter.vendor_code" @input="searchByVendorCode">
+                            <template v-if="vendorCodeList.length > 0">
+                                <select class="form-select" v-model="vendorCodeValueComputed" size="5">
+                                    <template v-for="item in vendorCodeList">
+                                        <option :value="item.id">{{ item.vendor_code }}</option>
+                                    </template>
+                                </select>
+                            </template>
                         </div>
-
                         <div class="form-group col-md-6">
-                            <label for="goods_name">Товар</label>
-                            <input name="goods_name" type="text" class="form-control" v-model="filter.goods_name">
+                            <label for="=goodsName">Товар</label>
+                            <input name="goodsName" class="form-control" type="text" v-model="filter.goods_name" @input="searchByGoodsName">
+                            <template v-if="goodsNameList.length > 0">
+                                <select class="form-select" v-model="goodsNameValueComputed" size="5">
+                                    <template v-for="item in goodsNameList">
+                                        <option :value="item.id">{{ item.name }}</option>
+                                    </template>
+                                </select>
+                            </template>
                         </div>
                     </div>
 
@@ -98,7 +111,7 @@
                     <div class="form-group row">
                         <div class="form-group col-md-6">
                             <label for="remainder">Залишок</label>
-                            <input type="checkbox" id="remainder" name="deprecated" style="margin-left: 5px;" v-model="filter.remainder" @change="changeDeprecated">
+                            <input type="checkbox" id="remainder" name="deprecated" style="margin-left: 5px;" v-model="filter.remainder">
                         </div>
                     </div>
                 </div>
@@ -122,7 +135,7 @@
 import {defineComponent, PropType} from "vue";
 import {FilterType} from "./Types/FilterType";
 import axios from "axios";
-import {Option} from "../../../../common/Types/Option";
+import {Option, OptionGoods} from "../../../../common/Types/Option";
 
 export default defineComponent({
     name: "Filter",
@@ -140,6 +153,9 @@ export default defineComponent({
                 order_date_to: '',
                 vendor_code: '',
                 goods_name: '',
+                goods_id: '',
+                vendor_code_value: '',
+                goods_name_value: '',
                 defect: '',
                 provider_start: '',
                 manager: '',
@@ -154,46 +170,41 @@ export default defineComponent({
             providerOptions: [] as Option[],
             statusOptions: [] as Option[],
             defectsOptions: [] as Option[],
+            vendorCodeList: [] as OptionGoods[],
+            goodsNameList: [] as OptionGoods[],
+            inputTimerVendorCode: 0,
+            inputTimerGoodsName: 0,
         }
     },
-    created() {
-        this.isLoading = true;
-        this.filter = this.filterParams;
-        const providers = axios.get('/api/v1/providers/all').then((response) => {
-            if (response.status !== 200) {
-                throw Error("Error");
+    computed: {
+        vendorCodeValueComputed: {
+            get() {
+                return this.filter.vendor_code_value;
+            },
+            set(value): void {
+                this.filter.vendor_code_value = value;
+                const goods = this.vendorCodeList.find((item: OptionGoods) => {
+                    return item.id === value;
+                });
+                this.filter.goods_id = goods.id;
+                this.filter.goods_name = goods.name;
+                this.filter.vendor_code = goods.vendor_code;
             }
-            return response.data;
-        });
-        const status = axios.get('/api/v1/status/all').then((response) => {
-            if (response.status !== 200) {
-                throw Error("Error");
+        },
+        goodsNameValueComputed: {
+            get() {
+                return this.filter.goods_name_value;
+            },
+            set(value): void {
+                this.filter.goods_name_value = value;
+                const goods = this.goodsNameList.find((item: OptionGoods) => {
+                    return item.id === value;
+                });
+                this.filter.goods_id = goods.id;
+                this.filter.goods_name = goods.name;
+                this.filter.vendor_code = goods.vendor_code;
             }
-            return response.data;
-        });
-        const defects = axios.get('/api/v1/defects/all').then((response) => {
-            if (response.status !== 200) {
-                throw Error("Error");
-            }
-            return response.data;
-        });
-        const managers = axios.get('/api/v1/users/all').then((response) => {
-            if (response.status !== 200) {
-                throw Error("Error");
-            }
-            return response.data;
-        });
-        Promise.all([managers, defects, providers, status]).then(values => {
-            this.managersOptions = this.addAll(values[0].data);
-            this.defectsOptions = this.addAll(values[1].data);
-            this.providerOptions = this.addAll(values[2].data);
-            this.statusOptions = this.addAll(values[3].data);
-
-            this.isLoading = false;
-        }).catch((e) => {
-            console.error(e);
-            alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
-        });
+        }
     },
     methods: {
         addAll(options: Option[]): Option[] {
@@ -206,8 +217,46 @@ export default defineComponent({
         initFilter(): void {
             this.$emit('initFilter', this.filter);
         },
-        changeDeprecated() {
-            this.form.deprecated = !this.form.deprecated;
+        searchByVendorCode(event) {
+            clearTimeout(this.inputTimerVendorCode);
+            this.clearGoods();
+            this.inputTimerVendorCode = setTimeout(() => {
+                if (event.target.value !== '') {
+                    axios.get('/api/v1/goods/vendor_code/' + event.target.value).then((response) => {
+                        if (response.status !== 200) {
+                            throw Error("Error");
+                        }
+                        this.vendorCodeList = response.data.data.records;
+                        this.goodsNameList = [];
+                    }).catch((error) => {
+                        console.error(error);
+                        alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
+                    })
+                }
+
+            }, 500);
+        },
+        searchByGoodsName(event) {
+            clearTimeout(this.inputTimerGoodsName);
+            this.clearGoods();
+            this.inputTimerGoodsName = setTimeout(() => {
+                if (event.target.value !== '') {
+                    axios.get('/api/v1/goods/goods_name/' + event.target.value).then((response) => {
+                        if (response.status !== 200) {
+                            throw Error("Error");
+                        }
+                        this.goodsNameList = response.data.data.records;
+                        this.vendorCodeList = [];
+                    }).catch((error) => {
+                        console.error(error);
+                        alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
+                    })
+                }
+            }, 500);
+        },
+        clearGoods(): void {
+            this.goodsNameList = [];
+            this.vendorCodeList = [];
         },
         clearFilter(): void {
             this.filter = {
@@ -224,8 +273,35 @@ export default defineComponent({
                 comment: '',
                 remainder: false,
             };
+        },
+        getFilterOptions(): void {
+            const response = ['providers', 'status', 'defects', 'users'].map((item: string) => this.getByUrl(item));
+            Promise.all(response).then(values => {
+                this.managersOptions = this.addAll(values[0].data);
+                this.defectsOptions = this.addAll(values[1].data);
+                this.providerOptions = this.addAll(values[2].data);
+                this.statusOptions = this.addAll(values[3].data);
+
+                this.isLoading = false;
+            }).catch((e) => {
+                console.error(e);
+                alert("Ошбка сервера, перегрузите страницу или обратитесь в тех поддержку.");
+            });
+        },
+        async getByUrl(param: string): Promise<Option[]> {
+            return axios.get(`/api/v1/${param}/all`).then((response) => {
+                if (response.status !== 200) {
+                    throw Error("Error");
+                }
+                return response.data;
+            });
         }
-    }
+    },
+    created() {
+        this.isLoading = true;
+        this.filter = this.filterParams;
+        this.getFilterOptions();
+    },
 });
 </script>
 

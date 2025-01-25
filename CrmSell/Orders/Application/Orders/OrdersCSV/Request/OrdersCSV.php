@@ -15,8 +15,9 @@ class OrdersCSV extends RootRequest
 
     private string $order_date_from = '';
     private string $order_date_to = '';
-    private string $vendor_code = '';
-    private string $goods_name = '';
+    private string $vendor_code_value = '';
+    private string $goods_name_value = '';
+    private string $goods_id = '';
     private string $defect = '';
     private string $provider_start = '';
     private string $manager = '';
@@ -46,8 +47,8 @@ class OrdersCSV extends RootRequest
         return [
             "order_date_from" => $this->order_date_from,
             "order_date_to" => $this->order_date_to,
-            "vendor_code" => $this->vendor_code,
-            "goods_name" => $this->goods_name,
+            "vendor_code" => $this->vendor_code_value,
+            "goods_name" => $this->goods_name_value,
             "defect" => $this->defect,
             "provider_start" => $this->provider_start,
             "manager" => $this->manager,
@@ -57,6 +58,7 @@ class OrdersCSV extends RootRequest
             "comment" => $this->comment,
             "order_number" => $this->order_number,
             "remainder" =>  $this->remainder,
+            "goods_id" =>  $this->goods_id,
         ];
     }
 }
