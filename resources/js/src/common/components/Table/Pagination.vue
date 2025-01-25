@@ -2,11 +2,11 @@
     <nav class="app-pagination">
         <ul class="pagination justify-content-center">
 
-            <li class="page-item disabled" v-if="pagination.pages.current_page !== 1" @click="clickButton(1)">
+            <li class="page-item" v-if="pagination.pages.current_page !== 1" @click="clickButton(1)">
                 <a class="page-link" href="#" tabindex="-1" aria-disabled="true">First</a>
             </li>
 
-            <li class="page-item disabled" v-if="pagination.pages.previous_page" @click="clickButton(pagination.pages.previous_page)">
+            <li class="page-item" v-if="pagination.pages.previous_page" @click="clickButton(pagination.pages.previous_page)">
                 <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
             </li>
 
@@ -41,6 +41,8 @@
             >
                 <a class="page-link" href="#">Last ({{ pagination.pages.last_page }})</a>
             </li>
+
+            <li><a class="page-link disabled" href="#">records: ({{pagination.records.from}} - {{pagination.records.to}} of {{pagination.records.all}})</a></li>
         </ul>
     </nav>
 </template>

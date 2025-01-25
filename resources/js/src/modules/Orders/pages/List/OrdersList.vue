@@ -185,6 +185,7 @@ export default defineComponent({
             } as OrderType;
         },
         clickSort(sortData: SortData): void {
+            this.pagination.pages.current_page = 1;
             this.sortData = sortData;
             this.getData();
         },
