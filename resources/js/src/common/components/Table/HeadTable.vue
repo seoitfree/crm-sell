@@ -5,7 +5,7 @@
                 <th class="cell" :style="[column.sort ? 'cursor: pointer' : '']" @click="sort(column.name)">
                     <div :style="column.hasOwnProperty('width') ? column.width : ``">
                         {{ column.translate }}
-                        <img v-if="column.sort" class="logo-icon me-2"  :src="getIcon(column.sortIcon)" alt="logo">
+                        <img v-if="column.sort" class="logo-icon me-2"  :src="getIcon(column)" alt="logo">
                     </div>
                 </th>
             </template>
@@ -22,7 +22,7 @@ import sort from '@/assets/images/sort/sort.png';
 import sortDown from '@/assets/images/sort/sort-down.png';
 import sortUp from '@/assets/images/sort/sort-up.png';
 
-export default defineComponent({ //C:\Users\Vlad\my-project\crm-sell\public\build
+export default defineComponent({
     name: "HeadTable",
     props: {
         headColumns: {
@@ -52,26 +52,22 @@ export default defineComponent({ //C:\Users\Vlad\my-project\crm-sell\public\buil
             }
         }
     },
-    created() {
-        this.headColumns.map((item) => {
-            if (item.name === this.sortData.sortField) {
-                item.sortIcon = (this.sortData.sortDir === 'asc') ? 'asc' : 'desc'
-            } else {
-                item.sortIcon = 'default';
-            }
-            return item;
-        });
-    },
     methods: {
-        getIcon(icon) {
+        getIcon(item: HeadColumn) {
+            let icon = '';
+            if (item.name === this.sortData.sortField) {
+                icon = (this.sortData.sortDir === 'asc') ? 'asc' : 'desc'
+            } else {
+                icon = 'default';
+            }
             return this.sortIcon[icon];
         },
-        sort(column: string): string {
+        sort(column: string): void {
             const currentColumn = this.headColumns.find((data, index) => data[this.columnDefs.name] === column);
             if (currentColumn.sort === undefined || currentColumn.sort) {
                 let sortDir = 'desc';
                 if (this.sortData.sortField === column) {
-                    sortDir = (this.sortData. sortDir === 'asc') ? 'desc' : 'asc';
+                    sortDir = (this.sortData.sortDir === 'asc') ? 'desc' : 'asc';
                 }
                 const sortData = {
                     sortField: column,

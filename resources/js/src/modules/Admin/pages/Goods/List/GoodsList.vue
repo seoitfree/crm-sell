@@ -34,19 +34,17 @@
 
 <script lang="ts">
 import {defineAsyncComponent, defineComponent} from "vue";
-import {HeadColumn} from "../../../../../common/components/Table/Type/HeadColumn";
-import {SortData} from "../../../../../common/components/Table/Type/SortData";
-import axios from "axios";
-import {getLocalDateTime} from "../../../../../common/helpers/DateTime";
 
 const Header = defineAsyncComponent(() => import('@/js/src/common/components/Header/Header.vue'));
 const GoodsTable = defineAsyncComponent(() => import('@/js/src/modules/Admin/pages/Goods/List/GoodsTable.vue'));
+const Footer = defineAsyncComponent(() => import('@/js/src/common/components/Footer/Footer.vue'));
 
 export default defineComponent({
     name: "GoodsList",
     components: {
         Header,
         GoodsTable,
+        Footer
     },
 });
 </script>

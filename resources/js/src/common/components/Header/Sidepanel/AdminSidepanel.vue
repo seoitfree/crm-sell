@@ -56,7 +56,6 @@ export default defineComponent({
                 {to:"/providers", icon: 'tileIcon', title: 'Постачальники'},
                 {to:`/status/` + StatusEnum.STATUS, icon: 'tileIcon', title: 'Статуси замовлення'},
                 {to:`/status/` + StatusEnum.DEFECT, icon: 'tileIcon', title: 'Статуси повернень'},
-                {to:"/providers", icon: 'tileIcon', title: 'Постачальники'},
                 {to:"/goods", icon: 'tileIcon', title: 'Товари'},
                 {to:"/brands", icon: 'tileIcon', title: 'Бренди'},
             ] as MenuItem[]

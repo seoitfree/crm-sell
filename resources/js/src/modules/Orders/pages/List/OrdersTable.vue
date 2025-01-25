@@ -138,6 +138,7 @@ export default defineComponent({
     },
     methods: {
         clickSort(sortData: SortData) {
+            this.pagination.pages.current_page = 1;
             this.sortData = sortData;
             this.$emit("clickSort", this.sortData);
         },

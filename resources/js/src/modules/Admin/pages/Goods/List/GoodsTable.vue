@@ -13,7 +13,7 @@
                             <HeadTable
                                 :headColumns="headColumns"
                                 :sortData="sortData"
-                                @clickSort="clickSort"
+                                @sort="clickSort"
                             />
                             <tbody>
                             <template v-for="item in records">
@@ -113,6 +113,7 @@ export default defineComponent({
             });
         },
         clickSort(sortData: SortData) {
+            this.pagination.pages.current_page = 1;
             this.sortData = sortData;
             this.getData();
         },

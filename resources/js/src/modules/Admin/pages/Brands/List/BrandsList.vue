@@ -38,12 +38,14 @@ import {defineAsyncComponent, defineComponent} from "vue";
 
 const Header = defineAsyncComponent(() => import('@/js/src/common/components/Header/Header.vue'));
 const BrandsTable = defineAsyncComponent(() => import('@/js/src/modules/Admin/pages/Brands/List/BrandsTable.vue'));
+const Footer = defineAsyncComponent(() => import('@/js/src/common/components/Footer/Footer.vue'));
 
 export default defineComponent({
     name: "BrandsList",
     components: {
         Header,
         BrandsTable,
+        Footer
     }
 });
 </script>

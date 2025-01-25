@@ -1,7 +1,5 @@
 
 export interface SortData {
-    sortData: {
-        sortField: string,
-        sortDir: string,
-    },
+    sortField: string,
+    sortDir: string,
 }
