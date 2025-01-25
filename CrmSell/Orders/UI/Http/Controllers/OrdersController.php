@@ -117,7 +117,7 @@ class OrdersController
      * @param OrdersCSVHandler $handler
      * @return JsonResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function generateFileOrdersCSV(Request $request, OrdersCSVHandler $handler): JsonResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse
+    public function downloadFileOrdersCSV(Request $request, OrdersCSVHandler $handler): JsonResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse
     {
         $user = Auth::user();
         if (empty($user) || $user->isNotActive()) {

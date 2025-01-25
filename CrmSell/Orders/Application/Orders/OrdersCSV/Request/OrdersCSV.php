@@ -35,7 +35,7 @@ class OrdersCSV extends RootRequest
         if (!empty($request['filterParams'])) {// TODO think about refactoting
             $this->mapField($request['filterParams'], ["status"]);
         }
-        $this->status = !empty($request["status"]) ? $request["status"] : [];
+        $this->status = !empty($request['filterParams']["status"]) ? $request['filterParams']["status"] : [];
     }
 
     /**
@@ -56,6 +56,7 @@ class OrdersCSV extends RootRequest
             "date_check_to" => $this->date_check_to,
             "comment" => $this->comment,
             "order_number" => $this->order_number,
+            "remainder" =>  $this->remainder,
         ];
     }
 }

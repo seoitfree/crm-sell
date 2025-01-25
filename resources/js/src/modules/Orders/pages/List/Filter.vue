@@ -8,100 +8,100 @@
                         <span>&times;</span>
                     </button>
                 </div>
-                    <div class="modal-body" v-if="!isLoading">
-                        <div class="form-group row">
-                            <div class="form-group col-md-6">
-                                <label for="comfyCategory">Менеджер</label>
-                                <select class="form-select" name="value" v-model="filter.manager">
-                                    <template v-for="item in managersOptions">
-                                        <option :selected="item.key === filter.manager" :value="item.key">{{ item.value }}</option>
-                                    </template>
-                                </select>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label for="comfyCategory">Статус замовлення</label>
-                                <select multiple class="form-select" name="value" v-model="filter.status">
-                                    <template v-for="item in statusOptions">
-                                        <option :selected="item.key === filter.status" :value="item.key">{{ item.value }}</option>
-                                    </template>
-                                </select>
-                            </div>
+                <div class="modal-body" v-if="!isLoading">
+                    <div class="form-group row">
+                        <div class="form-group col-md-6">
+                            <label for="comfyCategory">Менеджер</label>
+                            <select class="form-select" name="value" v-model="filter.manager">
+                                <template v-for="item in managersOptions">
+                                    <option :selected="item.key === filter.manager" :value="item.key">{{ item.value }}</option>
+                                </template>
+                            </select>
                         </div>
 
-                        <div class="form-group row">
-                            <div class="form-group col-md-6">
-                                <label for="comfyCategory">Дата від</label>
-                                <input name="order_date_from" type="date" class="form-control" v-model="filter.order_date_from">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="order_date_to">Дата до</label>
-                                <input name="order_date_to" type="date" class="form-control" v-model="filter.order_date_to">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="form-group col-md-6">
-                                <label for="comfyCategory">Дата Чеку від</label>
-                                <input name="order_date_from" type="date" class="form-control" v-model="filter.date_check_from">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="order_date_to">Дата Чеку до</label>
-                                <input name="order_date_to" type="date" class="form-control" v-model="filter.date_check_to">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="form-group col-md-6">
-                                <label for="vendor_code">Артикул</label>
-                                <input name="vendor_code" type="text" class="form-control" v-model="filter.vendor_code">
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label for="goods_name">Товар</label>
-                                <input name="goods_name" type="text" class="form-control" v-model="filter.goods_name">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="form-group col-md-6">
-                                <label>Постачальник</label>
-                                <select class="form-select" name="provider_start" v-model="filter.provider_start">
-                                    <template v-for="item in providerOptions">
-                                        <option :selected="item.key === filter.provider_start" :value="item.key">{{ item.value }}</option>
-                                    </template>
-                                </select>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label>Списаний</label>
-                                <select class="form-select" name="defect" v-model="filter.defect">
-                                    <template v-for="item in defectsOptions">
-                                        <option :selected="item.key === filter.defect" :value="item.key">{{ item.value }}</option>
-                                    </template>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="form-group col-md-6">
-                                <label for="comment">Коментар</label>
-                                <input name="comment" type="text" class="form-control" v-model="filter.comment">
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label for="order_number">№ Замовлення</label>
-                                <input name="order_number" type="text" class="form-control" v-model="filter.order_number">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="form-group col-md-6">
-                                <label for="remainder">Залишок</label>
-                                <input type="checkbox" id="remainder" name="deprecated" style="margin-left: 5px;" v-model="filter.remainder" @change="changeDeprecated">
-                            </div>
+                        <div class="form-group col-md-6">
+                            <label for="comfyCategory">Статус замовлення</label>
+                            <select multiple class="form-select" name="value" v-model="filter.status">
+                                <template v-for="item in statusOptions">
+                                    <option :selected="filter.status.includes(item.key)" :value="item.key">{{ item.value }}</option>
+                                </template>
+                            </select>
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <div class="form-group col-md-6">
+                            <label for="comfyCategory">Дата від</label>
+                            <input name="order_date_from" type="date" class="form-control" v-model="filter.order_date_from">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="order_date_to">Дата до</label>
+                            <input name="order_date_to" type="date" class="form-control" v-model="filter.order_date_to">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="form-group col-md-6">
+                            <label for="comfyCategory">Дата Чеку від</label>
+                            <input name="order_date_from" type="date" class="form-control" v-model="filter.date_check_from">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="order_date_to">Дата Чеку до</label>
+                            <input name="order_date_to" type="date" class="form-control" v-model="filter.date_check_to">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="form-group col-md-6">
+                            <label for="vendor_code">Артикул</label>
+                            <input name="vendor_code" type="text" class="form-control" v-model="filter.vendor_code">
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="goods_name">Товар</label>
+                            <input name="goods_name" type="text" class="form-control" v-model="filter.goods_name">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="form-group col-md-6">
+                            <label>Постачальник</label>
+                            <select class="form-select" name="provider_start" v-model="filter.provider_start">
+                                <template v-for="item in providerOptions">
+                                    <option :selected="item.key === filter.provider_start" :value="item.key">{{ item.value }}</option>
+                                </template>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label>Списаний</label>
+                            <select class="form-select" name="defect" v-model="filter.defect">
+                                <template v-for="item in defectsOptions">
+                                    <option :selected="item.key === filter.defect" :value="item.key">{{ item.value }}</option>
+                                </template>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="form-group col-md-6">
+                            <label for="comment">Коментар</label>
+                            <input name="comment" type="text" class="form-control" v-model="filter.comment">
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="order_number">№ Замовлення</label>
+                            <input name="order_number" type="text" class="form-control" v-model="filter.order_number">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="form-group col-md-6">
+                            <label for="remainder">Залишок</label>
+                            <input type="checkbox" id="remainder" name="deprecated" style="margin-left: 5px;" v-model="filter.remainder" @change="changeDeprecated">
+                        </div>
+                    </div>
+                </div>
                 <div class="modal-body" v-if="isLoading">
                     <div  class="d-flex justify-content-center mt-2">
                         <div class="spinner-border" role="status">
@@ -109,11 +109,10 @@
                         </div>
                     </div>
                 </div>
-                    <div v-if="!isLoading" class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" @click="initFilter">Фильтровать</button>
-                        <button type="submit" class="btn btn-secondary" @click="clearFilter">Очистить</button>
-                    </div>
-
+                <div v-if="!isLoading" class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" @click="initFilter">Фильтровать</button>
+                    <button type="submit" class="btn btn-secondary" @click="clearFilter">Очистить</button>
+                </div>
             </div>
         </div>
     </div>

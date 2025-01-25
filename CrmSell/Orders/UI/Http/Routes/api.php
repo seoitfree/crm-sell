@@ -12,5 +12,6 @@ Route::middleware(['api', 'auth:sanctum'])->group(function () {
             Route::post('/shipment', 'OrdersController@addShipment');
             Route::get('/shipments-history', 'OrdersController@shipmentsHistory');
             Route::patch('/order', 'OrdersController@patchOrder');
+            Route::post('/orders-csv', 'OrdersController@downloadFileOrdersCSV');
         });
 });

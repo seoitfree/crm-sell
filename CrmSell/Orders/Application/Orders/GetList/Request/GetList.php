@@ -10,7 +10,6 @@ class GetList extends \CrmSell\Common\Application\Service\Request\GetList
     use PropertyTrait;
 
     private array $filterParams = [];
-
     private string $order_date_from = '';
     private string $order_date_to = '';
     private string $vendor_code = '';
@@ -34,7 +33,7 @@ class GetList extends \CrmSell\Common\Application\Service\Request\GetList
         if (!empty($request['filterParams'])) {// TODO think about refactoting
             $this->mapField($request['filterParams'], ["pageNumber", "sortField", "sortDir", "status"]);
         }
-        $this->status = !empty($request["status"]) ? $request["status"] : [];
+        $this->status = !empty($request['filterParams']["status"]) ? $request['filterParams']["status"] : [];
     }
 
     /**
@@ -55,6 +54,7 @@ class GetList extends \CrmSell\Common\Application\Service\Request\GetList
             "date_check_to" => $this->date_check_to,
             "comment" => $this->comment,
             "order_number" => $this->order_number,
+            "remainder" =>  $this->remainder,
         ];
     }
 

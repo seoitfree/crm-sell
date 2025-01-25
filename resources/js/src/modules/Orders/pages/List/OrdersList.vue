@@ -18,12 +18,23 @@
                                     </router-link>
                                 </div>
 
-                                <div class="col-auto">
+                                <div v-if="!isLoading" class="col-auto">
                                     <a class="btn app-btn-secondary" @click="switchFilter()">Filter</a>
                                 </div>
 
-                                <div class="col-auto">
-                                    <a class="btn app-btn-secondary" @click="switchCSV()">CSV</a>
+                                <div v-if="!isDownloadCSV && !isLoading" class="col-auto">
+                                    <a class="btn app-btn-primary" @click="downloadCSV()">
+                                        <svg width="1em" height="1em" viewBox="0 0 16 16"
+                                             class="bi bi-file-earmark-arrow-down me-2" fill="currentColor"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M4 0h5.5v1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h1V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2z"></path>
+                                            <path d="M9.5 3V0L14 4.5h-3A1.5 1.5 0 0 1 9.5 3z"></path>
+                                            <path fill-rule="evenodd"
+                                                  d="M8 6a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 10.293V6.5A.5.5 0 0 1 8 6z"></path>
+                                        </svg>
+                                        CSV
+                                    </a>
                                 </div>
                             </div>
                         </div><!--//table-utilities-->
@@ -108,6 +119,7 @@ export default defineComponent({
                 sortField: 'created_at',
                 sortDir: 'desc',
             },
+            isDownloadCSV: false,
             records: [] as OrderType[],
         };
     },
@@ -186,10 +198,35 @@ export default defineComponent({
         switchFilter(): void {
             this.isFilter = !this.isFilter;
         },
-        switchCSV() {
+        async downloadCSV() {
+            if (confirm("Вы хотите скачать таблицу ввиде CSV?")) {
+                try {
+                    this.isDownloadCSV = true;
+                    const params =  {
+                        filterParams: this.filterParams
+                    };
+                    const response = await axios.post(`/api/v1/orders-csv`, params, {
+                        responseType: 'blob',
+                    });
 
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+
+                    link.setAttribute('download', 'orders.csv');
+                    document.body.appendChild(link);
+                    link.click();
+
+                    document.body.removeChild(link);
+                } catch (error) {
+                    console.error('Error downloading the file:', error);
+                } finally {
+                    this.isDownloadCSV = false;
+                }
+            }
         },
         initFilter(filterData: FilterType): void {
+            this.switchFilter();
             this.filterParams = filterData;
             this.getData();
         }

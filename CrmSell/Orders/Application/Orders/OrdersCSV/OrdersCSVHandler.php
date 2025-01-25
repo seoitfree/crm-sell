@@ -25,10 +25,10 @@ class OrdersCSVHandler extends AbstractHandler
     }
 
     /**
-     * @param RequestInterface $command
+     * @param RequestInterface $request
      * @return ResultHandler
      */
-    protected function process(RequestInterface $command): ResultHandler
+    protected function process(RequestInterface $request): ResultHandler
     {
         $fileName = 'OrdersCSV' . Uuid::uuid4() . '.csv';
 
@@ -38,8 +38,7 @@ class OrdersCSVHandler extends AbstractHandler
 
             $csv = Writer::createFromPath(storage_path('app/orders/') . $fileName , 'w+');
 
-            $this->createFile($command, $csv);
-
+            $this->createFile($request, $csv);
             $this->resultHandler->setResult([
                 'file_name' => $fileName,
                 'file_path' => Storage::disk('local')->path("orders/$fileName"),

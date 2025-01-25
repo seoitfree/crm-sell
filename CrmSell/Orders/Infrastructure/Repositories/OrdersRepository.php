@@ -106,7 +106,7 @@ class OrdersRepository implements OrdersRepositoryInterface
         $where = $where === '' ? $where : " WHERE $where ";
 
         try {
-            //DB::enableQueryLog();
+            DB::enableQueryLog();
             $sql = "
                 SELECT t.*
                 FROM ({$this->getQuerySQL()} $where) as t
@@ -115,8 +115,8 @@ class OrdersRepository implements OrdersRepositoryInterface
             ";
             $results = DB::select($sql, $params["bindings"]);
 
-            //$queries = DB::getQueryLog();
-            //$lastQuery = end($queries);
+            $queries = DB::getQueryLog();
+            $lastQuery = end($queries);
         } catch (QueryException $e) {
             Log::error($e->getMessage() . $e->getTraceAsString());
             throw new \Exception("OrdersRepository::getList() error.");
@@ -161,8 +161,9 @@ class OrdersRepository implements OrdersRepositoryInterface
             $filter["bindings"]["goods_name"] = "%{$params["goods_name"]}%";
         }
         if (!empty($params["status"]) && !in_array(self::FILTER_ALL, $params["status"])) {
-            $filter["condition"][] = " o.status IN (:status) ";
-            $filter["bindings"]["status"] = "{$params["status"]}";
+            list($bindings, $placeholders) = $this->getFilterStatus($params["status"]);
+            $filter["condition"][] = " o.status IN ( " . implode(',', $placeholders) . ") ";
+            $filter["bindings"] = array_merge($filter["bindings"], $bindings);
         }
         if (!empty($params["remainder"])) {
             $filter["condition"]["remainder"] = " IF(shipments.shipments_amount > 0, o.amount_in_order_paid - shipments.shipments_amount, o.amount_in_order_paid) > 0 ";
@@ -187,6 +188,22 @@ class OrdersRepository implements OrdersRepositoryInterface
         return $filter;
     }
 
+    /**
+     * @param array $statuses
+     * @return array
+     */
+    private function getFilterStatus(array $statuses): array
+    {
+        $bindings = [];
+        $placeholders = [];
+        foreach ($statuses as $index => $status) {
+            $placeholder = ":status{$index}";
+            $placeholders[] = $placeholder;
+            $bindings[$placeholder] = $status;
+        }
+
+        return [$bindings, $placeholders];
+    }
 
     /**
      * @param OrdersCSV $dto
@@ -195,23 +212,16 @@ class OrdersRepository implements OrdersRepositoryInterface
      */
     public function getListOrdersCSV(OrdersCSV $dto): \Generator
     {
-
         $params = $this->getFilter($dto->getFilter());
         $where = implode("AND", array_filter($params["condition"], fn($item) => $item !== ''));
         $where = $where === '' ? $where : " WHERE $where ";
 
         try {
-            $sql = "
-                SELECT t.*
-                FROM ({$this->getQuerySQL()} $where) as t
-            ";
+            $sql = "SELECT t.*  FROM ({$this->getQuerySQL()} $where) as t";
 
             foreach (DB::cursor($sql, $params["bindings"]) as $row) {
-                yield (array) $row; // Преобразуем в массив, если нужно
+                yield (array) $row;
             }
-
-            //$queries = DB::getQueryLog();
-            //$lastQuery = end($queries);
         } catch (QueryException $e) {
             Log::error($e->getMessage() . $e->getTraceAsString());
             throw new \Exception("OrdersRepository::getListOrdersCSV error.");

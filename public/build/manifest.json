@@ -1,4 +1,37 @@
 {
+  "_DateTime-b4f86fcf.js": {
+    "file": "assets/DateTime-b4f86fcf.js"
+  },
+  "_Pagination-626bd97a.js": {
+    "file": "assets/Pagination-626bd97a.js"
+  },
+  "_ProvidersEnum-7cdeec22.js": {
+    "file": "assets/ProvidersEnum-7cdeec22.js"
+  },
+  "_ResponseStatusEnum-c19283b9.js": {
+    "file": "assets/ResponseStatusEnum-c19283b9.js",
+    "imports": [
+      "resources/js/app.js"
+    ]
+  },
+  "_StatusEnum-ab793631.js": {
+    "file": "assets/StatusEnum-ab793631.js"
+  },
+  "_app-logo-840e89ad.js": {
+    "assets": [
+      "assets/app-logo-6741cde7.svg"
+    ],
+    "file": "assets/app-logo-840e89ad.js"
+  },
+  "_index.esm-0b247c9f.js": {
+    "file": "assets/index.esm-0b247c9f.js"
+  },
+  "_permissionMixin-5218c7e5.js": {
+    "file": "assets/permissionMixin-5218c7e5.js",
+    "imports": [
+      "resources/js/app.js"
+    ]
+  },
   "resources/assets/images/app-logo.svg": {
     "file": "assets/app-logo-6741cde7.svg",
     "src": "resources/assets/images/app-logo.svg"
@@ -6,6 +39,18 @@
   "resources/assets/images/background/background-1.jpg": {
     "file": "assets/background-1-dacc9c24.jpg",
     "src": "resources/assets/images/background/background-1.jpg"
+  },
+  "resources/assets/images/sort/sort-down.png": {
+    "file": "assets/sort-down-847901cc.png",
+    "src": "resources/assets/images/sort/sort-down.png"
+  },
+  "resources/assets/images/sort/sort-up.png": {
+    "file": "assets/sort-up-bd8cc8a9.png",
+    "src": "resources/assets/images/sort/sort-up.png"
+  },
+  "resources/assets/images/sort/sort.png": {
+    "file": "assets/sort-e45bd6f7.png",
+    "src": "resources/assets/images/sort/sort.png"
   },
   "resources/css/app.css": {
     "file": "assets/app-4ed993c7.js",
@@ -27,70 +72,884 @@
       "resources/js/src/pages/Login/Login.vue",
       "resources/js/src/pages/Main/Main.vue",
       "resources/js/src/pages/Docs/Docs.vue",
-      "resources/js/src/modules/Auth/pages/AccessError.vue"
+      "resources/js/src/modules/Admin/pages/Users/List/UsersList.vue",
+      "resources/js/src/modules/Admin/pages/Users/CreateUpdate/Create/UserCreate.vue",
+      "resources/js/src/modules/Admin/pages/Users/CreateUpdate/Update/UserUpdate.vue",
+      "resources/js/src/modules/Admin/pages/Users/DetailView/UserDetailView.vue",
+      "resources/js/src/modules/Admin/pages/Status/List/StatusList.vue",
+      "resources/js/src/modules/Admin/pages/Status/Edit/StatusEdit.vue",
+      "resources/js/src/modules/Admin/pages/Status/Edit/StatusEdit.vue",
+      "resources/js/src/modules/Admin/pages/Providers/List/ProvidersList.vue",
+      "resources/js/src/modules/Admin/pages/Providers/Edit/ProviderEdit.vue",
+      "resources/js/src/modules/Admin/pages/Goods/List/GoodsList.vue",
+      "resources/js/src/modules/Admin/pages/Goods/Edit/GoodsEdit.vue",
+      "resources/js/src/modules/Admin/pages/Goods/Edit/GoodsEdit.vue",
+      "resources/js/src/modules/Admin/pages/Providers/Edit/ProviderEdit.vue",
+      "resources/js/src/modules/Orders/pages/List/OrdersList.vue",
+      "resources/js/src/modules/Orders/pages/Create/OrderCreate.vue",
+      "resources/js/src/modules/Admin/pages/Brands/List/BrandsList.vue",
+      "resources/js/src/modules/Admin/pages/Brands/Edit/BrandEdit.vue",
+      "resources/js/src/modules/Admin/pages/Brands/Edit/BrandEdit.vue",
+      "resources/js/src/modules/Orders/pages/Create/OrderCreate.vue",
+      "resources/js/src/modules/Auth/pages/AccessError.vue",
+      "resources/js/src/modules/Auth/pages/PageNotFound.vue"
     ],
-    "file": "assets/app-40271bfc.js",
+    "file": "assets/app-872731ce.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   },
+  "resources/js/src/common/components/EditPage/Fields/NumberInput.vue": {
+    "file": "assets/NumberInput-3b7b5bfb.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/common/components/EditPage/Fields/NumberInput.vue"
+  },
+  "resources/js/src/common/components/EditPage/Fields/SelectFiled.vue": {
+    "file": "assets/SelectFiled-0204d8e4.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/common/components/EditPage/Fields/SelectFiled.vue"
+  },
+  "resources/js/src/common/components/EditPage/Fields/TextAreaInput.vue": {
+    "file": "assets/TextAreaInput-08d3079d.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/common/components/EditPage/Fields/TextAreaInput.vue"
+  },
+  "resources/js/src/common/components/EditPage/Fields/TextInput.vue": {
+    "file": "assets/TextInput-59339c38.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/common/components/EditPage/Fields/TextInput.vue"
+  },
   "resources/js/src/common/components/Footer/Footer.vue": {
-    "file": "assets/Footer-a7c03a87.js",
+    "file": "assets/Footer-eae88be8.js",
     "imports": [
       "resources/js/app.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/src/common/components/Footer/Footer.vue"
   },
+  "resources/js/src/common/components/Header/Branding.vue": {
+    "file": "assets/Branding-bb5ffcfc.js",
+    "imports": [
+      "resources/js/app.js",
+      "_app-logo-840e89ad.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/common/components/Header/Branding.vue"
+  },
   "resources/js/src/common/components/Header/Header.vue": {
-    "file": "assets/Header-b0cde434.js",
+    "dynamicImports": [
+      "resources/js/src/common/components/Header/Sidepanel/AdminSidepanel.vue",
+      "resources/js/src/common/components/Header/Sidepanel/AppSidepanel.vue"
+    ],
+    "file": "assets/Header-233f07f2.js",
+    "imports": [
+      "resources/js/app.js",
+      "_permissionMixin-5218c7e5.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/common/components/Header/Header.vue"
+  },
+  "resources/js/src/common/components/Header/Sidepanel/AdminSidepanel.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/Header/Branding.vue",
+      "resources/js/src/common/components/Header/Sidepanel/FooterSidepanel.vue",
+      "resources/js/src/common/components/icons/NavIcon/TileIcon.vue"
+    ],
+    "file": "assets/AdminSidepanel-51038424.js",
+    "imports": [
+      "resources/js/app.js",
+      "_StatusEnum-ab793631.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/common/components/Header/Sidepanel/AdminSidepanel.vue"
+  },
+  "resources/js/src/common/components/Header/Sidepanel/AppSidepanel.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/Header/Branding.vue",
+      "resources/js/src/common/components/Header/Sidepanel/FooterSidepanel.vue"
+    ],
+    "file": "assets/AppSidepanel-a9cf993d.js",
     "imports": [
       "resources/js/app.js"
     ],
     "isDynamicEntry": true,
-    "src": "resources/js/src/common/components/Header/Header.vue"
+    "src": "resources/js/src/common/components/Header/Sidepanel/AppSidepanel.vue"
+  },
+  "resources/js/src/common/components/Header/Sidepanel/FooterSidepanel.vue": {
+    "file": "assets/FooterSidepanel-afea842b.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/common/components/Header/Sidepanel/FooterSidepanel.vue"
+  },
+  "resources/js/src/common/components/Table/HeadTable.vue": {
+    "assets": [
+      "assets/sort-e45bd6f7.png",
+      "assets/sort-down-847901cc.png",
+      "assets/sort-up-bd8cc8a9.png"
+    ],
+    "file": "assets/HeadTable-1c805c08.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/common/components/Table/HeadTable.vue"
+  },
+  "resources/js/src/common/components/Table/Pagination.vue": {
+    "file": "assets/Pagination-61a44e17.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/common/components/Table/Pagination.vue"
+  },
+  "resources/js/src/common/components/icons/NavIcon/TileIcon.vue": {
+    "file": "assets/TileIcon-58088d26.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/common/components/icons/NavIcon/TileIcon.vue"
+  },
+  "resources/js/src/common/components/icons/OrdersTableIcons/CancelIcon.vue": {
+    "file": "assets/CancelIcon-317996fb.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/common/components/icons/OrdersTableIcons/CancelIcon.vue"
+  },
+  "resources/js/src/common/components/icons/OrdersTableIcons/EditIcon.vue": {
+    "file": "assets/EditIcon-ad2ad431.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/common/components/icons/OrdersTableIcons/EditIcon.vue"
+  },
+  "resources/js/src/common/components/icons/OrdersTableIcons/SaveIcon.vue": {
+    "file": "assets/SaveIcon-bd76fb15.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/common/components/icons/OrdersTableIcons/SaveIcon.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Brands/Edit/BrandEdit.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/Header/Header.vue",
+      "resources/js/src/common/components/Footer/Footer.vue",
+      "resources/js/src/modules/Admin/pages/Brands/Edit/BrandForm.vue"
+    ],
+    "file": "assets/BrandEdit-7a44b768.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Brands/Edit/BrandEdit.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Brands/Edit/BrandForm.vue": {
+    "file": "assets/BrandForm-dd5d5037.js",
+    "imports": [
+      "_index.esm-0b247c9f.js",
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Brands/Edit/BrandForm.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Brands/List/BrandsList.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/Header/Header.vue",
+      "resources/js/src/modules/Admin/pages/Brands/List/BrandsTable.vue"
+    ],
+    "file": "assets/BrandsList-f72c8449.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Brands/List/BrandsList.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Brands/List/BrandsTable.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/Table/HeadTable.vue",
+      "resources/js/src/common/components/Table/Pagination.vue"
+    ],
+    "file": "assets/BrandsTable-16a45351.js",
+    "imports": [
+      "resources/js/app.js",
+      "_Pagination-626bd97a.js",
+      "_DateTime-b4f86fcf.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Brands/List/BrandsTable.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Goods/Edit/GoodsEdit.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/Header/Header.vue",
+      "resources/js/src/common/components/Footer/Footer.vue",
+      "resources/js/src/modules/Admin/pages/Goods/Edit/GoodsForm.vue"
+    ],
+    "file": "assets/GoodsEdit-f019bfdb.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Goods/Edit/GoodsEdit.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Goods/Edit/GoodsForm.vue": {
+    "file": "assets/GoodsForm-1e5fba63.js",
+    "imports": [
+      "_index.esm-0b247c9f.js",
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Goods/Edit/GoodsForm.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Goods/List/GoodsList.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/Header/Header.vue",
+      "resources/js/src/modules/Admin/pages/Goods/List/GoodsTable.vue"
+    ],
+    "file": "assets/GoodsList-e7424e07.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Goods/List/GoodsList.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Goods/List/GoodsTable.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/Table/HeadTable.vue",
+      "resources/js/src/common/components/Table/Pagination.vue"
+    ],
+    "file": "assets/GoodsTable-827061f6.js",
+    "imports": [
+      "resources/js/app.js",
+      "_Pagination-626bd97a.js",
+      "_DateTime-b4f86fcf.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Goods/List/GoodsTable.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Providers/Edit/ProviderEdit.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/Header/Header.vue",
+      "resources/js/src/common/components/Footer/Footer.vue",
+      "resources/js/src/modules/Admin/pages/Providers/Edit/ProviderForm.vue"
+    ],
+    "file": "assets/ProviderEdit-4e0929e5.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Providers/Edit/ProviderEdit.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Providers/Edit/ProviderForm.vue": {
+    "file": "assets/ProviderForm-2887b255.js",
+    "imports": [
+      "_index.esm-0b247c9f.js",
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Providers/Edit/ProviderForm.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Providers/List/ProvidersList.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/Header/Header.vue",
+      "resources/js/src/modules/Admin/pages/Providers/List/ProvidersTable.vue"
+    ],
+    "file": "assets/ProvidersList-4deacfb6.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Providers/List/ProvidersList.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Providers/List/ProvidersTable.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/Table/HeadTable.vue",
+      "resources/js/src/common/components/Table/Pagination.vue"
+    ],
+    "file": "assets/ProvidersTable-8411f0d4.js",
+    "imports": [
+      "resources/js/app.js",
+      "_Pagination-626bd97a.js",
+      "_DateTime-b4f86fcf.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Providers/List/ProvidersTable.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Status/Edit/StatusEdit.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/Header/Header.vue",
+      "resources/js/src/common/components/Footer/Footer.vue",
+      "resources/js/src/modules/Admin/pages/Status/Edit/StatusForm.vue"
+    ],
+    "file": "assets/StatusEdit-4e8b6646.js",
+    "imports": [
+      "resources/js/app.js",
+      "_StatusEnum-ab793631.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Status/Edit/StatusEdit.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Status/Edit/StatusForm.vue": {
+    "file": "assets/StatusForm-0fe8a3de.js",
+    "imports": [
+      "_index.esm-0b247c9f.js",
+      "resources/js/app.js",
+      "_StatusEnum-ab793631.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Status/Edit/StatusForm.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Status/List/StatusList.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/Header/Header.vue",
+      "resources/js/src/modules/Admin/pages/Status/List/StatusTable.vue"
+    ],
+    "file": "assets/StatusList-8d5cd030.js",
+    "imports": [
+      "resources/js/app.js",
+      "_StatusEnum-ab793631.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Status/List/StatusList.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Status/List/StatusTable.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/Table/HeadTable.vue",
+      "resources/js/src/common/components/Table/Pagination.vue"
+    ],
+    "file": "assets/StatusTable-22093b69.js",
+    "imports": [
+      "resources/js/app.js",
+      "_Pagination-626bd97a.js",
+      "_DateTime-b4f86fcf.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Status/List/StatusTable.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Users/CreateUpdate/Create/CreateForm.vue": {
+    "file": "assets/CreateForm-33a33c9c.js",
+    "imports": [
+      "_index.esm-0b247c9f.js",
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Users/CreateUpdate/Create/CreateForm.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Users/CreateUpdate/Create/UserCreate.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/Header/Header.vue",
+      "resources/js/src/common/components/Footer/Footer.vue",
+      "resources/js/src/modules/Admin/pages/Users/CreateUpdate/Create/CreateForm.vue"
+    ],
+    "file": "assets/UserCreate-033d2aa1.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Users/CreateUpdate/Create/UserCreate.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Users/CreateUpdate/Update/UpdateForm.vue": {
+    "file": "assets/UpdateForm-0254f089.js",
+    "imports": [
+      "_permissionMixin-5218c7e5.js",
+      "_index.esm-0b247c9f.js",
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Users/CreateUpdate/Update/UpdateForm.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Users/CreateUpdate/Update/UserUpdate.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/Header/Header.vue",
+      "resources/js/src/common/components/Footer/Footer.vue",
+      "resources/js/src/modules/Admin/pages/Users/CreateUpdate/Update/UpdateForm.vue"
+    ],
+    "file": "assets/UserUpdate-d08a1d9a.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Users/CreateUpdate/Update/UserUpdate.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Users/DetailView/AddRoleModal.css": {
+    "file": "assets/AddRoleModal-e571509b.css",
+    "src": "resources/js/src/modules/Admin/pages/Users/DetailView/AddRoleModal.css"
+  },
+  "resources/js/src/modules/Admin/pages/Users/DetailView/AddRoleModal.vue": {
+    "css": [
+      "assets/AddRoleModal-e571509b.css"
+    ],
+    "file": "assets/AddRoleModal-f48d2d7e.js",
+    "imports": [
+      "resources/js/app.js",
+      "_index.esm-0b247c9f.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Users/DetailView/AddRoleModal.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Users/DetailView/Fields/DetailField.vue": {
+    "file": "assets/DetailField-d9a062db.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Users/DetailView/Fields/DetailField.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Users/DetailView/Fields/RoleField.vue": {
+    "file": "assets/RoleField-62bd1e5e.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Users/DetailView/Fields/RoleField.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Users/DetailView/RolesListPanel.vue": {
+    "dynamicImports": [
+      "resources/js/src/modules/Admin/pages/Users/DetailView/Fields/RoleField.vue",
+      "resources/js/src/modules/Admin/pages/Users/DetailView/AddRoleModal.vue"
+    ],
+    "file": "assets/RolesListPanel-2d54c66b.js",
+    "imports": [
+      "resources/js/app.js",
+      "_permissionMixin-5218c7e5.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Users/DetailView/RolesListPanel.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Users/DetailView/UserDetailView.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/Header/Header.vue",
+      "resources/js/src/common/components/Footer/Footer.vue",
+      "resources/js/src/modules/Admin/pages/Users/DetailView/Fields/DetailField.vue",
+      "resources/js/src/modules/Admin/pages/Users/DetailView/RolesListPanel.vue"
+    ],
+    "file": "assets/UserDetailView-43c28e26.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Users/DetailView/UserDetailView.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Users/List/UsersList.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/Header/Header.vue",
+      "resources/js/src/modules/Admin/pages/Users/List/UsersTableList.vue"
+    ],
+    "file": "assets/UsersList-4b2ee6a4.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Users/List/UsersList.vue"
+  },
+  "resources/js/src/modules/Admin/pages/Users/List/UsersTableList.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/Table/HeadTable.vue",
+      "resources/js/src/common/components/Table/Pagination.vue"
+    ],
+    "file": "assets/UsersTableList-4f1f41d6.js",
+    "imports": [
+      "resources/js/app.js",
+      "_Pagination-626bd97a.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Admin/pages/Users/List/UsersTableList.vue"
   },
   "resources/js/src/modules/Auth/pages/AccessError.vue": {
     "dynamicImports": [
       "resources/js/src/common/components/Header/Header.vue",
       "resources/js/src/common/components/Footer/Footer.vue"
     ],
-    "file": "assets/AccessError-5efd911b.js",
+    "file": "assets/AccessError-a045eba9.js",
     "imports": [
       "resources/js/app.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/src/modules/Auth/pages/AccessError.vue"
   },
+  "resources/js/src/modules/Auth/pages/PageNotFound.vue": {
+    "file": "assets/PageNotFound-5df9aecf.js",
+    "imports": [
+      "resources/js/app.js",
+      "_app-logo-840e89ad.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Auth/pages/PageNotFound.vue"
+  },
+  "resources/js/src/modules/Orders/pages/Create/CreateForm.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/EditPage/Fields/TextInput.vue",
+      "resources/js/src/common/components/EditPage/Fields/TextAreaInput.vue",
+      "resources/js/src/common/components/EditPage/Fields/SelectFiled.vue",
+      "resources/js/src/common/components/EditPage/Fields/NumberInput.vue"
+    ],
+    "file": "assets/CreateForm-e7030724.js",
+    "imports": [
+      "resources/js/app.js",
+      "_index.esm-0b247c9f.js",
+      "_ProvidersEnum-7cdeec22.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Orders/pages/Create/CreateForm.vue"
+  },
+  "resources/js/src/modules/Orders/pages/Create/OrderCreate.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/Header/Header.vue",
+      "resources/js/src/common/components/Footer/Footer.vue",
+      "resources/js/src/modules/Orders/pages/Create/CreateForm.vue"
+    ],
+    "file": "assets/OrderCreate-33c3f468.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Orders/pages/Create/OrderCreate.vue"
+  },
+  "resources/js/src/modules/Orders/pages/List/Filter.css": {
+    "file": "assets/Filter-ff17d57c.css",
+    "src": "resources/js/src/modules/Orders/pages/List/components/HistoryShipments.css"
+  },
+  "resources/js/src/modules/Orders/pages/List/Filter.vue": {
+    "css": [
+      "assets/Filter-ff17d57c.css"
+    ],
+    "file": "assets/Filter-3af6f60d.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Orders/pages/List/Filter.vue"
+  },
+  "resources/js/src/modules/Orders/pages/List/OrdersList.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/Header/Header.vue",
+      "resources/js/src/common/components/Footer/Footer.vue",
+      "resources/js/src/modules/Orders/pages/List/OrdersTable.vue",
+      "resources/js/src/modules/Orders/pages/List/Filter.vue"
+    ],
+    "file": "assets/OrdersList-84472207.js",
+    "imports": [
+      "resources/js/app.js",
+      "_Pagination-626bd97a.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Orders/pages/List/OrdersList.vue"
+  },
+  "resources/js/src/modules/Orders/pages/List/OrdersTable.vue": {
+    "dynamicImports": [
+      "resources/js/src/common/components/Table/HeadTable.vue",
+      "resources/js/src/common/components/Table/Pagination.vue",
+      "resources/js/src/modules/Orders/pages/List/components/AddShipments.vue",
+      "resources/js/src/modules/Orders/pages/List/components/HistoryShipments.vue",
+      "resources/js/src/modules/Orders/pages/List/components/TableRow.vue"
+    ],
+    "file": "assets/OrdersTable-eb23367b.js",
+    "imports": [
+      "resources/js/app.js",
+      "_DateTime-b4f86fcf.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Orders/pages/List/OrdersTable.vue"
+  },
+  "resources/js/src/modules/Orders/pages/List/components/AddShipments.css": {
+    "file": "assets/Filter-ff17d57c.css",
+    "src": "resources/js/src/modules/Orders/pages/List/components/HistoryShipments.css"
+  },
+  "resources/js/src/modules/Orders/pages/List/components/AddShipments.vue": {
+    "css": [
+      "assets/Filter-ff17d57c.css"
+    ],
+    "file": "assets/AddShipments-02fb5dae.js",
+    "imports": [
+      "_index.esm-0b247c9f.js",
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Orders/pages/List/components/AddShipments.vue"
+  },
+  "resources/js/src/modules/Orders/pages/List/components/HistoryShipments.css": {
+    "file": "assets/Filter-ff17d57c.css",
+    "src": "resources/js/src/modules/Orders/pages/List/components/HistoryShipments.css"
+  },
+  "resources/js/src/modules/Orders/pages/List/components/HistoryShipments.vue": {
+    "css": [
+      "assets/Filter-ff17d57c.css"
+    ],
+    "dynamicImports": [
+      "resources/js/src/common/components/Table/HeadTable.vue",
+      "resources/js/src/common/components/Table/Pagination.vue"
+    ],
+    "file": "assets/HistoryShipments-19ca8b3a.js",
+    "imports": [
+      "resources/js/app.js",
+      "_Pagination-626bd97a.js",
+      "_DateTime-b4f86fcf.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Orders/pages/List/components/HistoryShipments.vue"
+  },
+  "resources/js/src/modules/Orders/pages/List/components/InlineEdit/ComfyBrandEdit.css": {
+    "file": "assets/DecimalInlineEdit-d1fdec19.css",
+    "src": "resources/js/src/modules/Orders/pages/List/components/InlineEdit/ComfyBrandEdit.css"
+  },
+  "resources/js/src/modules/Orders/pages/List/components/InlineEdit/ComfyBrandEdit.vue": {
+    "css": [
+      "assets/DecimalInlineEdit-d1fdec19.css"
+    ],
+    "dynamicImports": [
+      "resources/js/src/common/components/icons/OrdersTableIcons/EditIcon.vue",
+      "resources/js/src/common/components/icons/OrdersTableIcons/SaveIcon.vue",
+      "resources/js/src/common/components/icons/OrdersTableIcons/CancelIcon.vue"
+    ],
+    "file": "assets/ComfyBrandEdit-0b856e20.js",
+    "imports": [
+      "resources/js/app.js",
+      "_ResponseStatusEnum-c19283b9.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Orders/pages/List/components/InlineEdit/ComfyBrandEdit.vue"
+  },
+  "resources/js/src/modules/Orders/pages/List/components/InlineEdit/DateInlineEdite.css": {
+    "file": "assets/DecimalInlineEdit-d1fdec19.css",
+    "src": "resources/js/src/modules/Orders/pages/List/components/InlineEdit/ComfyBrandEdit.css"
+  },
+  "resources/js/src/modules/Orders/pages/List/components/InlineEdit/DateInlineEdite.vue": {
+    "css": [
+      "assets/DecimalInlineEdit-d1fdec19.css"
+    ],
+    "dynamicImports": [
+      "resources/js/src/common/components/icons/OrdersTableIcons/EditIcon.vue",
+      "resources/js/src/common/components/icons/OrdersTableIcons/SaveIcon.vue",
+      "resources/js/src/common/components/icons/OrdersTableIcons/CancelIcon.vue"
+    ],
+    "file": "assets/DateInlineEdite-d3f5e455.js",
+    "imports": [
+      "resources/js/app.js",
+      "_index.esm-0b247c9f.js",
+      "_DateTime-b4f86fcf.js",
+      "_ResponseStatusEnum-c19283b9.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Orders/pages/List/components/InlineEdit/DateInlineEdite.vue"
+  },
+  "resources/js/src/modules/Orders/pages/List/components/InlineEdit/DecimalInlineEdit.css": {
+    "file": "assets/DecimalInlineEdit-d1fdec19.css",
+    "src": "resources/js/src/modules/Orders/pages/List/components/InlineEdit/ComfyBrandEdit.css"
+  },
+  "resources/js/src/modules/Orders/pages/List/components/InlineEdit/DecimalInlineEdit.vue": {
+    "css": [
+      "assets/DecimalInlineEdit-d1fdec19.css"
+    ],
+    "dynamicImports": [
+      "resources/js/src/common/components/icons/OrdersTableIcons/EditIcon.vue",
+      "resources/js/src/common/components/icons/OrdersTableIcons/SaveIcon.vue",
+      "resources/js/src/common/components/icons/OrdersTableIcons/CancelIcon.vue"
+    ],
+    "file": "assets/DecimalInlineEdit-5b91cafa.js",
+    "imports": [
+      "resources/js/app.js",
+      "_index.esm-0b247c9f.js",
+      "_ResponseStatusEnum-c19283b9.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Orders/pages/List/components/InlineEdit/DecimalInlineEdit.vue"
+  },
+  "resources/js/src/modules/Orders/pages/List/components/InlineEdit/DefectInlineEdit.css": {
+    "file": "assets/DecimalInlineEdit-d1fdec19.css",
+    "src": "resources/js/src/modules/Orders/pages/List/components/InlineEdit/ComfyBrandEdit.css"
+  },
+  "resources/js/src/modules/Orders/pages/List/components/InlineEdit/DefectInlineEdit.vue": {
+    "css": [
+      "assets/DecimalInlineEdit-d1fdec19.css"
+    ],
+    "dynamicImports": [
+      "resources/js/src/common/components/icons/OrdersTableIcons/EditIcon.vue",
+      "resources/js/src/common/components/icons/OrdersTableIcons/SaveIcon.vue",
+      "resources/js/src/common/components/icons/OrdersTableIcons/CancelIcon.vue"
+    ],
+    "file": "assets/DefectInlineEdit-2d810ade.js",
+    "imports": [
+      "resources/js/app.js",
+      "_ResponseStatusEnum-c19283b9.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Orders/pages/List/components/InlineEdit/DefectInlineEdit.vue"
+  },
+  "resources/js/src/modules/Orders/pages/List/components/InlineEdit/IntegerInlineEdit.css": {
+    "file": "assets/DecimalInlineEdit-d1fdec19.css",
+    "src": "resources/js/src/modules/Orders/pages/List/components/InlineEdit/ComfyBrandEdit.css"
+  },
+  "resources/js/src/modules/Orders/pages/List/components/InlineEdit/IntegerInlineEdit.vue": {
+    "css": [
+      "assets/DecimalInlineEdit-d1fdec19.css"
+    ],
+    "dynamicImports": [
+      "resources/js/src/common/components/icons/OrdersTableIcons/EditIcon.vue",
+      "resources/js/src/common/components/icons/OrdersTableIcons/SaveIcon.vue",
+      "resources/js/src/common/components/icons/OrdersTableIcons/CancelIcon.vue"
+    ],
+    "file": "assets/IntegerInlineEdit-8f671bed.js",
+    "imports": [
+      "resources/js/app.js",
+      "_index.esm-0b247c9f.js",
+      "_ResponseStatusEnum-c19283b9.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Orders/pages/List/components/InlineEdit/IntegerInlineEdit.vue"
+  },
+  "resources/js/src/modules/Orders/pages/List/components/InlineEdit/ProviderInlineEdit.css": {
+    "file": "assets/DecimalInlineEdit-d1fdec19.css",
+    "src": "resources/js/src/modules/Orders/pages/List/components/InlineEdit/ComfyBrandEdit.css"
+  },
+  "resources/js/src/modules/Orders/pages/List/components/InlineEdit/ProviderInlineEdit.vue": {
+    "css": [
+      "assets/DecimalInlineEdit-d1fdec19.css"
+    ],
+    "dynamicImports": [
+      "resources/js/src/common/components/icons/OrdersTableIcons/EditIcon.vue",
+      "resources/js/src/common/components/icons/OrdersTableIcons/SaveIcon.vue",
+      "resources/js/src/common/components/icons/OrdersTableIcons/CancelIcon.vue"
+    ],
+    "file": "assets/ProviderInlineEdit-edda5e8b.js",
+    "imports": [
+      "resources/js/app.js",
+      "_ResponseStatusEnum-c19283b9.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Orders/pages/List/components/InlineEdit/ProviderInlineEdit.vue"
+  },
+  "resources/js/src/modules/Orders/pages/List/components/InlineEdit/StatusInlineEdit.css": {
+    "file": "assets/DecimalInlineEdit-d1fdec19.css",
+    "src": "resources/js/src/modules/Orders/pages/List/components/InlineEdit/ComfyBrandEdit.css"
+  },
+  "resources/js/src/modules/Orders/pages/List/components/InlineEdit/StatusInlineEdit.vue": {
+    "css": [
+      "assets/DecimalInlineEdit-d1fdec19.css"
+    ],
+    "dynamicImports": [
+      "resources/js/src/common/components/icons/OrdersTableIcons/EditIcon.vue",
+      "resources/js/src/common/components/icons/OrdersTableIcons/SaveIcon.vue",
+      "resources/js/src/common/components/icons/OrdersTableIcons/CancelIcon.vue"
+    ],
+    "file": "assets/StatusInlineEdit-ff3dc2c5.js",
+    "imports": [
+      "resources/js/app.js",
+      "_ResponseStatusEnum-c19283b9.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Orders/pages/List/components/InlineEdit/StatusInlineEdit.vue"
+  },
+  "resources/js/src/modules/Orders/pages/List/components/InlineEdit/TextAreaInlineEdit.css": {
+    "file": "assets/TextAreaInlineEdit-fea4ba47.css",
+    "src": "resources/js/src/modules/Orders/pages/List/components/InlineEdit/TextAreaInlineEdit.css"
+  },
+  "resources/js/src/modules/Orders/pages/List/components/InlineEdit/TextAreaInlineEdit.vue": {
+    "css": [
+      "assets/TextAreaInlineEdit-fea4ba47.css"
+    ],
+    "dynamicImports": [
+      "resources/js/src/common/components/icons/OrdersTableIcons/EditIcon.vue",
+      "resources/js/src/common/components/icons/OrdersTableIcons/SaveIcon.vue",
+      "resources/js/src/common/components/icons/OrdersTableIcons/CancelIcon.vue"
+    ],
+    "file": "assets/TextAreaInlineEdit-02f8c82e.js",
+    "imports": [
+      "resources/js/app.js",
+      "_index.esm-0b247c9f.js",
+      "_ResponseStatusEnum-c19283b9.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Orders/pages/List/components/InlineEdit/TextAreaInlineEdit.vue"
+  },
+  "resources/js/src/modules/Orders/pages/List/components/InlineEdit/TextInlineEdit.css": {
+    "file": "assets/TextInlineEdit-3fc47de8.css",
+    "src": "resources/js/src/modules/Orders/pages/List/components/InlineEdit/TextInlineEdit.css"
+  },
+  "resources/js/src/modules/Orders/pages/List/components/InlineEdit/TextInlineEdit.vue": {
+    "css": [
+      "assets/TextInlineEdit-3fc47de8.css"
+    ],
+    "dynamicImports": [
+      "resources/js/src/common/components/icons/OrdersTableIcons/EditIcon.vue",
+      "resources/js/src/common/components/icons/OrdersTableIcons/SaveIcon.vue",
+      "resources/js/src/common/components/icons/OrdersTableIcons/CancelIcon.vue"
+    ],
+    "file": "assets/TextInlineEdit-530c252f.js",
+    "imports": [
+      "resources/js/app.js",
+      "_index.esm-0b247c9f.js",
+      "_ResponseStatusEnum-c19283b9.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Orders/pages/List/components/InlineEdit/TextInlineEdit.vue"
+  },
+  "resources/js/src/modules/Orders/pages/List/components/TableRow.vue": {
+    "dynamicImports": [
+      "resources/js/src/modules/Orders/pages/List/components/InlineEdit/TextInlineEdit.vue",
+      "resources/js/src/modules/Orders/pages/List/components/InlineEdit/TextAreaInlineEdit.vue",
+      "resources/js/src/modules/Orders/pages/List/components/InlineEdit/DecimalInlineEdit.vue",
+      "resources/js/src/modules/Orders/pages/List/components/InlineEdit/IntegerInlineEdit.vue",
+      "resources/js/src/modules/Orders/pages/List/components/InlineEdit/StatusInlineEdit.vue",
+      "resources/js/src/modules/Orders/pages/List/components/InlineEdit/ProviderInlineEdit.vue",
+      "resources/js/src/modules/Orders/pages/List/components/InlineEdit/DefectInlineEdit.vue",
+      "resources/js/src/modules/Orders/pages/List/components/InlineEdit/DateInlineEdite.vue",
+      "resources/js/src/modules/Orders/pages/List/components/InlineEdit/ComfyBrandEdit.vue"
+    ],
+    "file": "assets/TableRow-1a12c248.js",
+    "imports": [
+      "resources/js/app.js",
+      "_DateTime-b4f86fcf.js",
+      "_ProvidersEnum-7cdeec22.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/src/modules/Orders/pages/List/components/TableRow.vue"
+  },
   "resources/js/src/pages/Docs/Docs.vue": {
     "dynamicImports": [
       "resources/js/src/common/components/Header/Header.vue",
       "resources/js/src/common/components/Footer/Footer.vue"
     ],
-    "file": "assets/Docs-42065085.js",
+    "file": "assets/Docs-670faad6.js",
     "imports": [
-      "resources/js/app.js"
+      "resources/js/app.js",
+      "_permissionMixin-5218c7e5.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/src/pages/Docs/Docs.vue"
   },
   "resources/js/src/pages/Login/Login.vue": {
-    "assets": [
-      "assets/app-logo-6741cde7.svg"
-    ],
     "dynamicImports": [
       "resources/js/src/pages/Login/LoginForm.vue"
     ],
-    "file": "assets/Login-42f6a72c.js",
+    "file": "assets/Login-aca62ccc.js",
     "imports": [
-      "resources/js/app.js"
+      "resources/js/app.js",
+      "_app-logo-840e89ad.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/src/pages/Login/Login.vue"
   },
   "resources/js/src/pages/Login/LoginForm.vue": {
-    "file": "assets/LoginForm-7b750047.js",
+    "file": "assets/LoginForm-61147f4d.js",
     "imports": [
-      "resources/js/app.js"
+      "resources/js/app.js",
+      "_index.esm-0b247c9f.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/src/pages/Login/LoginForm.vue"
@@ -100,7 +959,7 @@
       "resources/js/src/common/components/Header/Header.vue",
       "resources/js/src/common/components/Footer/Footer.vue"
     ],
-    "file": "assets/Main-5540f8f3.js",
+    "file": "assets/Main-fc2a7872.js",
     "imports": [
       "resources/js/app.js"
     ],
