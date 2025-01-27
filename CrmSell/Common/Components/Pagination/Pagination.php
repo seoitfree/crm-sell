@@ -107,7 +107,7 @@ class Pagination implements PaginationInterface
             "records" => [
                 "all" => $this->amount,
                 "from" => $this->offset + 1,
-                "to" => $this->offset + $this->limit
+                "to" => ($this->offset + $this->limit) > $this->amount ? $this->amount : $this->offset + $this->limit
             ]
         ];
     }

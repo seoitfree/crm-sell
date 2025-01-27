@@ -276,7 +276,7 @@ export default defineComponent({
                 const provider = this.providerOptions.find((item: OptionProvider) => {
                     return item.key === value;
                 });
-                this.form.providerType = provider.type;=
+                this.form.providerType = provider.type;
             }
         },
         goodsNameValueComputed: {
