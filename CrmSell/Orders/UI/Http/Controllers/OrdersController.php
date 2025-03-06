@@ -117,20 +117,13 @@ class OrdersController
      * @param OrdersCSVHandler $handler
      * @return JsonResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function downloadFileOrdersCSV(Request $request, OrdersCSVHandler $handler): JsonResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse
+    public function downloadFileOrdersCSV(Request $request, OrdersCSVHandler $handler): \Symfony\Component\HttpFoundation\StreamedResponse|\Illuminate\Http\JsonResponse
     {
         $user = Auth::user();
         if (empty($user) || $user->isNotActive()) {
             return $this->getErrorsResponse(["Access is denied."], 403);
         }
 
-        $resultHandler = $handler->handle(new OrdersCSV($request->toArray()));
-        if ($resultHandler->hasErrors()) {
-            return $this->getErrorsResponse($resultHandler->getErrors());
-        }
-
-        return response()
-            ->download($resultHandler->getResult()['file_path'])
-            ->deleteFileAfterSend(true);
+        return $handler->handle(new OrdersCSV($request->toArray()));
     }
 }
